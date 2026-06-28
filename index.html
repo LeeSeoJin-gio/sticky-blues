@@ -631,13 +631,24 @@
     const next=(current+dir+max)%max;
     const nx=document.getElementById('work-'+(next+1));
     if(nx===cur) return;
-    current=next;                        // 상태만 갱신 — 가려진 메인은 작품 닫을 때 한 번만 그린다 (폰 부담↓)
+    current=next;
     nx.scrollTop=0;
-    nx.style.zIndex='31';                // 들어오는 작품을 위로 — 전환 내내 메인이 비치지 않음
+    const fwd=dir>0;                                  // 다음: 새 페이지가 오른쪽에서 / 이전: 왼쪽에서
+    const inFrom=fwd?'100%':'-100%';
+    const outTo =fwd?'-100%':'100%';
+    nx.style.transition='none';                       // 들어올 페이지를 화면 밖에 즉시 배치
+    nx.style.transform='translateX('+inFrom+')';
     nx.classList.add('active'); nx.setAttribute('aria-hidden','false');
+    void nx.offsetWidth;                              // 시작 위치 확정
+    nx.style.transition='';                           // 둘이 한 몸처럼 동시에 미끄러짐 — 화면이 비지 않음
+    nx.style.transform='translateX(0)';
+    cur.style.transform='translateX('+outTo+')';
     setTimeout(()=>{
-      if(cur){ cur.style.transition='none'; cur.classList.remove('active'); cur.setAttribute('aria-hidden','true'); void cur.offsetWidth; cur.style.transition=''; }
-      nx.style.zIndex='';
+      cur.style.transition='none';
+      cur.classList.remove('active'); cur.setAttribute('aria-hidden','true');
+      cur.style.transform='';                         // CSS 기본(화면 밖)으로 복귀 — 안 보임
+      void cur.offsetWidth; cur.style.transition='';
+      nx.style.transform='';                          // 이후 위치는 active 클래스에 맡김
     }, 460);
   }
   const wvNormalCount=discs.filter(d=>!d.hidden).length;
