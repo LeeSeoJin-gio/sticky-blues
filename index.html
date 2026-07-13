@@ -33,11 +33,12 @@
   .turntable{position:relative;width:min(66vw,250px);height:min(66vw,250px);margin-top:10px;display:flex;align-items:center;justify-content:center;flex:none;}
   .platter{width:100%;height:100%;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,.013) 0px, transparent 1.5px, rgba(0,0,0,.05) 3px, transparent 4.5px), radial-gradient(circle at 50% 38%, #26272f 0%, #1a1b27 46%, #131320 78%, #0d0d16 100%);box-shadow:inset 0 0 0 2px #313443, inset 0 0 0 3px rgba(0,0,0,.55), inset 0 0 18px rgba(0,0,0,.5), inset 0 16px 38px rgba(0,0,0,.5), 0 26px 54px rgba(0,0,0,.6), 0 6px 14px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;position:relative;}
   .platter::before{content:"";position:absolute;inset:8%;border-radius:50%;border:1px solid rgba(255,255,255,.04);}
-  .spindle{width:8px;height:8px;border-radius:50%;background:linear-gradient(#e6e9f0,#9aa1b0);box-shadow:0 0 0 3px #0c0d16;z-index:6;}
+  .spindle{width:8px;height:8px;border-radius:50%;background:linear-gradient(#e6e9f0,#9aa1b0);box-shadow:0 0 0 3px #0c0d16;z-index:6;transition:opacity .45s ease;}
+  .playing .spindle{opacity:0;}
   .tt-disc{position:absolute;width:92%;height:92%;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:4;opacity:0;transform:scale(.82);transition:opacity .6s ease, transform .7s cubic-bezier(.22,.61,.36,1);pointer-events:none;cursor:pointer;}
   .tt-disc .disc-face{width:100%;height:100%;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;background:repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,.06) 0px, rgba(0,0,0,0) 0.5px, rgba(0,0,0,.5) 1.15px, rgba(0,0,0,0) 1.7px), radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--blue) 50%, #07070d) 0%, color-mix(in srgb, var(--blue) 28%, #050509) 66%, #040407 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1), inset 0 0 0 3px rgba(0,0,0,.4), inset 0 0 40px rgba(0,0,0,.5), 0 18px 34px rgba(0,0,0,.6), 0 4px 10px rgba(0,0,0,.45);}
   .tt-disc .lbl{width:38%;height:38%;border-radius:50%;background:radial-gradient(circle at 50% 48%, rgba(255,255,255,.07) 0%, transparent 42%), radial-gradient(circle at 38% 30%, var(--blue-lit), var(--blue) 70%);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 1px 3px rgba(255,255,255,.34), inset 0 -2px 4px rgba(0,0,0,.36), inset 0 0 0 1.5px rgba(0,0,0,.16), 0 1px 1px rgba(255,255,255,.1), 0 2px 6px rgba(0,0,0,.5);font-family:var(--display);font-size:11px;color:#08131c;text-align:center;line-height:1;padding:4px;z-index:2;}
-  .tt-disc .hole{position:absolute;width:6px;height:6px;border-radius:50%;background:#05060d;box-shadow:inset 0 1px 2px rgba(0,0,0,.85);z-index:3;}
+  .tt-disc .hole{display:none;}
   .tt-disc .tt-gloss{position:absolute;inset:0;border-radius:50%;pointer-events:none;z-index:5;background:linear-gradient(125deg, transparent 30%, rgba(208,230,255,.18) 44%, rgba(228,242,255,.30) 49.5%, rgba(208,230,255,.15) 55%, transparent 67%), radial-gradient(ellipse 82% 52% at 40% 15%, rgba(220,236,255,.18), transparent 60%);mix-blend-mode:screen;}
   .tt-disc .tt-gloss::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse 48% 30% at 72% 84%, rgba(185,210,245,.10), transparent 56%);mix-blend-mode:screen;}
   .playing .tt-disc{opacity:1;transform:scale(1);pointer-events:auto;}
@@ -596,16 +597,16 @@
     if(sit){ const tgt=sit.offsetLeft-(shelf.clientWidth-sit.offsetWidth)/2; shelf.scrollTo({left:Math.max(0,tgt), behavior:'smooth'}); }
     setBloomY(); scene.classList.add('playing'); ttDisc.tabIndex=0;
     tonearm.style.animation='none'; void tonearm.offsetWidth; tonearm.style.animation='';
-    if(sound) startDrone(); else stopDrone();
+    if(sound) playSound(i); else stopSound();
   }
-  function stop(){current=-1;scene.classList.remove('playing');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopDrone();}
+  function stop(){current=-1;scene.classList.remove('playing');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopSound();}
 
   ttDisc.addEventListener('click', stop);
   window.addEventListener('resize', setBloomY);
 
   // 작품 화면 전환 (한 파일 안에서)
-  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;stopDrone();}
-  function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');if(current>=0){select(current,false);if(!muted)startDrone();}}
+  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;stopSound();}
+  function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');if(current>=0){select(current,false);if(!muted)playSound(current);}}
   npTitle.addEventListener('click',e=>{e.preventDefault();if(current>=0)showWork(current);});
   document.querySelectorAll('.wv-back').forEach(b=>b.addEventListener('click',()=>hideWork(b.closest('.work-view'))));
 
@@ -665,6 +666,21 @@
 
   // ===== 분위기음 =====
   let audioCtx=null, droneNodes=null, muted=false;
+  // ===== 실제 음악(MP3) 레이어 =====
+  // 같은 폴더에 곡명.mp3(예: prelude.mp3)가 있으면 그 파일을 틀고, 없으면 합성 무드음이 나온다.
+  let trackAudio=null;
+  function trackFile(i){ return discs[i].form.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()+'.mp3'; }
+  function stopTrack(){ if(trackAudio){ try{trackAudio.pause();}catch(e){} trackAudio=null; } }
+  function playSound(i){
+    stopTrack();
+    startDrone();                                  // 즉시 소리 시작 — 파일이 없어도 지금과 동일
+    const a=new Audio(trackFile(i));
+    a.loop=true; a.muted=muted;
+    trackAudio=a;
+    a.play().then(()=>{ if(trackAudio===a) stopDrone(); else a.pause(); })   // 파일 확인되면 무드음이 1.5초에 걸쳐 음악에 자리를 내준다
+            .catch(()=>{ if(trackAudio===a) trackAudio=null; });             // 파일 없음 → 무드음 유지
+  }
+  function stopSound(quick){ stopTrack(); stopDrone(quick); }
   const soundBtn=document.getElementById('soundBtn');
   function baseFreq(i){ return 98.0 * Math.pow(2, -(i/9)); }
   function startDrone(){
