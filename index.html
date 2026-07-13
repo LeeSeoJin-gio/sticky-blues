@@ -275,9 +275,9 @@
   <div class="wpage">
     <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
-      <div class="wh-form">Prelude<span>전주곡</span></div>
+      <div class="wh-form">Bossa<span>보사노바</span></div>
       <h1 class="wh-title">1</h1>
-      <div class="wh-mark">Andante, sereno</div>
+      <div class="wh-mark">Easy bossa</div>
       <div class="wh-by">작곡 ○○○</div>
     </header>
     <main class="work-body">
@@ -299,9 +299,9 @@
   <div class="wpage">
     <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
-      <div class="wh-form">Fantasia<span>환상곡</span></div>
+      <div class="wh-form">Swing<span>스윙</span></div>
       <h1 class="wh-title">2</h1>
-      <div class="wh-mark">Quasi improvvisando</div>
+      <div class="wh-mark">Medium swing, bright</div>
       <div class="wh-by">작곡 ○○○</div>
     </header>
     <main class="work-body">
@@ -323,9 +323,9 @@
   <div class="wpage">
     <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
-      <div class="wh-form">Barcarolle<span>뱃노래</span></div>
+      <div class="wh-form">Standard<span>스탠더드</span></div>
       <h1 class="wh-title">3</h1>
-      <div class="wh-mark">Andantino, dolce</div>
+      <div class="wh-mark">Relaxed, in two</div>
       <div class="wh-by">작곡 ○○○</div>
     </header>
     <main class="work-body">
@@ -347,9 +347,9 @@
   <div class="wpage">
     <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
-      <div class="wh-form">Nocturne<span>야상곡</span></div>
+      <div class="wh-form">Ballad<span>발라드</span></div>
       <h1 class="wh-title">4</h1>
-      <div class="wh-mark">Adagio, con dolore</div>
+      <div class="wh-mark">Slow ballad, tender</div>
       <div class="wh-by">작곡 ○○○</div>
     </header>
     <main class="work-body">
@@ -371,9 +371,9 @@
   <div class="wpage">
     <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
-      <div class="wh-form">Sonata<span>소나타</span></div>
+      <div class="wh-form">Blues<span>블루스</span></div>
       <h1 class="wh-title">5</h1>
-      <div class="wh-mark">Moderato, risoluto</div>
+      <div class="wh-mark">Slow blues, after hours</div>
       <div class="wh-by">작곡 ○○○</div>
     </header>
     <main class="work-body">
@@ -544,11 +544,11 @@
 
   // ===== 데이터 ===== 제목은 참여자 해석 자리(예시), 악상기호는 형식별 배정(예시)
   const discs = [
-    {form:'Prelude',     kr:'전주곡',   color:'#A8DADC', title:'1',   mark:'Andante, sereno'},
-    {form:'Fantasia',    kr:'환상곡',   color:'#6FB7D4', title:'2', mark:'Quasi improvvisando'},
-    {form:'Barcarolle',  kr:'뱃노래',   color:'#4895C9', title:'3',       mark:'Andantino, dolce'},
-    {form:'Nocturne',    kr:'야상곡',   color:'#2A6F97', title:'4', mark:'Adagio, con dolore'},
-    {form:'Sonata',      kr:'소나타',   color:'#1B5299', title:'5',     mark:'Moderato, risoluto'},
+    {form:'Bossa',       kr:'보사노바', color:'#A8DADC', title:'1',   mark:'Easy bossa'},
+    {form:'Swing',       kr:'스윙',     color:'#6FB7D4', title:'2', mark:'Medium swing, bright'},
+    {form:'Standard',    kr:'스탠더드', color:'#4895C9', title:'3',       mark:'Relaxed, in two'},
+    {form:'Ballad',      kr:'발라드',   color:'#2A6F97', title:'4', mark:'Slow ballad, tender'},
+    {form:'Blues',       kr:'블루스',   color:'#1B5299', title:'5',     mark:'Slow blues, after hours'},
     {form:'Étude',       kr:'연습곡',   color:'#1D3461', title:'6',      mark:'Allegro, agitato'},
     {form:'Arabesque',   kr:'아라베스크', color:'#14213D', title:'7',     mark:'Grazioso'},
     {form:'Rhapsody',    kr:'광시곡',   color:'#121B33', title:'8',       mark:'Appassionato'},
@@ -710,7 +710,7 @@
     setTimeout(()=>nodes.oscs.forEach(o=>{try{o.stop();}catch(e){}}), t*1000+120);
     droneNodes=null;
   }
-  function setMute(m){muted=m;soundBtn.classList.toggle('muted',m);soundBtn.setAttribute('aria-label',m?'소리 켜기':'소리 끄기');if(droneNodes&&audioCtx){const now=audioCtx.currentTime;droneNodes.master.gain.cancelScheduledValues(now);droneNodes.master.gain.setValueAtTime(droneNodes.master.gain.value,now);droneNodes.master.gain.linearRampToValueAtTime(m?0:0.15,now+0.4);}}
+  function setMute(m){muted=m;soundBtn.classList.toggle('muted',m);soundBtn.setAttribute('aria-label',m?'소리 켜기':'소리 끄기');if(trackAudio)trackAudio.muted=m;if(droneNodes&&audioCtx){const now=audioCtx.currentTime;droneNodes.master.gain.cancelScheduledValues(now);droneNodes.master.gain.setValueAtTime(droneNodes.master.gain.value,now);droneNodes.master.gain.linearRampToValueAtTime(m?0:0.15,now+0.4);}}
   soundBtn.addEventListener('click', ()=>setMute(!muted));
 
   // ===== 입장 / 표지 복귀 =====
