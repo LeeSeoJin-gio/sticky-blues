@@ -17,6 +17,7 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{-webkit-text-size-adjust:100%;overflow-x:clip;}
+  body.covered{overflow:hidden;}
   body{
     min-height:100vh;
     background:#1b1c1f;
@@ -235,7 +236,7 @@
   .req-reveal.show .rt-go{opacity:1;}
 </style>
 </head>
-<body>
+<body class="covered">
 <div class="bloom-wrap" aria-hidden="true"><div class="bloom b1"></div><div class="bloom b2"></div></div>
 <button class="home-btn" id="homeBtn" aria-label="표지로 돌아가기">
   <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
@@ -508,7 +509,7 @@
     <header class="work-head">
       <div class="wh-form">Symphony<span>교향곡</span></div>
       <h1 class="wh-title">10</h1>
-      <div class="wh-mark">Maestoso</div>
+      <div class="wh-mark">Adagio lamentoso</div>
       <div class="wh-by">작곡 ○○○</div>
     </header>
     <main class="work-body">
@@ -530,7 +531,7 @@
   <div class="wpage">
     <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
-      <div class="wh-form">Requiem<span>레퀴엠</span></div>
+      <div class="wh-form">Requiem<span>진혼곡</span></div>
       <h1 class="wh-title">11</h1>
       <div class="wh-mark">Lento, doloroso</div>
       <div class="wh-by">편곡 ○○○</div>
@@ -550,7 +551,7 @@
 
 <div class="req-reveal" id="reqReveal" aria-hidden="true">
   <div class="rd"><div class="rd-lbl">Requiem</div></div>
-  <div class="rt">그 후의 침묵<span>Requiem · 레퀴엠</span></div>
+  <div class="rt">그 후의 침묵<span>Requiem · 진혼곡</span></div>
   <div class="rt-go">탭하여 마지막 곡을 듣다</div>
 </div>
 
@@ -568,8 +569,8 @@
     {form:'Étude',       kr:'연습곡',   color:'#14213D', title:'7',     mark:'Allegro, agitato', note:'작품 소개글이 놓일 자리'},
     {form:'Nocturne',    kr:'야상곡',   color:'#121B33', title:'8',       mark:'Adagio, con dolore', note:'작품 소개글이 놓일 자리'},
     {form:'Ballade',     kr:'담시곡',   color:'#161630', title:'9',     mark:'Narrante', note:'작품 소개글이 놓일 자리'},
-    {form:'Symphony',    kr:'교향곡',   color:'#15122B', title:'10',        mark:'Maestoso', note:'작품 소개글이 놓일 자리'},
-    {form:'Requiem',     kr:'레퀴엠',   color:'#120A22', title:'11',     mark:'Lento, doloroso', note:'작품 소개글이 놓일 자리', hidden:true},
+    {form:'Symphony',    kr:'교향곡',   color:'#15122B', title:'10',        mark:'Adagio lamentoso', note:'작품 소개글이 놓일 자리'},
+    {form:'Requiem',     kr:'진혼곡',   color:'#120A22', title:'11',     mark:'Lento, doloroso', note:'작품 소개글이 놓일 자리', hidden:true},
   ];
 
   const root=document.documentElement, scene=document.getElementById('scene'), shelf=document.getElementById('shelf');
@@ -704,12 +705,15 @@
   const cover=document.getElementById('cover'), homeBtn=document.getElementById('homeBtn');
   function enterAlbum(){
     cover.classList.add('open');
+    document.body.classList.remove('covered');
   }
   cover.addEventListener('click', enterAlbum);
   cover.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enterAlbum(); } });
   homeBtn.addEventListener('click', ()=>{
     if(current>=0) stop();
     cover.classList.remove('open'); // 표지가 다시 가운데로 닫힘
+    document.body.classList.add('covered');
+    window.scrollTo(0,0);
   });
 
   setBloomY();
