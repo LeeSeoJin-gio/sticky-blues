@@ -72,7 +72,12 @@
 
   /* ===== 선반 ===== */
   .shelf-wrap{margin-top:12px;width:100%;padding-top:24px;}
-  .shelf-label{font-size:10.5px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;text-align:center;margin-bottom:14px;}
+  .shelf-label{font-size:15px;font-weight:500;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;text-align:center;margin-bottom:16px;}
+  .wA,.wB{transition:color .8s ease, opacity .8s ease;}
+  .side-a .wA,.side-b .wB{color:var(--blue-lit);opacity:1;}
+  .side-a .wB,.side-b .wA{opacity:.35;}
+  .side-req .wA{color:#84b6e0;opacity:1;}
+  .side-req .wB{color:#a690d4;opacity:1;}
   .shelf{display:flex;gap:14px;overflow-x:auto;padding:8px 6px 16px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .shelf::-webkit-scrollbar{display:none;}
   .disc-item{flex:none;width:78px;text-align:center;cursor:pointer;scroll-snap-align:center;-webkit-tap-highlight-color:transparent;}
@@ -170,6 +175,7 @@
     .np-mid{min-height:clamp(150px,20vh,240px);}
     .np-note{font-size:15.5px;max-width:46ch;}
     .np-go{font-size:15px;margin-top:22px;}
+    .shelf-label{font-size:19px;}
     .shelf{gap:22px;padding:14px 12px 26px;}
     .disc-item{width:124px;}
     .disc-mini{width:116px;height:116px;}
@@ -269,7 +275,7 @@
     <div class="np-go" id="npGo">탭하여 작품 펼치기 →</div>
   </div>
   <div class="shelf-wrap">
-    <div class="shelf-label">— Sticky Blues, 전곡 —</div>
+    <div class="shelf-label"><span class="wA">Sticky</span> <span class="wB">Blues</span></div>
     <div class="shelf" id="shelf"></div>
   </div>
 </div>
@@ -605,10 +611,11 @@
     const sit=items[i];
     if(sit){ const tgt=sit.offsetLeft-(shelf.clientWidth-sit.offsetWidth)/2; shelf.scrollTo({left:Math.max(0,tgt), behavior:'smooth'}); }
     setBloomY(); scene.classList.add('playing'); ttDisc.tabIndex=0;
+    scene.classList.toggle('side-a', i<5); scene.classList.toggle('side-b', i>=5 && i<discs.length-1); scene.classList.toggle('side-req', i===discs.length-1);
     tonearm.style.animation='none'; void tonearm.offsetWidth; tonearm.style.animation='';
     if(sound) playSound(i); else stopSound();
   }
-  function stop(){current=-1;scene.classList.remove('playing');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopSound();}
+  function stop(){current=-1;scene.classList.remove('playing','side-a','side-b','side-req');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopSound();}
 
   ttDisc.addEventListener('click', stop);
   window.addEventListener('resize', setBloomY);
