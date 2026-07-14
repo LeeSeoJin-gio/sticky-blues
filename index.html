@@ -61,18 +61,22 @@
   .np-title:hover,.np-title:focus-visible{color:#fff;outline:none;text-shadow:0 0 28px color-mix(in srgb, var(--blue-lit) 60%, transparent);}
   .np-title:hover::after,.np-title:focus-visible::after{transform:scaleX(1);}
   .np-mark{margin-top:11px;font-family:var(--display);font-style:italic;font-size:14px;color:#9fb1c0;letter-spacing:.02em;}
-  .np-go{margin-top:13px;font-size:11px;color:var(--dim);letter-spacing:.08em;}
+  .np-mid{position:relative;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:clamp(110px,17vh,180px);margin-top:8px;}
+  .np-note{max-width:36ch;padding:0 8px;text-align:center;font-size:13px;line-height:1.85;color:#94a2b2;opacity:0;transition:opacity .6s ease .55s;}
+  .playing .np-note{opacity:1;}
+  .np-go{margin-top:14px;font-size:11px;color:var(--dim);letter-spacing:.08em;opacity:0;pointer-events:none;transition:opacity .6s ease .7s;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .playing .np-go{opacity:1;pointer-events:auto;}
 
-  .hint{margin-top:30px;min-height:104px;display:flex;align-items:center;justify-content:center;font-size:12.5px;color:var(--dim);letter-spacing:.04em;transition:opacity .4s;}
+  .hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12.5px;color:var(--dim);letter-spacing:.04em;transition:opacity .4s;pointer-events:none;}
   .playing .hint{opacity:0;}
 
   /* ===== 선반 ===== */
-  .shelf-wrap{margin-top:30px;width:100%;padding-top:24px;}
+  .shelf-wrap{margin-top:12px;width:100%;padding-top:24px;}
   .shelf-label{font-size:10.5px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;text-align:center;margin-bottom:14px;}
   .shelf{display:flex;gap:14px;overflow-x:auto;padding:8px 6px 16px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .shelf::-webkit-scrollbar{display:none;}
   .disc-item{flex:none;width:78px;text-align:center;cursor:pointer;scroll-snap-align:center;-webkit-tap-highlight-color:transparent;}
-  .disc-mini{width:72px;height:72px;border-radius:50%;margin:0 auto;position:relative;display:flex;align-items:center;justify-content:center;background:conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(90,150,255,.04) 60deg, transparent 120deg, transparent 240deg, rgba(80,160,200,.035) 290deg, transparent 340deg), repeating-radial-gradient(circle at 50% 50%, #070709 0px, #111121 1.1px, #08080e 2.2px), radial-gradient(circle at 50% 50%, #0d0d17 0%, #07070d 70%);box-shadow:0 8px 17px rgba(0,0,0,.52), inset 0 0 10px rgba(0,0,0,.45), inset 0 0 0 2px rgba(0,0,0,.4), inset 0 0 0 3px rgba(255,255,255,.04);transition:transform .4s cubic-bezier(.22,.61,.36,1), box-shadow .4s;}
+  .disc-mini{width:72px;height:72px;border-radius:50%;margin:0 auto;position:relative;display:flex;align-items:center;justify-content:center;background:conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(90,150,255,.04) 60deg, transparent 120deg, transparent 240deg, rgba(80,160,200,.035) 290deg, transparent 340deg), repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,.06) 0px, rgba(0,0,0,0) 0.5px, rgba(0,0,0,.5) 1.15px, rgba(0,0,0,0) 1.7px), radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--c,#0a0a14) 50%, #07070d) 0%, color-mix(in srgb, var(--c,#0a0a14) 28%, #06060b) 72%);box-shadow:0 8px 17px rgba(0,0,0,.52), inset 0 0 10px rgba(0,0,0,.45), inset 0 0 0 2px rgba(0,0,0,.4), inset 0 0 0 3px rgba(255,255,255,.04);transition:transform .4s cubic-bezier(.22,.61,.36,1), box-shadow .4s;}
   .disc-mini::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;background:linear-gradient(125deg, transparent 34%, rgba(205,228,255,.13) 47%, rgba(222,240,255,.19) 50.5%, transparent 61%), radial-gradient(ellipse 68% 44% at 42% 20%, rgba(215,232,255,.11), transparent 60%);mix-blend-mode:screen;}
   .disc-mini .mini-lbl{width:42%;height:42%;border-radius:50%;box-shadow:inset 0 1px 1.5px rgba(255,255,255,.28), inset 0 -1px 2px rgba(0,0,0,.3), inset 0 0 0 1px rgba(0,0,0,.25), 0 1px 2px rgba(0,0,0,.42);}
   .disc-mini .mini-hole{position:absolute;width:4px;height:4px;border-radius:50%;background:#05060d;}
@@ -163,7 +167,9 @@
     .np-form span{font-size:15.5px;margin-left:9px;}
     .np-title{font-size:44px;margin-top:13px;}
     .np-mark{font-size:22px;margin-top:16px;}
-    .np-go{font-size:15px;margin-top:20px;}
+    .np-mid{min-height:clamp(150px,20vh,240px);}
+    .np-note{font-size:15.5px;max-width:46ch;}
+    .np-go{font-size:15px;margin-top:22px;}
     .shelf{gap:22px;padding:14px 12px 26px;}
     .disc-item{width:124px;}
     .disc-mini{width:116px;height:116px;}
@@ -256,9 +262,12 @@
     <div class="np-form" id="npForm"></div>
     <a href="#" class="np-title" id="npTitle"></a>
     <div class="np-mark" id="npMark"></div>
-    <div class="np-go">탭하여 작품 펼치기 →</div>
   </div>
-  <div class="hint" id="hint">선반에서 한 장을 골라 올려보세요</div>
+  <div class="np-mid">
+    <div class="hint" id="hint">선반에서 한 장을 골라 올려보세요</div>
+    <div class="np-note" id="npNote"></div>
+    <div class="np-go" id="npGo">탭하여 작품 펼치기 →</div>
+  </div>
   <div class="shelf-wrap">
     <div class="shelf-label">— Sticky Blues, 전곡 —</div>
     <div class="shelf" id="shelf"></div>
@@ -544,22 +553,22 @@
 
   // ===== 데이터 ===== 제목은 참여자 해석 자리(예시), 악상기호는 형식별 배정(예시)
   const discs = [
-    {form:'Bossa',       kr:'보사노바', color:'#A8DADC', title:'1',   mark:'Easy bossa'},
-    {form:'Swing',       kr:'스윙',     color:'#6FB7D4', title:'2', mark:'Medium swing, bright'},
-    {form:'Standard',    kr:'스탠더드', color:'#4895C9', title:'3',       mark:'Relaxed, in two'},
-    {form:'Ballad',      kr:'발라드',   color:'#2A6F97', title:'4', mark:'Slow ballad, tender'},
-    {form:'Blues',       kr:'블루스',   color:'#1B5299', title:'5',     mark:'Slow blues, after hours'},
-    {form:'Prelude',     kr:'전주곡',   color:'#1D3461', title:'6',      mark:'Sostenuto'},
-    {form:'Étude',       kr:'연습곡',   color:'#14213D', title:'7',     mark:'Allegro, agitato'},
-    {form:'Nocturne',    kr:'야상곡',   color:'#121B33', title:'8',       mark:'Adagio, con dolore'},
-    {form:'Ballade',     kr:'담시곡',   color:'#161630', title:'9',     mark:'Narrante'},
-    {form:'Symphony',    kr:'교향곡',   color:'#15122B', title:'10',        mark:'Maestoso'},
-    {form:'Requiem',     kr:'레퀴엠',   color:'#120A22', title:'11',     mark:'Lento, doloroso', hidden:true},
+    {form:'Bossa',       kr:'보사노바', color:'#A8DADC', title:'1',   mark:'Easy bossa', note:'작품 소개글이 놓일 자리'},
+    {form:'Swing',       kr:'스윙',     color:'#6FB7D4', title:'2', mark:'Medium swing, bright', note:'작품 소개글이 놓일 자리'},
+    {form:'Standard',    kr:'스탠더드', color:'#4895C9', title:'3',       mark:'Relaxed, in two', note:'작품 소개글이 놓일 자리'},
+    {form:'Ballad',      kr:'발라드',   color:'#2A6F97', title:'4', mark:'Slow ballad, tender', note:'작품 소개글이 놓일 자리'},
+    {form:'Blues',       kr:'블루스',   color:'#1B5299', title:'5',     mark:'Slow blues, after hours', note:'작품 소개글이 놓일 자리'},
+    {form:'Prelude',     kr:'전주곡',   color:'#1D3461', title:'6',      mark:'Sostenuto', note:'작품 소개글이 놓일 자리'},
+    {form:'Étude',       kr:'연습곡',   color:'#14213D', title:'7',     mark:'Allegro, agitato', note:'작품 소개글이 놓일 자리'},
+    {form:'Nocturne',    kr:'야상곡',   color:'#121B33', title:'8',       mark:'Adagio, con dolore', note:'작품 소개글이 놓일 자리'},
+    {form:'Ballade',     kr:'담시곡',   color:'#161630', title:'9',     mark:'Narrante', note:'작품 소개글이 놓일 자리'},
+    {form:'Symphony',    kr:'교향곡',   color:'#15122B', title:'10',        mark:'Maestoso', note:'작품 소개글이 놓일 자리'},
+    {form:'Requiem',     kr:'레퀴엠',   color:'#120A22', title:'11',     mark:'Lento, doloroso', note:'작품 소개글이 놓일 자리', hidden:true},
   ];
 
   const root=document.documentElement, scene=document.getElementById('scene'), shelf=document.getElementById('shelf');
   const platter=document.querySelector('.platter'), ttLabel=document.getElementById('ttLabel'), tonearm=document.querySelector('.tonearm');
-  const npForm=document.getElementById('npForm'), npTitle=document.getElementById('npTitle'), npMark=document.getElementById('npMark');
+  const npForm=document.getElementById('npForm'), npTitle=document.getElementById('npTitle'), npMark=document.getElementById('npMark'), npNote=document.getElementById('npNote');
   const ttDisc=document.getElementById('ttDisc');
   let current=-1;
   let reqSeq=0; let requiemUnlocked=false;
@@ -570,7 +579,7 @@
     const item=document.createElement('button');
     item.className='disc-item'+(d.hidden?' locked':'');
     item.setAttribute('aria-label', `${d.form} ${d.kr} 올리기`);
-    item.innerHTML=`<div class="disc-mini"><div class="mini-lbl" style="background:radial-gradient(circle at 38% 30%, ${lighten(d.color,.35)}, ${d.color} 65%)"></div><div class="mini-hole"></div></div><div class="disc-name">${d.form}</div><div class="disc-num">${String(i+1).padStart(2,'0')}</div>`;
+    item.innerHTML=`<div class="disc-mini" style="--c:${d.color}"><div class="mini-lbl" style="background:radial-gradient(circle at 38% 30%, ${lighten(d.color,.35)}, ${d.color} 65%)"></div><div class="mini-hole"></div></div><div class="disc-name">${d.form}</div><div class="disc-num">${String(i+1).padStart(2,'0')}</div>`;
     item.addEventListener('click',()=>{
       select(i);
       if(!requiemUnlocked && !d.hidden && i===reqSeq){
@@ -591,7 +600,7 @@
     root.style.setProperty('--blue-lit', lighten(d.color,.42));
     ttLabel.textContent=d.form;
     npForm.innerHTML=`${d.form}<span>${d.kr}</span>`;
-    npTitle.textContent=d.title; npMark.textContent=d.mark;
+    npTitle.textContent=d.title; npMark.textContent=d.mark; npNote.textContent=d.note||'';
     items.forEach((it,idx)=>it.classList.toggle('active', idx===i));
     const sit=items[i];
     if(sit){ const tgt=sit.offsetLeft-(shelf.clientWidth-sit.offsetWidth)/2; shelf.scrollTo({left:Math.max(0,tgt), behavior:'smooth'}); }
@@ -608,6 +617,7 @@
   function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;stopSound();}
   function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');if(current>=0){select(current,false);if(!muted)playSound(current);}}
   npTitle.addEventListener('click',e=>{e.preventDefault();if(current>=0)showWork(current);});
+  document.getElementById('npGo').addEventListener('click',()=>{if(current>=0)showWork(current);});
   document.querySelectorAll('.wv-back').forEach(b=>b.addEventListener('click',()=>hideWork(b.closest('.work-view'))));
 
   // 레퀴엠 해금: 선반 판을 1번부터 순서대로 모두 누르면 어둠 속에서 떠오른다
