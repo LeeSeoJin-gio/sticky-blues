@@ -18,6 +18,7 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   html{-webkit-text-size-adjust:100%;overflow-x:clip;}
   body.covered{overflow:hidden;}
+  body.locked{overflow:hidden;}
   body{
     min-height:100vh;
     background:#1b1c1f;
@@ -117,7 +118,7 @@
   @keyframes drift2{0%,100%{opacity:.32;transform:translate(-50%,-50%) scale(1.05);}50%{opacity:.27;transform:translate(-47%,-48%) scale(1.12);}}
 
   /* ===== 표지 ===== */
-  .cover{position:fixed;inset:0;z-index:20;background:#1b1c1f;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:1;transition:opacity 1s ease, visibility 1s;-webkit-tap-highlight-color:transparent;}
+  .cover{position:fixed;inset:0;z-index:20;background:#1b1c1f;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:1;transition:opacity 1s ease, visibility 1s;-webkit-tap-highlight-color:transparent;touch-action:none;}
   .cover-img{max-width:100%;max-height:100%;object-fit:contain;display:block;}
   .cover-hint{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:rgba(220,235,240,.7);animation:hintpulse 2.6s ease-in-out infinite;pointer-events:none;}
   @keyframes hintpulse{0%,100%{opacity:.35;}50%{opacity:.85;}}
@@ -194,7 +195,7 @@
   }
 
   /* ===== 작품 화면 (통합) ===== */
-  .work-view{position:fixed;inset:0;z-index:30;overflow-y:auto;-webkit-overflow-scrolling:touch;background:linear-gradient(#070811,#050609);visibility:hidden;transform:translateX(100%);transition:transform .42s cubic-bezier(.33,0,.2,1), visibility .42s;}
+  .work-view{position:fixed;inset:0;z-index:30;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:linear-gradient(#070811,#050609);visibility:hidden;transform:translateX(100%);transition:transform .42s cubic-bezier(.33,0,.2,1), visibility .42s;}
   .work-view.active{visibility:visible;transform:translateX(0);}
   .work-view .wpage{max-width:680px;margin:0 auto;padding:20px 26px 80px;min-height:100%;background:radial-gradient(125% 52% at 50% -8%, var(--wv-glow) 0%, transparent 50%);}
   .work-view .topbar{padding:6px 0 30px;}
@@ -622,8 +623,8 @@
   window.addEventListener('resize', setBloomY);
 
   // 작품 화면 전환 (한 파일 안에서)
-  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;stopSound();}
-  function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');if(current>=0){select(current,false);if(!muted)playSound(current);}}
+  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();}
+  function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');if(current>=0){select(current,false);if(!muted)playSound(current);}}
   npTitle.addEventListener('click',e=>{e.preventDefault();if(current>=0)showWork(current);});
   document.getElementById('npGo').addEventListener('click',()=>{if(current>=0)showWork(current);});
   document.querySelectorAll('.wv-back').forEach(b=>b.addEventListener('click',()=>hideWork(b.closest('.work-view'))));
