@@ -6,7 +6,7 @@
 <title>Sticky Blues</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
 <style>
   :root{
     --haze:#cfe4ea;--dim:#6c7b8c;--silver:#c6ccd6;
@@ -27,7 +27,7 @@
   .scene{width:100%;max-width:480px;margin:0 auto;min-height:100vh;padding:26px 22px 30px;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;}
 
   header{text-align:center;margin-bottom:14px;}
-  header .title{font-family:var(--display);font-size:21px;letter-spacing:.02em;}
+  header .title{font-family:'Cormorant Garamond',var(--display);font-size:25px;font-weight:400;letter-spacing:.045em;}
   header .title i{font-style:italic;}
   header .sub{margin-top:5px;font-size:11px;color:var(--dim);letter-spacing:.16em;text-transform:uppercase;}
 
@@ -589,11 +589,11 @@
     item.setAttribute('aria-label', `${d.form} ${d.kr} 올리기`);
     item.innerHTML=`<div class="disc-mini" style="--c:${d.color}"><div class="mini-lbl" style="background:radial-gradient(circle at 38% 30%, ${lighten(d.color,.35)}, ${d.color} 65%)"></div><div class="mini-hole"></div></div><div class="disc-name">${d.form}</div><div class="disc-num">${String(i+1).padStart(2,'0')}</div>`;
     item.addEventListener('click',()=>{
-      select(i);
       if(!requiemUnlocked && !d.hidden && i===reqSeq){
         reqSeq++;
         if(reqSeq>=discs.filter(x=>!x.hidden).length) requiemArmed=true;   // 조용히 무장 — 10번 감상을 방해하지 않는다
       }
+      select(i);                                                           // 무장이 끝난 뒤 감시가 시작되도록 순서 고정
     });
     shelf.appendChild(item);
   });
