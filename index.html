@@ -553,7 +553,7 @@
 <div class="req-reveal" id="reqReveal" aria-hidden="true">
   <div class="rd"><div class="rd-lbl">Requiem</div></div>
   <div class="rt">그 후의 침묵<span>Requiem · 진혼곡</span></div>
-  <div class="rt-go">탭하여 마지막 곡을 듣다</div>
+  <div class="rt-go">마지막 한 장이 선반 끝에서 기다립니다</div>
 </div>
 
 <script>
@@ -579,7 +579,7 @@
   const npForm=document.getElementById('npForm'), npTitle=document.getElementById('npTitle'), npMark=document.getElementById('npMark'), npNote=document.getElementById('npNote');
   const ttDisc=document.getElementById('ttDisc');
   let current=-1;
-  let reqSeq=0; let requiemUnlocked=false;
+  let reqSeq=0; let requiemUnlocked=false; let requiemArmed=false; let reqTimer=null;
 
   function lighten(hex,f){const n=parseInt(hex.slice(1),16);let r=n>>16,g=(n>>8)&255,b=n&255;r=Math.round(r+(255-r)*f);g=Math.round(g+(255-g)*f);b=Math.round(b+(255-b)*f);return `rgb(${r},${g},${b})`;}
 
@@ -592,7 +592,7 @@
       select(i);
       if(!requiemUnlocked && !d.hidden && i===reqSeq){
         reqSeq++;
-        if(reqSeq>=discs.filter(x=>!x.hidden).length) unlockRequiem();
+        if(reqSeq>=discs.filter(x=>!x.hidden).length) requiemArmed=true;   // 조용히 무장 — 10번 감상을 방해하지 않는다
       }
     });
     shelf.appendChild(item);
@@ -614,33 +614,45 @@
     if(sit){ const tgt=sit.offsetLeft-(shelf.clientWidth-sit.offsetWidth)/2; shelf.scrollTo({left:Math.max(0,tgt), behavior:'smooth'}); }
     setBloomY(); scene.classList.add('playing'); ttDisc.tabIndex=0;
     scene.classList.toggle('side-a', i<5); scene.classList.toggle('side-b', i>=5 && i<discs.length-1); scene.classList.toggle('side-req', i===discs.length-1);
+    watchTen();
     tonearm.style.animation='none'; void tonearm.offsetWidth; tonearm.style.animation='';
     if(sound) playSound(i); else stopSound();
   }
-  function stop(){current=-1;scene.classList.remove('playing','side-a','side-b','side-req');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopSound();}
+  function stop(){const wasTen=(current===TEN);current=-1;scene.classList.remove('playing','side-a','side-b','side-req');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopSound();if(wasTen&&requiemArmed&&!requiemUnlocked)reqFire(3250);else clearTimeout(reqTimer);}
 
   ttDisc.addEventListener('click', stop);
   window.addEventListener('resize', setBloomY);
 
   // 작품 화면 전환 (한 파일 안에서)
-  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();}
+  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');clearTimeout(reqTimer);stopSound();}
   function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');if(current>=0){select(current,false);if(!muted)playSound(current);}}
   npTitle.addEventListener('click',e=>{e.preventDefault();if(current>=0)showWork(current);});
   document.getElementById('npGo').addEventListener('click',()=>{if(current>=0)showWork(current);});
   document.querySelectorAll('.wv-back').forEach(b=>b.addEventListener('click',()=>hideWork(b.closest('.work-view'))));
 
-  // 레퀴엠 해금: 선반 판을 1번부터 순서대로 모두 누르면 어둠 속에서 떠오른다
+  // 레퀴엠 해금: 순서대로 다 누르면 조건이 차고(armed), 10번이 다 흐른 '그 후의 침묵'에서 떠오른다
   const reqReveal=document.getElementById('reqReveal');
+  const TEN=discs.length-2;                                     // 10번 곡의 인덱스
+  function reqFire(delay){
+    clearTimeout(reqTimer);
+    reqTimer=setTimeout(()=>{
+      if(requiemArmed && !requiemUnlocked && !document.body.classList.contains('covered') && !document.body.classList.contains('locked')) unlockRequiem();
+    }, delay);
+  }
+  function watchTen(){                                          // 10번이 판에 올라 있는 동안만
+    clearTimeout(reqTimer);
+    if(!requiemArmed || requiemUnlocked || current!==TEN) return;
+    reqFire(3250);                                              // 3250ms — 3월 25일, 아바키오의 생일. 그 시간 뒤에 그가 떠오른다
+  }
   function unlockRequiem(){
     if(requiemUnlocked) return;
     requiemUnlocked=true;
-    setTimeout(()=>reqReveal.classList.add('show'), 700);
+    reqReveal.classList.add('show');
   }
   reqReveal.addEventListener('click', ()=>{
     reqReveal.classList.remove('show');
     const reqItem=items[items.length-1];
-    if(reqItem) reqItem.classList.add('revealed');   // 이후 선반에서도 접근 가능
-    setTimeout(()=>select(discs.length-1), 500);      // 레퀴엠을 턴테이블에 올림
+    if(reqItem) reqItem.classList.add('revealed');   // 선반 끝에 꽂힐 뿐 — 트는 것은 감상하는 사람의 몫
   });
 
   // 작품 간 이전/다음 이동 (끝에서 처음으로 순환)
