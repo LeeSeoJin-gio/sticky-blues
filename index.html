@@ -642,7 +642,6 @@
     wv.style.setProperty('--sink', p.toFixed(3));
     const mix=(a,c)=>a.map((v,k)=>Math.round(v+(c[k]-v)*p)).join(',');
     wv.style.background=`linear-gradient(rgb(${mix([7,8,17],[2,2,7])}), rgb(${mix([5,6,9],[1,1,4])}))`;
-    wv.classList.toggle('deep', p>0.82);                         // 끝에 닿으면 문이 빛난다
   }
   function checkRead(i){
     if(i>=discs.length-1 || readWorks.has(i)) return;            // 진혼곡 자신은 세지 않는다
@@ -768,6 +767,13 @@
     nav.querySelector('.wv-prev').addEventListener('click',()=>navWork(-1));
     nav.querySelector('.wv-next').addEventListener('click',()=>navWork(1));
     wv.addEventListener('scroll',()=>{ sink(wv); checkRead(idx); },{passive:true});   // 내려갈수록 어두워지고, 바닥에 닿으면 읽은 것으로
+    if('IntersectionObserver' in window){                              // 문이 시야에 들어오면 켜진다 — 스크롤 계산의 헛디딤 없이
+      new IntersectionObserver(es=>{
+        es.forEach(en=>wv.classList.toggle('deep', en.isIntersecting));
+      },{root:wv,threshold:.4}).observe(foot);
+    }else{
+      wv.addEventListener('scroll',()=>{ const m=wv.scrollHeight-wv.clientHeight; wv.classList.toggle('deep', m<=60 || wv.scrollTop/m>0.82); },{passive:true});
+    }
   });
 
   // ===== 음악(MP3) =====
