@@ -82,8 +82,9 @@
   .side-req .wB{color:#a690d4;opacity:1;}
   .shelf{display:flex;gap:14px;overflow-x:auto;padding:8px 6px 16px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
   .shelf::-webkit-scrollbar{display:none;}
+  .shelf.solo{justify-content:center;scroll-snap-type:none;}   /* 홀로 남은 판은 무대 중앙에 */
   .disc-item{flex:none;width:78px;text-align:center;cursor:pointer;scroll-snap-align:center;-webkit-tap-highlight-color:transparent;}
-  .disc-mini{width:72px;height:72px;border-radius:50%;margin:0 auto;position:relative;display:flex;align-items:center;justify-content:center;background:conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(90,150,255,.04) 60deg, transparent 120deg, transparent 240deg, rgba(80,160,200,.035) 290deg, transparent 340deg), repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,.06) 0px, rgba(0,0,0,0) 0.5px, rgba(0,0,0,.5) 1.15px, rgba(0,0,0,0) 1.7px), radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--c,#0a0a14) 50%, #07070d) 0%, color-mix(in srgb, var(--c,#0a0a14) 28%, #06060b) 72%);box-shadow:0 8px 17px rgba(0,0,0,.52), inset 0 0 10px rgba(0,0,0,.45), inset 0 0 0 2px rgba(0,0,0,.4), inset 0 0 0 3px rgba(255,255,255,.04);transition:transform .4s cubic-bezier(.22,.61,.36,1), box-shadow .4s;}
+  .disc-mini{width:72px;height:72px;border-radius:50%;margin:0 auto;position:relative;display:flex;align-items:center;justify-content:center;background:conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(90,150,255,.04) 60deg, transparent 120deg, transparent 240deg, rgba(80,160,200,.035) 290deg, transparent 340deg), repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,.06) 0px, rgba(0,0,0,0) 0.5px, rgba(0,0,0,.5) 1.15px, rgba(0,0,0,0) 1.7px), radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--c,#0a0a14) 50%, #07070d) 0%, color-mix(in srgb, var(--c,#0a0a14) 28%, #06060b) 72%);box-shadow:0 8px 17px rgba(0,0,0,.52), inset 0 0 10px rgba(0,0,0,.45), inset 0 0 0 2px rgba(0,0,0,.4), inset 0 0 0 3px rgba(255,255,255,.04);transition:transform .4s cubic-bezier(.22,.61,.36,1), box-shadow .4s, filter 1.6s ease;}
   .disc-mini::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;background:linear-gradient(125deg, transparent 34%, rgba(205,228,255,.13) 47%, rgba(222,240,255,.19) 50.5%, transparent 61%), radial-gradient(ellipse 68% 44% at 42% 20%, rgba(215,232,255,.11), transparent 60%);mix-blend-mode:screen;}
   .disc-mini .mini-lbl{width:42%;height:42%;border-radius:50%;box-shadow:inset 0 1px 1.5px rgba(255,255,255,.28), inset 0 -1px 2px rgba(0,0,0,.3), inset 0 0 0 1px rgba(0,0,0,.25), 0 1px 2px rgba(0,0,0,.42);}
   .disc-mini .mini-hole{position:absolute;width:4px;height:4px;border-radius:50%;background:#05060d;}
@@ -198,7 +199,6 @@
   .work-view{position:fixed;inset:0;z-index:30;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:linear-gradient(#070811,#050609);visibility:hidden;transform:translateX(100%);transition:transform .42s cubic-bezier(.33,0,.2,1), visibility .42s;}
   .work-view.active{visibility:visible;transform:translateX(0);}
   .work-view .wpage{max-width:680px;margin:0 auto;padding:20px 26px 80px;min-height:100%;background:radial-gradient(125% 52% at 50% -8%, var(--wv-glow) 0%, transparent 50%);}
-  .work-view .topbar{padding:6px 0 30px;}
   .work-view .back{font-family:var(--sans);font-size:12.5px;color:var(--dim);letter-spacing:.04em;display:inline-flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;transition:color .25s;-webkit-tap-highlight-color:transparent;}
   .work-view .back:hover{color:var(--haze);}
   .work-view .arr{width:7px;height:7px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);display:inline-block;}
@@ -225,16 +225,22 @@
   /* ===== 레퀴엠 (히든) ===== */
   .disc-item.locked{display:none;}
   .disc-item.revealed{display:block;}
-  .req-reveal{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;background:rgba(2,2,8,0);opacity:0;visibility:hidden;transition:opacity 2s ease, visibility 2s, background 2s ease;cursor:pointer;-webkit-tap-highlight-color:transparent;}
-  .req-reveal.show{opacity:1;visibility:visible;background:rgba(2,2,8,.94);}
-  .req-reveal .rd{width:150px;height:150px;border-radius:50%;background:repeating-radial-gradient(circle at 50% 50%, #060610 0 1px, #0a0a16 1px 3px);display:flex;align-items:center;justify-content:center;transform:scale(.7);opacity:0;box-shadow:0 0 55px rgba(74,42,96,.32);transition:opacity 2.6s ease .5s, transform 3s cubic-bezier(.16,.84,.32,1) .5s;}
-  .req-reveal.show .rd{opacity:1;transform:scale(1);}
-  .req-reveal .rd-lbl{width:40%;height:40%;border-radius:50%;background:radial-gradient(circle at 38% 30%, #2a1840, #120A22 65%);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:10px;color:#9a86b0;}
-  .req-reveal .rt{font-family:var(--display);font-style:italic;font-size:26px;color:#b8a8c8;text-align:center;opacity:0;transition:opacity 1.8s ease 1.8s;}
-  .req-reveal .rt span{display:block;font-style:normal;font-size:11.5px;letter-spacing:.2em;color:#6c6478;margin-top:11px;}
-  .req-reveal.show .rt{opacity:1;}
-  .req-reveal .rt-go{font-family:var(--sans);font-size:11px;color:#5a5468;letter-spacing:.12em;opacity:0;transition:opacity 1.5s ease 2.6s;}
-  .req-reveal.show .rt-go{opacity:1;}
+  .disc-item.read .disc-mini{filter:brightness(.2) saturate(.25);}                          /* 불 꺼진 방 */
+  .disc-item.read .disc-name{color:var(--haze);text-shadow:0 0 10px rgba(207,228,234,.4);}  /* 문패만 남아 빛난다 */
+  .disc-item.gone{display:none;}                                                            /* 자리를 비운 사이 */
+  .disc-item.returning{opacity:0;}
+  .disc-item.ret{transition:opacity 2.2s ease;opacity:1;}
+  .disc-item.revealed.pre{opacity:0;transform:translateY(26px) scale(.96);filter:blur(4px);}   /* 아직 수면 아래 */
+  .disc-item.revealed.rise{opacity:1;transform:none;filter:none;transition:opacity 2.4s ease, transform 2.4s cubic-bezier(.22,.61,.36,1), filter 2.4s ease;}   /* 떠오른다 */
+  .veil{position:fixed;inset:0;background:#020208;opacity:0;pointer-events:none;z-index:60;transition:opacity 2s ease;}
+  .veil.on{opacity:1;pointer-events:auto;transition:opacity 2.8s ease;}
+  .work-view .work-head{opacity:calc(1 - var(--sink,0)*.5);}                     /* 표제부는 함께 저문다 */
+  .work-foot .back{--lume:color-mix(in srgb, var(--wv-glow,#8fa3b8) 38%, #d8e7f4);transition:box-shadow 1.2s ease, color 1.2s ease, border-color 1.2s ease, text-shadow 1.2s ease;}   /* 판이 어두워도 빛은 밝다 — 색은 판의 것, 밝기는 빛의 것 */
+  .work-view.deep .work-foot .back{color:var(--lume);border-color:color-mix(in srgb, var(--lume) 62%, transparent);box-shadow:0 0 24px color-mix(in srgb, var(--lume) 36%, transparent);text-shadow:0 0 10px color-mix(in srgb, var(--lume) 55%, transparent);}   /* 끝에 닿으면 문이 그 트랙의 빛깔로 빛난다 */
+  @media (prefers-reduced-motion:reduce){
+    .veil,.veil.on{transition-duration:.01s;}
+    .disc-item.revealed.rise{transition-duration:.01s;}
+  }
 </style>
 </head>
 <body class="covered">
@@ -290,7 +296,6 @@
 
 <section class="work-view" id="work-1" aria-hidden="true" style="--wv-accent:rgb(207,235,236);--wv-glow:#A8DADC;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Bossa<span>보사노바</span></div>
       <h1 class="wh-title">1</h1>
@@ -314,7 +319,6 @@
 
 <section class="work-view" id="work-2" aria-hidden="true" style="--wv-accent:rgb(176,215,231);--wv-glow:#6FB7D4;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Swing<span>스윙</span></div>
       <h1 class="wh-title">2</h1>
@@ -338,7 +342,6 @@
 
 <section class="work-view" id="work-3" aria-hidden="true" style="--wv-accent:rgb(154,197,225);--wv-glow:#4895C9;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Standard<span>스탠더드</span></div>
       <h1 class="wh-title">3</h1>
@@ -362,7 +365,6 @@
 
 <section class="work-view" id="work-4" aria-hidden="true" style="--wv-accent:rgb(138,176,198);--wv-glow:#2A6F97;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Ballad<span>발라드</span></div>
       <h1 class="wh-title">4</h1>
@@ -386,7 +388,6 @@
 
 <section class="work-view" id="work-5" aria-hidden="true" style="--wv-accent:rgb(130,160,199);--wv-glow:#1B5299;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Blues<span>블루스</span></div>
       <h1 class="wh-title">5</h1>
@@ -410,7 +411,6 @@
 
 <section class="work-view" id="work-6" aria-hidden="true" style="--wv-accent:rgb(131,143,168);--wv-glow:#1D3461;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Prelude<span>전주곡</span></div>
       <h1 class="wh-title">6</h1>
@@ -434,7 +434,6 @@
 
 <section class="work-view" id="work-7" aria-hidden="true" style="--wv-accent:rgb(126,133,148);--wv-glow:#14213D;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Étude<span>연습곡</span></div>
       <h1 class="wh-title">7</h1>
@@ -458,7 +457,6 @@
 
 <section class="work-view" id="work-8" aria-hidden="true" style="--wv-accent:rgb(125,130,143);--wv-glow:#121B33;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Nocturne<span>야상곡</span></div>
       <h1 class="wh-title">8</h1>
@@ -482,7 +480,6 @@
 
 <section class="work-view" id="work-9" aria-hidden="true" style="--wv-accent:rgb(127,127,141);--wv-glow:#161630;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Ballade<span>담시곡</span></div>
       <h1 class="wh-title">9</h1>
@@ -506,7 +503,6 @@
 
 <section class="work-view" id="work-10" aria-hidden="true" style="--wv-accent:rgb(126,125,138);--wv-glow:#15122B;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Symphony<span>교향곡</span></div>
       <h1 class="wh-title">10</h1>
@@ -530,7 +526,6 @@
 
 <section class="work-view" id="work-11" aria-hidden="true" style="--wv-accent:rgb(136,132,144);--wv-glow:#120A22;">
   <div class="wpage">
-    <div class="topbar"><button class="back wv-back"><span class="arr"></span>음반으로</button></div>
     <header class="work-head">
       <div class="wh-form">Requiem<span>진혼곡</span></div>
       <h1 class="wh-title">11</h1>
@@ -550,11 +545,7 @@
   </div>
 </section>
 
-<div class="req-reveal" id="reqReveal" aria-hidden="true">
-  <div class="rd"><div class="rd-lbl">Requiem</div></div>
-  <div class="rt">그 후의 침묵<span>Requiem · 진혼곡</span></div>
-  <div class="rt-go">마지막 한 장이 선반 끝에서 기다립니다</div>
-</div>
+<div class="veil" id="veil" aria-hidden="true"></div>
 
 <script>
 
@@ -579,7 +570,7 @@
   const npForm=document.getElementById('npForm'), npTitle=document.getElementById('npTitle'), npMark=document.getElementById('npMark'), npNote=document.getElementById('npNote');
   const ttDisc=document.getElementById('ttDisc');
   let current=-1;
-  let reqSeq=0; let requiemUnlocked=false; let requiemArmed=false; let reqTimer=null;
+  const readWorks=new Set(); let requiemUnlocked=false; let shelfRestored=false;
 
   function lighten(hex,f){const n=parseInt(hex.slice(1),16);let r=n>>16,g=(n>>8)&255,b=n&255;r=Math.round(r+(255-r)*f);g=Math.round(g+(255-g)*f);b=Math.round(b+(255-b)*f);return `rgb(${r},${g},${b})`;}
 
@@ -588,13 +579,7 @@
     item.className='disc-item'+(d.hidden?' locked':'');
     item.setAttribute('aria-label', `${d.form} ${d.kr} 올리기`);
     item.innerHTML=`<div class="disc-mini" style="--c:${d.color}"><div class="mini-lbl" style="background:radial-gradient(circle at 38% 30%, ${lighten(d.color,.35)}, ${d.color} 65%)"></div><div class="mini-hole"></div></div><div class="disc-name">${d.form}</div><div class="disc-num">${String(i+1).padStart(2,'0')}</div>`;
-    item.addEventListener('click',()=>{
-      if(!requiemUnlocked && !d.hidden && i===reqSeq){
-        reqSeq++;
-        if(reqSeq>=discs.filter(x=>!x.hidden).length) requiemArmed=true;   // 조용히 무장 — 10번 감상을 방해하지 않는다
-      }
-      select(i);                                                           // 무장이 끝난 뒤 감시가 시작되도록 순서 고정
-    });
+    item.addEventListener('click',()=>select(i));
     shelf.appendChild(item);
   });
   const items=[...shelf.children];
@@ -614,46 +599,75 @@
     if(sit){ const tgt=sit.offsetLeft-(shelf.clientWidth-sit.offsetWidth)/2; shelf.scrollTo({left:Math.max(0,tgt), behavior:'smooth'}); }
     setBloomY(); scene.classList.add('playing'); ttDisc.tabIndex=0;
     scene.classList.toggle('side-a', i<5); scene.classList.toggle('side-b', i>=5 && i<discs.length-1); scene.classList.toggle('side-req', i===discs.length-1);
-    watchTen();
+    if(i===discs.length-1 && requiemUnlocked && !shelfRestored) restoreShelf();   // 진혼곡이 흐르는 사이, 열 장이 돌아온다
     tonearm.style.animation='none'; void tonearm.offsetWidth; tonearm.style.animation='';
     if(sound) playSound(i); else stopSound();
   }
-  function stop(){const wasTen=(current===TEN);current=-1;scene.classList.remove('playing','side-a','side-b','side-req');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopSound();if(wasTen&&requiemArmed&&!requiemUnlocked)reqFire(3250);else clearTimeout(reqTimer);}
+  function stop(){current=-1;scene.classList.remove('playing','side-a','side-b','side-req');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopSound();}
 
   ttDisc.addEventListener('click', stop);
   window.addEventListener('resize', setBloomY);
 
   // 작품 화면 전환 (한 파일 안에서)
-  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');clearTimeout(reqTimer);stopSound();}
-  function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');if(current>=0){select(current,false);if(!muted)playSound(current);}}
+  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();requestAnimationFrame(()=>{sink(wv);checkRead(i);});}
+  function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');
+    if(!requiemUnlocked && readWorks.size>=discs.filter(d=>!d.hidden).length){ finale(); return; }   // 자리를 비운 사이, 선반이 달라져 있다
+    if(current>=0){select(current,false);if(!muted)playSound(current);}}
   npTitle.addEventListener('click',e=>{e.preventDefault();if(current>=0)showWork(current);});
   document.getElementById('npGo').addEventListener('click',()=>{if(current>=0)showWork(current);});
   document.querySelectorAll('.wv-back').forEach(b=>b.addEventListener('click',()=>hideWork(b.closest('.work-view'))));
 
-  // 레퀴엠 해금: 순서대로 다 누르면 조건이 차고(armed), 10번이 다 흐른 '그 후의 침묵'에서 떠오른다
-  const reqReveal=document.getElementById('reqReveal');
-  const TEN=discs.length-2;                                     // 10번 곡의 인덱스
-  function reqFire(delay){
-    clearTimeout(reqTimer);
-    reqTimer=setTimeout(()=>{
-      if(requiemArmed && !requiemUnlocked && !document.body.classList.contains('covered') && !document.body.classList.contains('locked')) unlockRequiem();
-    }, delay);
+  // 레퀴엠: 한 편을 바닥까지 읽을 때마다 그 방의 불이 꺼지고, 문패만 남아 빛난다.
+  // 열 편을 모두 읽고 나온 선반에는 낯선 한 장만 남는다. 진혼곡이 흐르는 동안, 열 장은 꺼진 채로 돌아온다.
+  const hintEl=document.getElementById('hint');
+  const veil=document.getElementById('veil');
+  const RM=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function sink(wv){                                             // 읽어 내려갈수록 방이 어두워진다 — 글자는 그대로, 종이만 저문다
+    const max=wv.scrollHeight-wv.clientHeight;
+    const p=max>60 ? Math.min(1, wv.scrollTop/max) : 0;
+    wv.style.setProperty('--sink', p.toFixed(3));
+    const mix=(a,c)=>a.map((v,k)=>Math.round(v+(c[k]-v)*p)).join(',');
+    wv.style.background=`linear-gradient(rgb(${mix([7,8,17],[2,2,7])}), rgb(${mix([5,6,9],[1,1,4])}))`;
+    wv.classList.toggle('deep', p>0.82);                         // 끝에 닿으면 문이 빛난다
   }
-  function watchTen(){                                          // 10번이 판에 올라 있는 동안만
-    clearTimeout(reqTimer);
-    if(!requiemArmed || requiemUnlocked || current!==TEN) return;
-    reqFire(3250);                                              // 3250ms — 3월 25일, 아바키오의 생일. 그 시간 뒤에 그가 떠오른다
+  function checkRead(i){
+    if(i>=discs.length-1 || readWorks.has(i)) return;            // 진혼곡 자신은 세지 않는다
+    const wv=document.getElementById('work-'+(i+1));
+    if(wv && wv.scrollTop+wv.clientHeight>=wv.scrollHeight-28){
+      readWorks.add(i);
+      items[i].classList.add('read');                            // 불이 꺼지고, 문패가 켜진다
+    }
   }
-  function unlockRequiem(){
-    if(requiemUnlocked) return;
+  function finale(){
     requiemUnlocked=true;
-    reqReveal.classList.add('show');
+    const req=items[items.length-1];
+    const T_DARK=RM?200:2900, T_RISE=RM?700:5600;                // 5600ms — 4월 5일에서 6일로, 그 하룻밤의 어둠
+    veil.classList.add('on');                                    // 화면이 천천히 어두워진다
+    setTimeout(()=>{                                             // 완전한 어둠 속에서, 조용히 —
+      stop();
+      items.forEach((it,idx)=>{ if(!discs[idx].hidden) it.classList.add('gone'); });
+      shelf.classList.add('solo');
+      req.classList.add('revealed','pre');
+      hintEl.textContent='그 후의 침묵 — 한 장이 남아 있습니다';
+    }, T_DARK);
+    setTimeout(()=>{
+      veil.classList.remove('on');                               // 어둠이 걷히고
+      req.classList.add('rise'); req.classList.remove('pre');    // 그가 떠오른다
+    }, T_RISE);
   }
-  reqReveal.addEventListener('click', ()=>{
-    reqReveal.classList.remove('show');
-    const reqItem=items[items.length-1];
-    if(reqItem) reqItem.classList.add('revealed');   // 선반 끝에 꽂힐 뿐 — 트는 것은 감상하는 사람의 몫
-  });
+  function restoreShelf(){
+    shelfRestored=true;
+    setTimeout(()=>{
+      shelf.classList.remove('solo');
+      items.forEach((it,idx)=>{ if(!discs[idx].hidden){ it.classList.remove('gone'); it.classList.add('returning'); } });
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        items.forEach((it,idx)=>{ if(!discs[idx].hidden){ it.classList.add('ret'); it.classList.remove('returning'); } });
+        const req=items[items.length-1];
+        shelf.scrollTo({left:Math.max(0,req.offsetLeft-(shelf.clientWidth-req.offsetWidth)/2), behavior:'smooth'});   // 진혼곡은 시야 중앙에 머문 채, 열 장이 곁으로 돌아온다
+      }));
+      hintEl.textContent='선반에서 한 장을 골라 올려보세요';
+    }, 3500);                                                    // 곡이 먼저, 기억은 그다음
+  }
 
   // 작품 간 이전/다음 이동 (끝에서 처음으로 순환)
   function navWork(dir){
@@ -681,6 +695,7 @@
       cur.style.transform='';                         // CSS 기본(화면 밖)으로 복귀 — 안 보임
       void cur.offsetWidth; cur.style.transition='';
       nx.style.transform='';                          // 이후 위치는 active 클래스에 맡김
+      sink(nx); checkRead(next);                      // 짧은 페이지는 도착만으로 바닥에 닿는다
     }, 460);
   }
   const wvNormalCount=discs.filter(d=>!d.hidden).length;
@@ -693,6 +708,7 @@
     foot.insertBefore(nav, foot.firstChild);
     nav.querySelector('.wv-prev').addEventListener('click',()=>navWork(-1));
     nav.querySelector('.wv-next').addEventListener('click',()=>navWork(1));
+    wv.addEventListener('scroll',()=>{ sink(wv); checkRead(idx); },{passive:true});   // 내려갈수록 어두워지고, 바닥에 닿으면 읽은 것으로
   });
 
   // ===== 음악(MP3) =====
