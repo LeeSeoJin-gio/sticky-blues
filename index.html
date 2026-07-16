@@ -622,7 +622,7 @@
   window.addEventListener('resize', setBloomY);
 
   // 작품 화면 전환 (한 파일 안에서)
-  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();requestAnimationFrame(()=>{sink(wv);checkRead(i);});}
+  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();requestAnimationFrame(()=>{sink(wv);markSeen(i);});}
   function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');
     if(!requiemUnlocked && readWorks.size>=discs.filter(d=>!d.hidden).length){ finale(); return; }   // 자리를 비운 사이, 선반이 달라져 있다
     if(requiemUnlocked && !shelfRestored && current===discs.length-1) restoreShelf();   // 진혼곡의 방을 읽고 나온 뒤에야, 열 장이 돌아온다
@@ -643,13 +643,10 @@
     const mix=(a,c)=>a.map((v,k)=>Math.round(v+(c[k]-v)*p)).join(',');
     wv.style.background=`linear-gradient(rgb(${mix([7,8,17],[2,2,7])}), rgb(${mix([5,6,9],[1,1,4])}))`;
   }
-  function checkRead(i){
+  function markSeen(i){                                          // 바닥까지가 아니라, 들어가 본 것으로 족하다
     if(i>=discs.length-1 || readWorks.has(i)) return;            // 진혼곡 자신은 세지 않는다
-    const wv=document.getElementById('work-'+(i+1));
-    if(wv && wv.scrollTop+wv.clientHeight>=wv.scrollHeight-28){
-      readWorks.add(i);
-      items[i].classList.add('read');                            // 불이 꺼지고, 문패가 켜진다
-    }
+    readWorks.add(i);
+    items[i].classList.add('read');                              // 불이 꺼지고, 문패가 켜진다
   }
   // ===== 비명(碑銘)의 배경음 — 같은 폴더의 epitaph.mp3, 없으면 침묵 =====
   let epAudio=null, epCtx=null, epGain=null;
@@ -753,7 +750,7 @@
       cur.style.transform='';                         // CSS 기본(화면 밖)으로 복귀 — 안 보임
       void cur.offsetWidth; cur.style.transition='';
       nx.style.transform='';                          // 이후 위치는 active 클래스에 맡김
-      sink(nx); checkRead(next);                      // 짧은 페이지는 도착만으로 바닥에 닿는다
+      sink(nx); markSeen(next);                       // 필름스트립으로 건너온 방도 들른 것으로
     }, 460);
   }
   const wvNormalCount=discs.filter(d=>!d.hidden).length;
@@ -766,7 +763,7 @@
     foot.insertBefore(nav, foot.firstChild);
     nav.querySelector('.wv-prev').addEventListener('click',()=>navWork(-1));
     nav.querySelector('.wv-next').addEventListener('click',()=>navWork(1));
-    wv.addEventListener('scroll',()=>{ sink(wv); checkRead(idx); },{passive:true});   // 내려갈수록 어두워지고, 바닥에 닿으면 읽은 것으로
+    wv.addEventListener('scroll',()=>sink(wv),{passive:true});   // 내려갈수록 어두워진다
     if('IntersectionObserver' in window){                              // 문이 시야에 들어오면 켜진다 — 스크롤 계산의 헛디딤 없이
       new IntersectionObserver(es=>{
         es.forEach(en=>wv.classList.toggle('deep', en.isIntersecting));
