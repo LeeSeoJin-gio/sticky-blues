@@ -652,19 +652,57 @@
       items[i].classList.add('read');                            // 불이 꺼지고, 문패가 켜진다
     }
   }
+  // ===== 비명(碑銘)의 배경음 — 같은 폴더의 epitaph.mp3, 없으면 침묵 =====
+  let epAudio=null, epCtx=null, epGain=null;
+  function epStart(){
+    try{
+      epAudio=new Audio('epitaph.mp3'); epAudio.loop=true; epAudio.muted=muted;
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(AC){                                                    // 게인 노드 경유 — iOS에서도 페이드가 성립한다
+        epCtx=new AC();
+        const src=epCtx.createMediaElementSource(epAudio);
+        epGain=epCtx.createGain(); epGain.gain.value=0;
+        src.connect(epGain); epGain.connect(epCtx.destination);
+      }else{ epAudio.volume=0; }
+      epAudio.play().catch(()=>{});
+    }catch(e){}
+  }
+  function epFade(to,ms,done){
+    if(epGain&&epCtx){
+      const t=epCtx.currentTime;
+      epGain.gain.cancelScheduledValues(t);
+      epGain.gain.setValueAtTime(epGain.gain.value,t);
+      epGain.gain.linearRampToValueAtTime(to,t+ms/1000);
+      if(done)setTimeout(done,ms+60);
+      return;
+    }
+    if(!epAudio){ if(done)done(); return; }
+    const a=epAudio,from=a.volume,t0=performance.now();
+    (function step(){
+      const k=Math.min(1,(performance.now()-t0)/ms);
+      try{a.volume=from+(to-from)*k;}catch(e){}
+      if(k<1)requestAnimationFrame(step); else if(done)done();
+    })();
+  }
+  function epStop(){
+    epFade(0,1400,()=>{ try{ if(epAudio)epAudio.pause(); if(epCtx)epCtx.close(); }catch(e){} epAudio=null; epCtx=null; epGain=null; });
+  }
   function finale(){
     requiemUnlocked=true;
     const req=items[items.length-1];
     const T_DARK=RM?200:3350;                                    // 3250ms — 3월 25일의 길이로 저문다
-    veil.classList.add('on');                                    // 화면이 천천히 어두워진다
+    veil.classList.add('on');                                    // 화면이 천천히 어두워진다 — 저묾은 무음으로
+    epStart();                                                   // 제스처 안에 미리 심어둔다, 소리는 아직 0
     setTimeout(()=>{                                             // 완전한 어둠 속에서, 조용히 —
       stop();
       items.forEach((it,idx)=>{ if(!discs[idx].hidden) it.classList.add('gone'); });
       shelf.classList.add('solo');
       req.classList.add('revealed','pre');
-      hintEl.textContent='그 후의 침묵 — 한 장이 남아 있습니다';
+      hintEl.textContent='';                                     // 캡션 없이 — 장면이 스스로 말한다
       veil.classList.add('hold');                                // 두 줄의 비명(碑銘)이 떠오른다
       veil.setAttribute('aria-hidden','false');
+      try{ if(epAudio) epAudio.currentTime=0; }catch(e){}        // 곡은 처음부터
+      epFade(.7, RM?200:2600);                                   // 비명이 떠오른 뒤에야 흐른다
       setTimeout(()=>veil.classList.add('hintable'), 4200);      // 오래 머무는 이에게만 건네는 안내
     }, T_DARK);
   }
@@ -672,6 +710,7 @@
     if(!veil.classList.contains('hold')) return;                 // 저무는 동안은 재촉을 받지 않는다
     veil.classList.remove('on','hold','hintable');
     veil.setAttribute('aria-hidden','true');
+    epStop();                                                    // 곡이 먼저 물러난다
     const req=items[items.length-1];
     req.classList.add('rise'); req.classList.remove('pre');      // 어둠이 걷히고, 그가 떠오른다
   });
