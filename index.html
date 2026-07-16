@@ -235,8 +235,10 @@
   .veil{position:fixed;inset:0;background:#020208;opacity:0;pointer-events:none;z-index:60;transition:opacity 2s ease;}
   .veil.on{opacity:1;pointer-events:auto;transition:opacity 2.8s ease;}
   .work-view .work-head{opacity:calc(1 - var(--sink,0)*.5);}                     /* 표제부는 함께 저문다 */
-  .work-foot .back{--lume:color-mix(in srgb, var(--wv-glow,#8fa3b8) 38%, #d8e7f4);transition:box-shadow 1.2s ease, color 1.2s ease, border-color 1.2s ease, text-shadow 1.2s ease;}   /* 판이 어두워도 빛은 밝다 — 색은 판의 것, 밝기는 빛의 것 */
-  .work-view.deep .work-foot .back{color:var(--lume);border-color:color-mix(in srgb, var(--lume) 62%, transparent);box-shadow:0 0 24px color-mix(in srgb, var(--lume) 36%, transparent);text-shadow:0 0 10px color-mix(in srgb, var(--lume) 55%, transparent);}   /* 끝에 닿으면 문이 그 트랙의 빛깔로 빛난다 */
+  .work-foot .back{--lume:color-mix(in srgb, var(--wv-glow,#8fa3b8) 38%, #d8e7f4);transition:color 1.2s ease, text-shadow 1.2s ease;}   /* 판이 어두워도 빛은 밝다 — 색은 판의 것, 밝기는 빛의 것 */
+  .work-foot .arr{transition:filter 1.2s ease;}
+  .work-view.deep .work-foot .back{color:var(--lume);text-shadow:0 0 10px color-mix(in srgb, var(--lume) 60%, transparent), 0 0 28px color-mix(in srgb, var(--lume) 32%, transparent);}   /* 상자 없이, 글자만 빛난다 */
+  .work-view.deep .work-foot .arr{filter:drop-shadow(0 0 6px color-mix(in srgb, var(--lume) 55%, transparent));}
   @media (prefers-reduced-motion:reduce){
     .veil,.veil.on{transition-duration:.01s;}
     .disc-item.revealed.rise{transition-duration:.01s;}
