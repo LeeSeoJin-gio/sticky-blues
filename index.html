@@ -626,7 +626,7 @@
   function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();requestAnimationFrame(()=>{sink(wv);checkRead(i);});}
   function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');
     if(!requiemUnlocked && readWorks.size>=discs.filter(d=>!d.hidden).length){ finale(); return; }   // 자리를 비운 사이, 선반이 달라져 있다
-    if(current>=0){select(current,false);if(!muted)playSound(current);}}
+    if(current>=0) stop();}                                      // 나오면 판은 내려가 있다 — 다음 장은 손이 고른다
   npTitle.addEventListener('click',e=>{e.preventDefault();if(current>=0)showWork(current);});
   document.getElementById('npGo').addEventListener('click',()=>{if(current>=0)showWork(current);});
   document.querySelectorAll('.wv-back').forEach(b=>b.addEventListener('click',()=>hideWork(b.closest('.work-view'))));
@@ -691,8 +691,8 @@
     requiemUnlocked=true;
     const req=items[items.length-1];
     const T_DARK=RM?200:3350;                                    // 3250ms — 3월 25일의 길이로 저문다
-    veil.classList.add('on');                                    // 화면이 천천히 어두워진다 — 저묾은 무음으로
-    epStart();                                                   // 제스처 안에 미리 심어둔다, 소리는 아직 0
+    veil.classList.add('on');                                    // 화면이 천천히 어두워진다
+    epStart(); epFade(.7, RM?200:3250);                          // 암전과 함께 곡이 차오른다
     setTimeout(()=>{                                             // 완전한 어둠 속에서, 조용히 —
       stop();
       items.forEach((it,idx)=>{ if(!discs[idx].hidden) it.classList.add('gone'); });
@@ -701,8 +701,6 @@
       hintEl.textContent='';                                     // 캡션 없이 — 장면이 스스로 말한다
       veil.classList.add('hold');                                // 두 줄의 비명(碑銘)이 떠오른다
       veil.setAttribute('aria-hidden','false');
-      try{ if(epAudio) epAudio.currentTime=0; }catch(e){}        // 곡은 처음부터
-      epFade(.7, RM?200:2600);                                   // 비명이 떠오른 뒤에야 흐른다
       setTimeout(()=>veil.classList.add('hintable'), 4200);      // 오래 머무는 이에게만 건네는 안내
     }, T_DARK);
   }
