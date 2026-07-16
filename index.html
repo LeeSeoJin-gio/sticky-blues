@@ -232,15 +232,21 @@
   .disc-item.ret{transition:opacity 2.2s ease;opacity:1;}
   .disc-item.revealed.pre{opacity:0;transform:translateY(26px) scale(.96);filter:blur(4px);}   /* 아직 수면 아래 */
   .disc-item.revealed.rise{opacity:1;transform:none;filter:none;transition:opacity 2.4s ease, transform 2.4s cubic-bezier(.22,.61,.36,1), filter 2.4s ease;}   /* 떠오른다 */
-  .veil{position:fixed;inset:0;background:#020208;opacity:0;pointer-events:none;z-index:60;transition:opacity 2s ease;}
-  .veil.on{opacity:1;pointer-events:auto;transition:opacity 2.8s ease;}
+  .veil{position:fixed;inset:0;background:#020208;opacity:0;pointer-events:none;z-index:60;transition:opacity 2s ease;display:flex;align-items:center;justify-content:center;padding:24px;}
+  .veil.on{opacity:1;pointer-events:auto;transition:opacity 3.25s ease;}   /* 3.25초 — 3월 25일의 길이로 저문다 */
+  .epitaph{text-align:center;font-family:var(--serif);color:#8d99ab;letter-spacing:.06em;opacity:0;transition:opacity 1.8s ease;}
+  .veil.hold .epitaph{opacity:1;}
+  .epitaph p{margin:0 0 30px;font-size:17px;font-style:italic;}
+  .epitaph p span{display:block;margin-top:9px;font-size:12px;font-style:normal;letter-spacing:.24em;color:#5d6878;font-variant-numeric:tabular-nums;}
+  .ep-hint{margin-top:46px;font-family:var(--sans);font-size:10.5px;letter-spacing:.34em;color:#454e5e;opacity:0;transition:opacity 1.4s ease;}
+  .veil.hold.hintable .ep-hint{opacity:.6;}
   .work-view .work-head{opacity:calc(1 - var(--sink,0)*.5);}                     /* 표제부는 함께 저문다 */
   .work-foot .back{--lume:color-mix(in srgb, var(--wv-glow,#8fa3b8) 38%, #d8e7f4);transition:color 1.2s ease, text-shadow 1.2s ease;}   /* 판이 어두워도 빛은 밝다 — 색은 판의 것, 밝기는 빛의 것 */
   .work-foot .arr{transition:filter 1.2s ease;}
   .work-view.deep .work-foot .back{color:var(--lume);text-shadow:0 0 10px color-mix(in srgb, var(--lume) 60%, transparent), 0 0 28px color-mix(in srgb, var(--lume) 32%, transparent);}   /* 상자 없이, 글자만 빛난다 */
   .work-view.deep .work-foot .arr{filter:drop-shadow(0 0 6px color-mix(in srgb, var(--lume) 55%, transparent));}
   @media (prefers-reduced-motion:reduce){
-    .veil,.veil.on{transition-duration:.01s;}
+    .veil,.veil.on,.epitaph,.ep-hint{transition-duration:.01s;}
     .disc-item.revealed.rise{transition-duration:.01s;}
   }
 </style>
@@ -547,7 +553,13 @@
   </div>
 </section>
 
-<div class="veil" id="veil" aria-hidden="true"></div>
+<div class="veil" id="veil" aria-hidden="true">
+  <div class="epitaph">
+    <p>Leone Abbacchio<span>1980.03.25 – 2001.04.05</span></p>
+    <p>Bruno Bucciarati<span>1980.09.27 – 2001.04.06</span></p>
+    <div class="ep-hint">탭하여 계속</div>
+  </div>
+</div>
 
 <script>
 
@@ -643,7 +655,7 @@
   function finale(){
     requiemUnlocked=true;
     const req=items[items.length-1];
-    const T_DARK=RM?200:2900, T_RISE=RM?700:5600;                // 5600ms — 4월 5일에서 6일로, 그 하룻밤의 어둠
+    const T_DARK=RM?200:3350;                                    // 3250ms — 3월 25일의 길이로 저문다
     veil.classList.add('on');                                    // 화면이 천천히 어두워진다
     setTimeout(()=>{                                             // 완전한 어둠 속에서, 조용히 —
       stop();
@@ -651,12 +663,18 @@
       shelf.classList.add('solo');
       req.classList.add('revealed','pre');
       hintEl.textContent='그 후의 침묵 — 한 장이 남아 있습니다';
+      veil.classList.add('hold');                                // 두 줄의 비명(碑銘)이 떠오른다
+      veil.setAttribute('aria-hidden','false');
+      setTimeout(()=>veil.classList.add('hintable'), 4200);      // 오래 머무는 이에게만 건네는 안내
     }, T_DARK);
-    setTimeout(()=>{
-      veil.classList.remove('on');                               // 어둠이 걷히고
-      req.classList.add('rise'); req.classList.remove('pre');    // 그가 떠오른다
-    }, T_RISE);
   }
+  veil.addEventListener('click',()=>{
+    if(!veil.classList.contains('hold')) return;                 // 저무는 동안은 재촉을 받지 않는다
+    veil.classList.remove('on','hold','hintable');
+    veil.setAttribute('aria-hidden','true');
+    const req=items[items.length-1];
+    req.classList.add('rise'); req.classList.remove('pre');      // 어둠이 걷히고, 그가 떠오른다
+  });
   function restoreShelf(){
     shelfRestored=true;
     setTimeout(()=>{
