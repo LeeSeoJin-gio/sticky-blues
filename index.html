@@ -18,6 +18,7 @@
   *{margin:0;padding:0;box-sizing:border-box;}
   html{-webkit-text-size-adjust:100%;overflow-x:clip;}
   body.covered{overflow:hidden;}
+  body.foyer-open{overflow:hidden;}   /* 속표지가 떠 있는 동안 본문 스크롤 잠금 */
   body.locked{overflow:hidden;}
   body{
     min-height:100vh;
@@ -122,9 +123,9 @@
   .cover{position:fixed;inset:0;z-index:20;background:#1b1c1f;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:1;transition:opacity 1s ease, visibility 1s;-webkit-tap-highlight-color:transparent;touch-action:none;}
   .cover-img{max-width:100%;max-height:100%;object-fit:contain;display:block;}
   /* ===== 속표지(주의문구) ===== */
-  .foyer{position:fixed;inset:0;z-index:19;background:
-    radial-gradient(90% 70% at 50% 30%, #12161d 0%, #0b0e13 60%, #07090d 100%);
-    display:flex;align-items:center;justify-content:center;padding:34px;
+  .foyer{position:fixed;inset:0;z-index:19;background:#0b0e13;
+    background-image:radial-gradient(90% 70% at 50% 30%, #12161d 0%, #0b0e13 60%, #07090d 100%);
+    display:flex;align-items:center;justify-content:center;padding:34px;overflow-y:auto;
     opacity:0;visibility:hidden;transition:opacity 1s ease, visibility 1s;}
   .foyer.show{opacity:1;visibility:visible;}
   .foyer-in{max-width:32ch;text-align:center;}
@@ -916,6 +917,7 @@
   function enterAlbum(){
     cover.classList.add('open');
     foyer.classList.add('show'); foyer.setAttribute('aria-hidden','false');
+    document.body.classList.add('foyer-open');  // 속표지 위에서 본문이 스크롤로 드러나지 않게
     startRainOutside();                        // 표지 탭이 손짓 — 밖의 비가 차오른다
   }
 
@@ -927,7 +929,7 @@
     const T2 = RM_T?100:1400;                  // 문이 닫힐 즈음 천천히 밝아온다
     setTimeout(()=>{
       foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
-      document.body.classList.remove('covered');
+      document.body.classList.remove('covered','foyer-open');
       rainGoInside();                          // 비가 벽 안으로 먹힌다
       window.scrollTo(0,0);
       setTimeout(()=>blackout.classList.remove('on'), T2);
@@ -941,6 +943,7 @@
     if(current>=0) stop();
     cover.classList.remove('open'); // 표지가 다시 가운데로 닫힘
     foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
+    document.body.classList.remove('foyer-open');
     document.body.classList.add('covered');
     if(rainCtx){ rainInside=false; fadeTo(rIn,0,800); fadeTo(rOut,0,800); fadeTo(rUmb,0,800); }   // 표지로 나가면 비는 멎는다
     window.scrollTo(0,0);
