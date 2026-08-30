@@ -826,7 +826,7 @@
   // ===== 빗소리: 밖(rain-out) ↔ 안(rain-in) 크로스페이드. 파일 없으면 조용히. =====
   // rain-in.mp3 가 없으면 rain-out 한 겹을 저역 필터에 통과시켜 '벽에 먹힌 비'로 대신한다.
   const RM_A = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let rainCtx=null, rainMaster=null, rOut=null, rIn=null, rInIsSynth=false, rainInside=false, rainReady=false;
+  let rainCtx=null, rainMaster=null, rOut=null, rUmb=null, rIn=null, rInIsSynth=false, rainInside=false, rainReady=false;
   function mkChain(url, filtered){
     const el=new Audio(url); el.loop=true; el.crossOrigin='anonymous';
     const src=rainCtx.createMediaElementSource(el);
@@ -843,6 +843,7 @@
       rainCtx=new AC();
       rainMaster=rainCtx.createGain(); rainMaster.gain.value=muted?0:1; rainMaster.connect(rainCtx.destination);
       rOut=mkChain('rain-out.mp3', false);
+      rUmb=mkChain('rain-umbrella.mp3', false);   // 우산 위 후두둑 — 배경비 위에 겹친다
       // rain-in 파일이 있으면 그것을, 없으면 rain-out 을 필터링해 실내음으로
       rIn =mkChain('rain-in.mp3', false);
       rIn.el.addEventListener('error', ()=>{ rInIsSynth=true; rIn=mkChain('rain-out.mp3', true); }, {once:true});
@@ -858,8 +859,8 @@
   function startRainOutside(){
     if(!initRain()) return false;
     if(rainCtx.state==='suspended') rainCtx.resume();
-    const pr=rOut.el.play();
-    const ok=()=>{ rainInside=false; fadeTo(rOut, .9, RM_A?200:2600); };   // 열자마자 서서히
+    const pr=rOut.el.play(); if(rUmb) rUmb.el.play().catch(()=>{});
+    const ok=()=>{ rainInside=false; fadeTo(rOut, .55, RM_A?200:2600); fadeTo(rUmb, .95, RM_A?200:2600); };   // 배경은 멀리, 우산은 가까이
     if(pr && pr.then){ pr.then(ok).catch(()=>{}); return pr; }
     ok(); return true;
   }
@@ -870,13 +871,13 @@
     if(rainCtx.state==='suspended') rainCtx.resume();
     rainInside=true;
     rIn.el.play().catch(()=>{});
-    fadeTo(rOut, 0, RM_A?200:1400);
+    fadeTo(rOut, 0, RM_A?200:1400); fadeTo(rUmb, 0, RM_A?200:1400);   // 문이 닫히면 밖의 두 층 모두 멎는다
     fadeTo(rIn, rInIsSynth?.85:.7, RM_A?200:1600);   // 벽에 먹힌 먼 비
   }
   function rainGoOutside(){
     if(!rainCtx) return; rainInside=false;
     rOut.el.play().catch(()=>{});
-    fadeTo(rIn, 0, 1200); fadeTo(rOut, .9, 1400);
+    fadeTo(rIn, 0, 1200); fadeTo(rOut, .55, 1400); fadeTo(rUmb, .95, 1400);
   }
   function setRainMuted(m){ if(rainMaster) rainMaster.gain.linearRampToValueAtTime(m?0:1, (rainCtx?rainCtx.currentTime:0)+.2); }
   // 음악이 흐르면 실내 비가 배경으로 물러난다
@@ -941,7 +942,7 @@
     cover.classList.remove('open'); // 표지가 다시 가운데로 닫힘
     foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
     document.body.classList.add('covered');
-    if(rainCtx){ rainInside=false; fadeTo(rIn,0,800); }   // 표지로 나가면 비는 멎는다
+    if(rainCtx){ rainInside=false; fadeTo(rIn,0,800); fadeTo(rOut,0,800); fadeTo(rUmb,0,800); }   // 표지로 나가면 비는 멎는다
     window.scrollTo(0,0);
   });
 
