@@ -843,7 +843,7 @@
     rainInside=true;
     rIn.el.play().catch(()=>{});
     fadeTo(rOut, 0, RM_A?200:1400);
-    fadeTo(rIn, rInIsSynth?.85:.9, RM_A?200:1600);   // 벽에 먹힌 먼 비 (파일이 작아 기본을 올림)
+    fadeTo(rIn, rInIsSynth?.85:.7, RM_A?200:1600);   // 벽에 먹힌 먼 비
   }
   function rainGoOutside(){
     if(!rainCtx) return; rainInside=false;
@@ -854,7 +854,7 @@
   // 음악이 흐르면 실내 비가 배경으로 물러난다
   function duckRain(on){
     if(!rainCtx || !rainInside || !rIn) return;
-    const full=rInIsSynth?.85:.9, ducked=full*0.4;   // 음악 중엔 40%로
+    const full=rInIsSynth?.85:.7, ducked=full*0.4;   // 음악 중엔 40%로
     fadeTo(rIn, on?ducked:full, 900);
   }
 
