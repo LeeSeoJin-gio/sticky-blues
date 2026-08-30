@@ -121,16 +121,28 @@
   /* ===== 표지 ===== */
   .cover{position:fixed;inset:0;z-index:20;background:#1b1c1f;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:1;transition:opacity 1s ease, visibility 1s;-webkit-tap-highlight-color:transparent;touch-action:none;}
   .cover-img{max-width:100%;max-height:100%;object-fit:contain;display:block;}
-  .rain-on{position:absolute;bottom:12%;left:50%;transform:translateX(-50%);z-index:4;
-    width:46px;height:46px;display:flex;align-items:center;justify-content:center;
-    background:rgba(20,26,34,.5);border:1px solid rgba(150,180,205,.28);color:#bcd0e0;
-    border-radius:50%;cursor:pointer;backdrop-filter:blur(4px);animation:breatheR 3s ease-in-out infinite;}
-  .rain-on:focus-visible{outline:2px solid #7bbede;outline-offset:2px;}
-  .rain-on .drop{opacity:.85;animation:drip 2s ease-in infinite;}
-  .rain-on .d1{animation-delay:0s;} .rain-on .d2{animation-delay:.65s;} .rain-on .d3{animation-delay:1.3s;}
-  @keyframes drip{0%{opacity:0;transform:translateY(-3px);}25%{opacity:.9;}70%{opacity:.9;}100%{opacity:0;transform:translateY(4px);}}
-  @keyframes breatheR{0%,100%{opacity:.55;}50%{opacity:.95;}}
-  .cover.open .rain-on{opacity:0;pointer-events:none;}
+  /* ===== 속표지(주의문구) ===== */
+  .foyer{position:fixed;inset:0;z-index:19;background:
+    radial-gradient(90% 70% at 50% 30%, #12161d 0%, #0b0e13 60%, #07090d 100%);
+    display:flex;align-items:center;justify-content:center;padding:34px;
+    opacity:0;visibility:hidden;transition:opacity 1s ease, visibility 1s;}
+  .foyer.show{opacity:1;visibility:visible;}
+  .foyer-in{max-width:32ch;text-align:center;}
+  .foyer-body{font-family:var(--serif);color:#b9c6d2;line-height:1.95;font-size:15px;}
+  .foyer-body .lead{font-family:var(--display);font-size:20px;color:#dbe6ee;letter-spacing:.02em;margin-bottom:18px;font-weight:300;}
+  .foyer-body p{margin:0 0 14px;}
+  .foyer-body .fine{font-size:12.5px;color:#7f8c9c;letter-spacing:.04em;margin-top:4px;}
+  .foyer-rule{width:34px;height:1px;background:#3a4a58;margin:24px auto;}
+  .foyer-enter{margin-top:38px;padding:14px 42px;background:none;border:1px solid #46596a;border-radius:2px;
+    color:#cddae6;font-family:var(--sans);font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;
+    transition:background .5s, box-shadow .5s, color .5s;}
+  .foyer-enter:hover,.foyer-enter:focus-visible{background:rgba(123,190,222,.09);box-shadow:0 0 24px rgba(123,190,222,.16);color:#7bbede;outline:none;}
+
+  /* 암전막 */
+  .blackout{position:fixed;inset:0;z-index:40;background:#04060a;opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity 1.4s ease, visibility 1.4s;}
+  .blackout.on{opacity:1;visibility:visible;pointer-events:auto;}
+
   .cover-hint{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:rgba(220,235,240,.7);animation:hintpulse 2.6s ease-in-out infinite;pointer-events:none;}
   @keyframes hintpulse{0%,100%{opacity:.35;}50%{opacity:.85;}}
   .cover:focus-visible{outline:2px solid #7bbede;outline-offset:-4px;}
@@ -310,14 +322,30 @@
 <div class="cover" id="cover" role="button" tabindex="0" aria-label="입장하기">
   <picture><source media="(min-width:1000px)" srcset="cover-wide.png"><img class="cover-img" src="cover.png" alt="Sticky Blues — Bruno Bucciarati × Leone Abbacchio CP exhibition"></picture>
   <div class="cover-hint">tap to enter</div>
-  <button class="rain-on" id="rainOn" aria-label="빗소리 켜기" hidden>
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path class="drop d1" d="M8 4.5c0 0-2.2 3-2.2 4.6a2.2 2.2 0 0 0 4.4 0C10.2 7.5 8 4.5 8 4.5Z"/>
-      <path class="drop d2" d="M16 6.5c0 0-2.2 3-2.2 4.6a2.2 2.2 0 0 0 4.4 0C18.2 9.5 16 6.5 16 6.5Z"/>
-      <path class="drop d3" d="M9.5 13.5c0 0-2.2 3-2.2 4.6a2.2 2.2 0 0 0 4.4 0C11.7 16.5 9.5 13.5 9.5 13.5Z"/>
-    </svg>
-  </button>
 </div>
+
+<!-- 속표지: 주의문구 (표지 탭 후 등장, 밖의 비가 흐름) -->
+<section class="foyer" id="foyer" aria-hidden="true">
+  <div class="foyer-in">
+    <div class="foyer-body" id="foyerBody">
+      <!-- ============================================================
+           여기에 주의문구를 적으세요. (CP 주의 · 2차창작 고지 등)
+             한 줄  :  <p>문구</p>
+             강조   :  <p class="lead">앞세울 한 줄</p>
+             구분선 :  <div class="foyer-rule"></div>
+           적은 뒤 이 안내 주석은 지워도 됩니다.
+      ============================================================ -->
+      <p class="lead">이곳은 ○○ × ○○ 팬 합작 전시입니다.</p>
+      <p>실제 인물·공식과 무관한 2차 창작이며,<br>모든 작품의 권리는 각 참여자에게 있습니다.</p>
+      <div class="foyer-rule"></div>
+      <p class="fine">읽고 동의하신다면, 문을 열고 들어와 주세요.</p>
+    </div>
+    <button class="foyer-enter" id="foyerEnter">들어가기</button>
+  </div>
+</section>
+
+<!-- 암전막 : 장면 전환을 덮는다 -->
+<div class="blackout" id="blackout" aria-hidden="true"></div>
 
 <section class="work-view" id="work-1" aria-hidden="true" style="--wv-accent:rgb(207,235,236);--wv-glow:#A8DADC;">
   <div class="wpage">
@@ -876,30 +904,44 @@
 
   // ===== 입장 / 표지 복귀 =====
   const cover=document.getElementById('cover'), homeBtn=document.getElementById('homeBtn');
+  const foyer=document.getElementById('foyer');
+  const blackout=document.getElementById('blackout');
+  const RM_T = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // 문 여닫는 효과음 한 세트 (파일 없으면 조용히) — door.mp3
+  function doorSound(){ try{ const a=new Audio('door.mp3'); a.play().catch(()=>{}); }catch(e){} }
+
+  // 표지 탭 → 속표지로. 여기서 '밖의 비'가 페이드인.
   function enterAlbum(){
     cover.classList.add('open');
-    document.body.classList.remove('covered');
-    rainGoInside();                            // 문이 열리고, 비가 벽 안으로 먹힌다
+    foyer.classList.add('show'); foyer.setAttribute('aria-hidden','false');
+    startRainOutside();                        // 표지 탭이 손짓 — 밖의 비가 차오른다
   }
-  const rainOn=document.getElementById('rainOn');
-  // 열자마자 밖의 비를 시도한다. 브라우저가 막으면 ♪ 어포던스를 조용히 띄운다.
-  (function tryRain(){
-    const r=startRainOutside();
-    if(r && r.then){ r.then(()=>{ rainOn.hidden=true; }).catch(()=>{ rainOn.hidden=false; }); }
-    else if(r===false){ rainOn.hidden=false; }
-  })();
-  rainOn.addEventListener('click', e=>{
-    e.stopPropagation();                       // 표지 입장과 겹치지 않게
-    if(rainCtx && rainCtx.state==='suspended') rainCtx.resume();
-    startRainOutside(); rainOn.hidden=true;
-  });
+
+  // 속표지 입장 → 암전, 문소리, 그 사이 비가 실내로, 밝아오며 본문
+  function enterHall(){
+    doorSound();                               // 문 한 세트: 열리고 — 닫힌다
+    blackout.classList.add('on');              // 그 소리에 맞춰 화면이 저문다
+    const T1 = RM_T?200:2200;                  // 문이 여닫히는 사이, 어둠 속에서 장면을 바꾼다
+    const T2 = RM_T?100:1400;                  // 문이 닫힐 즈음 천천히 밝아온다
+    setTimeout(()=>{
+      foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
+      document.body.classList.remove('covered');
+      rainGoInside();                          // 비가 벽 안으로 먹힌다
+      window.scrollTo(0,0);
+      setTimeout(()=>blackout.classList.remove('on'), T2);
+    }, T1);
+  }
+  // 표지는 무음. 밖의 비는 표지를 탭해 속표지로 들어설 때 시작된다(브라우저 자동재생 정책 우회).
   cover.addEventListener('click', enterAlbum);
   cover.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enterAlbum(); } });
+  document.getElementById('foyerEnter').addEventListener('click', enterHall);
   homeBtn.addEventListener('click', ()=>{
     if(current>=0) stop();
     cover.classList.remove('open'); // 표지가 다시 가운데로 닫힘
+    foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
     document.body.classList.add('covered');
-    rainGoOutside();                           // 다시 골목의 비로
+    if(rainCtx){ rainInside=false; fadeTo(rIn,0,800); }   // 표지로 나가면 비는 멎는다
     window.scrollTo(0,0);
   });
 
