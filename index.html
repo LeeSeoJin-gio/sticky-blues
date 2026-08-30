@@ -909,6 +909,26 @@
   const cover=document.getElementById('cover'), homeBtn=document.getElementById('homeBtn');
   const foyer=document.getElementById('foyer');
   const blackout=document.getElementById('blackout');
+
+  // 속표지가 떠 있는 동안 배경 스크롤을 원천 차단 (데스크톱 휠·키, 모바일 터치)
+  let foyerLocked=false;
+  function isInsideFoyer(t){ return t && foyer.contains(t); }
+  function blockScroll(e){
+    if(!foyerLocked) return;
+    // 속표지 내부에서 실제로 스크롤 여지가 있으면 통과, 아니면 차단
+    if(e.type==='wheel' || e.type==='touchmove'){
+      if(isInsideFoyer(e.target) && foyer.scrollHeight>foyer.clientHeight) return;
+      e.preventDefault();
+    }
+  }
+  function blockKeys(e){
+    if(!foyerLocked) return;
+    const keys=['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' ','Spacebar'];
+    if(keys.includes(e.key) && !isInsideFoyer(e.target)) e.preventDefault();
+  }
+  window.addEventListener('wheel', blockScroll, {passive:false});
+  window.addEventListener('touchmove', blockScroll, {passive:false});
+  window.addEventListener('keydown', blockKeys, {passive:false});
   const RM_T = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // 문 여닫는 효과음 한 세트 (파일 없으면 조용히) — door.mp3
@@ -919,6 +939,7 @@
     cover.classList.add('open');
     foyer.classList.add('show'); foyer.setAttribute('aria-hidden','false');
     document.body.classList.add('foyer-open');  // 속표지 위에서 본문이 스크롤로 드러나지 않게
+    foyerLocked=true;
     startRainOutside();                        // 표지 탭이 손짓 — 밖의 비가 차오른다
   }
 
@@ -930,6 +951,7 @@
     const T2 = RM_T?100:1400;                  // 문이 닫힐 즈음 천천히 밝아온다
     setTimeout(()=>{
       foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
+      foyerLocked=false;
       document.body.classList.remove('covered','foyer-open');
       rainGoInside();                          // 비가 벽 안으로 먹힌다
       window.scrollTo(0,0);
@@ -944,6 +966,7 @@
     if(current>=0) stop();
     cover.classList.remove('open'); // 표지가 다시 가운데로 닫힘
     foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
+    foyerLocked=false;
     document.body.classList.remove('foyer-open');
     document.body.classList.add('covered');
     if(rainCtx){ rainInside=false; fadeTo(rIn,0,800); fadeTo(rOut,0,800); fadeTo(rUmb,0,800); }   // 표지로 나가면 비는 멎는다
