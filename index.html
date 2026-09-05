@@ -130,15 +130,22 @@
     overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
     opacity:0;visibility:hidden;transition:opacity 1s ease, visibility 1s;}
   .foyer.show{opacity:1;visibility:visible;}
-  .foyer-in{max-width:32ch;text-align:center;}
-  .foyer-body{font-family:var(--serif);color:#b9c6d2;line-height:1.95;font-size:15px;}
-  .foyer-body .lead{font-family:var(--display);font-size:20px;color:#dbe6ee;letter-spacing:.02em;margin-bottom:18px;font-weight:300;}
-  .foyer-body p{margin:0 0 14px;}
-  .foyer-body .fine{font-size:12.5px;color:#7f8c9c;letter-spacing:.04em;margin-top:4px;}
-  .foyer-rule{width:34px;height:1px;background:#3a4a58;margin:24px auto;}
-  .foyer-enter{margin-top:38px;padding:14px 42px;background:none;border:1px solid #46596a;border-radius:2px;
-    color:#cddae6;font-family:var(--sans);font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;
-    transition:background .5s, box-shadow .5s, color .5s;}
+  .liner{max-width:600px;width:100%;margin:0 auto;text-align:center;}
+  .liner-eyebrow{font-family:var(--sans);font-size:10.5px;letter-spacing:.36em;color:#6d8093;text-transform:uppercase;}
+  .liner-title{font-family:var(--display);font-weight:300;font-size:clamp(1.8rem,6vw,2.6rem);color:#dbe6ee;letter-spacing:.02em;margin-top:14px;}
+  .liner-sub{font-family:var(--serif);font-style:italic;font-size:14px;color:#8ba0b0;margin-top:8px;letter-spacing:.04em;}
+  .liner-sides{display:flex;gap:34px;justify-content:center;margin:40px 0 8px;text-align:left;flex-wrap:wrap;}
+  .liner-side{flex:1 1 220px;max-width:280px;}
+  .side-head{font-family:var(--serif);font-size:15px;color:#c6d3de;letter-spacing:.14em;text-transform:uppercase;padding-bottom:12px;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,.12);}
+  .side-mark{font-family:var(--display);font-size:19px;color:var(--blue-lit);margin-right:8px;}
+  .tracklist{list-style:none;margin:0;padding:0;counter-reset:none;}
+  .tracklist li{display:flex;align-items:baseline;gap:12px;padding:9px 2px;border-bottom:1px solid rgba(255,255,255,.05);}
+  .tracklist .tl-no{font-family:var(--sans);font-size:11px;color:#6d8093;min-width:20px;font-variant-numeric:tabular-nums;}
+  .tracklist .tl-name{font-family:var(--serif);font-size:15px;color:#cbd8e2;}
+  .tracklist .tl-by{font-family:var(--sans);font-size:11.5px;color:#7f8c9c;margin-left:auto;letter-spacing:.04em;}
+  .liner-rule{width:38px;height:1px;background:#3a4a58;margin:34px auto 24px;}
+  .liner-fine{font-family:var(--serif);font-size:12px;line-height:1.85;color:#6f7d8c;max-width:46ch;margin:0 auto;word-break:keep-all;text-wrap:pretty;letter-spacing:.02em;}
+  .foyer-enter{margin-top:40px;padding:14px 42px;background:none;border:1px solid #46596a;border-radius:2px;color:#cddae6;font-family:var(--sans);font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;transition:background .5s, box-shadow .5s, color .5s;}
   .foyer-enter:hover,.foyer-enter:focus-visible{background:rgba(123,190,222,.09);box-shadow:0 0 24px rgba(123,190,222,.16);color:#7bbede;outline:none;}
 
   /* 암전막 */
@@ -234,6 +241,26 @@
   .work-view .wh-mark{font-family:var(--display);font-style:italic;font-size:15px;color:var(--wv-accent);margin-top:15px;opacity:.85;}
   .work-view .wh-by{font-family:var(--sans);font-size:12px;color:var(--dim);letter-spacing:.06em;margin-top:20px;}
   .work-view .work-body{font-family:var(--serif);line-height:1.85;color:var(--haze);}
+  /* 봉인된 트랙 */
+  .corked{max-width:520px;margin:40px auto 0;text-align:center;padding:20px 24px 60px;}
+  .corked .cork-line{font-family:var(--display);font-size:clamp(1.5rem,5vw,2rem);color:var(--haze);letter-spacing:.02em;}
+  .corked .cork-sub{font-family:var(--serif);font-size:14.5px;line-height:1.9;color:var(--dim);margin-top:20px;word-break:keep-all;text-wrap:pretty;}
+  .cork-br{display:none;}
+  @media (min-width:560px){ .cork-br{display:inline;} }
+  .cork-form{display:flex;gap:10px;justify-content:center;align-items:stretch;margin-top:40px;flex-wrap:wrap;}
+  .cork-input{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.16);border-radius:3px;
+    padding:12px 16px;font-family:var(--serif);font-size:15px;color:var(--haze);letter-spacing:.04em;text-align:center;
+    min-width:min(64vw,240px);transition:border-color .3s, box-shadow .3s;}
+  .cork-input:focus{outline:none;border-color:var(--wv-accent);box-shadow:0 0 20px color-mix(in srgb, var(--wv-glow) 28%, transparent);}
+  .cork-input::placeholder{color:#4a5563;letter-spacing:.3em;}
+  .cork-go{background:none;border:1px solid rgba(255,255,255,.22);border-radius:3px;color:var(--haze);
+    font-family:var(--sans);font-size:12.5px;letter-spacing:.16em;padding:0 22px;cursor:pointer;transition:background .4s, box-shadow .4s, color .4s;}
+  .cork-go:hover,.cork-go:focus-visible{background:color-mix(in srgb, var(--wv-glow) 14%, transparent);box-shadow:0 0 20px color-mix(in srgb, var(--wv-glow) 24%, transparent);color:#fff;outline:none;}
+  .cork-miss{font-family:var(--serif);font-style:italic;font-size:13px;color:#8a7551;margin-top:22px;}
+  .corked.opening{opacity:0;transition:opacity .8s ease;}
+  .wb-sealed{animation:sealReveal 1.2s ease both;}
+  @keyframes sealReveal{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  @media (prefers-reduced-motion:reduce){ .corked.opening,.wb-sealed{transition:none;animation:none;} }
   .work-view .para{font-size:17.5px;margin:0 0 1.5em;color:#d2dce1;}
   .work-view .sub{font-family:var(--display);font-weight:600;font-size:1.45rem;color:var(--wv-accent);margin:2.2em 0 .8em;}
   .work-view .fig{margin:2.6em 0;}
@@ -329,11 +356,37 @@
 
 <!-- 속표지: 주의문구 (표지 탭 후 등장, 밖의 비가 흐름) -->
 <section class="foyer" id="foyer" aria-hidden="true">
-  <div class="foyer-in">
-    <div class="foyer-body" id="foyerBody">
-      <!-- 여기에 주의문구를 채우세요. (한 줄: <p>문구</p> · 강조: <p class="lead">문구</p> · 구분선: <div class="foyer-rule"></div>) -->
-      <p class="lead">주의문구</p>
+  <div class="liner">
+    <p class="liner-eyebrow">A JOINT EXHIBITION</p>
+    <h2 class="liner-title">앨범 제목</h2>
+    <p class="liner-sub">Bruno Bucciarati &times; Leone Abbacchio</p>
+
+    <div class="liner-sides">
+      <div class="liner-side">
+        <div class="side-head"><span class="side-mark">A</span> Jazz</div>
+        <ol class="tracklist">
+          <li><span class="tl-no">01</span><span class="tl-name">Bossa</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">02</span><span class="tl-name">Swing</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">03</span><span class="tl-name">Standard</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">04</span><span class="tl-name">Ballad</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">05</span><span class="tl-name">Blues</span><span class="tl-by">○○○</span></li>
+        </ol>
+      </div>
+      <div class="liner-side">
+        <div class="side-head"><span class="side-mark">B</span> Classic</div>
+        <ol class="tracklist" start="6">
+          <li><span class="tl-no">06</span><span class="tl-name">Prelude</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">07</span><span class="tl-name">Étude</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">08</span><span class="tl-name">Nocturne</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">09</span><span class="tl-name">Ballade</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">10</span><span class="tl-name">Symphony</span><span class="tl-by">○○○</span></li>
+        </ol>
+      </div>
     </div>
+
+    <div class="liner-rule"></div>
+    <p class="liner-fine">『죠죠의 기묘한 모험』 5부 〈황금의 바람〉 기반 팬 2차 창작 · 브루노 부차라티 × 레오네 아바키오 좌우상대고정 · 원작 및 실존하는 무엇과도 무관하며, 모든 작품의 권리는 각 참여자에게 있습니다.</p>
+
     <button class="foyer-enter" id="foyerEnter">들어가기</button>
   </div>
 </section>
@@ -441,13 +494,21 @@
       <div class="wh-mark">Slow blues, after hours</div>
       <div class="wh-by">작곡 ○○○</div>
     </header>
-    <main class="work-body">
+    <!-- 봉인된 트랙: 그레코 디 투포를 대면 열린다 -->
+    <div class="corked" id="cork5">
+      <p class="cork-line">한 잔 하시겠습니까?</p>
+      <p class="cork-sub">…이 바에 오셨던 손님 중 한 분이 <br class="cork-br">자주 주문하셨던 화이트 와인이 있는데.</p>
+      <form class="cork-form" id="corkForm5" autocomplete="off">
+        <input type="text" id="corkInput5" class="cork-input" placeholder="⋯" aria-label="화이트 와인의 이름" spellcheck="false">
+        <button type="submit" class="cork-go">주문</button>
+      </form>
+      <p class="cork-miss" id="corkMiss5" hidden>글쎄요, 그 이름이 아닌 것 같군요.</p>
+    </div>
+    <main class="work-body wb-sealed" id="wbody5" hidden>
       <!-- ============================================================
-         여기에 작품을 넣으세요. 글과 그림을 원하는 순서로 자유롭게.
-           글 문단 :  <p class="para">문단 내용</p>
-           소제목  :  <h2 class="sub">소제목</h2>
-           그림    :  <figure class="fig"><img src="그림파일.jpg" alt="설명"><figcaption>캡션</figcaption></figure>
-         그림 파일은 이 html과 같은 폴더에 두고 파일명을 src에 적으면 됩니다.
+         여기에 (성인) 작품을 넣으세요. 잠금 해제 후 보이는 본문입니다.
+           글 문단 :  <p class="para">문단 내용</p>  ·  소제목 : <h2 class="sub">…</h2>
+           그림    :  <figure class="fig"><img src="그림.jpg" alt=""><figcaption>캡션</figcaption></figure>
          작품을 넣은 뒤 placeholder 줄은 지우세요.
          ============================================================ -->
       <p class="placeholder">작품이 이곳에 펼쳐집니다</p>
@@ -609,7 +670,7 @@
     {form:'Swing',       kr:'스윙',     color:'#6FB7D4', title:'2', mark:'Medium swing, bright', note:'작품 소개글이 놓일 자리'},
     {form:'Standard',    kr:'스탠더드', color:'#4895C9', title:'3',       mark:'Relaxed, in two', note:'작품 소개글이 놓일 자리'},
     {form:'Ballad',      kr:'발라드',   color:'#2A6F97', title:'4', mark:'Slow ballad, tender', note:'작품 소개글이 놓일 자리'},
-    {form:'Blues',       kr:'블루스',   color:'#1B5299', title:'5',     mark:'Slow blues, after hours', note:'작품 소개글이 놓일 자리'},
+    {form:'Blues',       kr:'블루스',   color:'#1B5299', title:'5',     mark:'Slow blues, after hours', note:'작품 소개글이 놓일 자리', sealed:true},
     {form:'Prelude',     kr:'전주곡',   color:'#1D3461', title:'6',      mark:'Sostenuto', note:'작품 소개글이 놓일 자리'},
     {form:'Étude',       kr:'연습곡',   color:'#14213D', title:'7',     mark:'Allegro, agitato', note:'작품 소개글이 놓일 자리'},
     {form:'Nocturne',    kr:'야상곡',   color:'#121B33', title:'8',       mark:'Adagio, con dolore', note:'작품 소개글이 놓일 자리'},
@@ -661,6 +722,26 @@
   window.addEventListener('resize', setBloomY);
 
   // 작품 화면 전환 (한 파일 안에서)
+  // 봉인 해제: 그레코 디 투포 (표기 흔들림 허용, 풀네임)
+  function normalizeAnswer(s){ return (s||'').toLowerCase().split(' ').join('').split('　').join('').split('·').join('').split('・').join('').trim(); }
+  const GRECO=['그레코디투포','grecoditufo'];
+  (function initCork(){
+    const form=document.getElementById('corkForm5'); if(!form) return;
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      const val=normalizeAnswer(document.getElementById('corkInput5').value);
+      const miss=document.getElementById('corkMiss5');
+      if(GRECO.includes(val)){
+        const cork=document.getElementById('cork5'), body=document.getElementById('wbody5');
+        cork.classList.add('opening');
+        setTimeout(function(){ cork.hidden=true; body.hidden=false; }, 800);
+      }else{
+        miss.hidden=false;
+        document.getElementById('corkInput5').select();
+      }
+    });
+  })();
+
   function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();requestAnimationFrame(()=>{sink(wv);markSeen(i);});}
   function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');
     if(!requiemUnlocked && readWorks.size>=discs.filter(d=>!d.hidden).length){ finale(); return; }   // 자리를 비운 사이, 선반이 달라져 있다
