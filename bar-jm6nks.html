@@ -712,7 +712,7 @@
     ttLabel.textContent=d.form;
     npForm.innerHTML = d.title ? `${d.form}<span>${d.kr}</span>` : d.kr;   // 무제: 위엔 한글 형식명, 제목 자리엔 형식명
     npTitle.textContent=d.title||d.form; npMark.textContent=d.mark;
-    npNote.textContent=d.note||'Instrumental'; npNote.classList.toggle('instrumental', !d.note);
+    npNote.textContent=d.note||'Instrumental'; npNote.classList.toggle('instrumental', !d.note); centerInst();
     items.forEach((it,idx)=>it.classList.toggle('active', idx===i));
     const sit=items[i];
     if(sit){ const tgt=sit.offsetLeft-(shelf.clientWidth-sit.offsetWidth)/2; shelf.scrollTo({left:Math.max(0,tgt), behavior:'smooth'}); }
@@ -721,6 +721,15 @@
     tonearm.style.animation='none'; void tonearm.offsetWidth; tonearm.style.animation='';
     if(sound) playSound(i); else stopSound();
   }
+  // Instrumental 한 단어는 곡 정보(악상기호)와 '작품 펼치기' 사이 빈 칸의 한가운데에
+  function absTop(el){ let y=0; for(let e=el; e; e=e.offsetParent) y+=e.offsetTop; return y; }   // 애니메이션(transform)에 흔들리지 않는 위치
+  function centerInst(){
+    npNote.style.transform='';
+    if(!npNote.classList.contains('instrumental')) return;
+    const mB=absTop(npMark)+npMark.offsetHeight, gT=absTop(npGo), nT=absTop(npNote), nH=npNote.offsetHeight;
+    npNote.style.transform=`translateY(${((mB+gT)/2)-(nT+nH/2)}px)`;
+  }
+  window.addEventListener('resize', centerInst);
   function stop(){current=-1;scene.classList.remove('playing','side-a','side-b','side-req');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopSound();}
 
   ttDisc.addEventListener('click', stop);
