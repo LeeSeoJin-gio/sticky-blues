@@ -959,7 +959,7 @@
     rainInside=true;
     rIn.el.play().catch(()=>{});
     fadeTo(rOut, 0, RM_A?200:1400); fadeTo(rUmb, 0, RM_A?200:1400);   // 문이 닫히면 밖의 두 층 모두 멎는다
-    fadeTo(rIn, rInIsSynth?.85:.7, RM_A?200:1600);   // 벽에 먹힌 먼 비
+    fadeTo(rIn, rainInFull(), RM_A?200:1600);   // 벽에 먹힌 먼 비
   }
   function rainGoOutside(){
     if(!rainCtx) return; rainInside=false;
@@ -968,9 +968,13 @@
   }
   function setRainMuted(m){ if(rainMaster) rainMaster.gain.linearRampToValueAtTime(m?0:1, (rainCtx?rainCtx.currentTime:0)+.2); }
   // 음악이 흐르면 실내 비가 배경으로 물러난다
+  // 안에 들어왔을 때 빗소리 크기 — 숫자만 바꾸면 됨 (예전 값 0.7)
+  const RAIN_IN_VOL = 0.42;     // 음악 없을 때
+  const RAIN_IN_DUCK = 0.35;    // 음악이 흐를 땐 그 35%로
+  function rainInFull(){ return rInIsSynth ? RAIN_IN_VOL*1.2 : RAIN_IN_VOL; }
   function duckRain(on){
     if(!rainCtx || !rainInside || !rIn) return;
-    const full=rInIsSynth?.85:.7, ducked=full*0.4;   // 음악 중엔 40%로
+    const full=rainInFull(), ducked=full*RAIN_IN_DUCK;
     fadeTo(rIn, on?ducked:full, 900);
   }
 
