@@ -256,6 +256,10 @@
   .work-view .film video{width:100%;height:auto;display:block;border-radius:3px;background:#000;box-shadow:0 14px 34px rgba(0,0,0,.45);}
   .work-view .wh-sub{display:block;font-family:var(--sans);font-size:14px;color:var(--haze);opacity:.72;letter-spacing:.06em;margin-top:10px;}
   .work-view .placeholder{text-align:center;color:var(--dim);font-style:italic;padding:80px 0;font-size:15px;opacity:.55;}
+  .work-view .artist{text-align:center;margin-top:64px;}
+  .work-view .artist a{display:inline-block;padding:14px 34px;border:1px solid color-mix(in srgb, var(--wv-glow) 45%, #46596a);border-radius:2px;
+      color:#cddae6;font-family:var(--sans);font-size:13px;letter-spacing:.12em;text-decoration:none;transition:background .5s, box-shadow .5s, color .5s;-webkit-tap-highlight-color:transparent;}
+  .work-view .artist a:hover,.work-view .artist a:focus-visible{background:color-mix(in srgb, var(--wv-glow) 12%, transparent);box-shadow:0 0 24px color-mix(in srgb, var(--wv-glow) 22%, transparent);color:var(--wv-accent);outline:none;}
   .work-view .work-foot{margin-top:72px;padding-top:32px;border-top:1px solid rgba(255,255,255,.08);text-align:center;}
   .work-view .wv-nav{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:28px;}
   .work-view .wv-nav button{font-family:var(--sans);font-size:13px;color:var(--wv-accent);background:none;border:none;cursor:pointer;letter-spacing:.03em;padding:8px 4px;opacity:.85;transition:opacity .25s;-webkit-tap-highlight-color:transparent;}
@@ -472,7 +476,7 @@
   <div class="wpage">
     <header class="work-head">
       <div class="wh-form">Ballad<span>발라드</span></div>
-      <h1 class="wh-title">blue</h1>
+      <h1 class="wh-title">Untitled Blue: 927</h1>
       <div class="wh-mark">Slow ballad, tender</div>
       <div class="wh-by">깨갱</div>
     </header>
@@ -663,17 +667,18 @@
   // ===== 데이터 ===== 제목은 참여자 해석 자리(예시), 악상기호는 형식별 배정(예시)
   // 제목이 없는 작품: title:''  → 형식명이 곧 곡의 이름이 됨 (예: 야상곡 / Nocturne)
   // 소개글이 없는 작품: note:''  → 속지처럼 'Instrumental' 한 단어만 흐리게 표시
+  // 트위터: x:'아이디' (@ 없이)  → 작품 맨 끝에 계정으로 가는 버튼이 생김. 비워두면 버튼 없음
   const discs = [
-    {form:'Cool',        kr:'쿨',       color:'#A8DADC', title:'BLUE AND BLUE',   mark:'Cool, unhurried', note:'최근 어째서인지 우울해 보이는 아바키오. 매해 자신의 생일엔 혼자 고향에 내려가 하루를 보내는 부차라티는 아바키오를 위해 처음으로 혼자가 아닌 함께 고향으로 내려간다. 그렇게 둘이서 보내는 평범한 하루.'},
-    {form:'Modal',       kr:'모달',     color:'#6FB7D4', title:'내일은 날이 밝을거야', mark:'Modal, spacious', note:''},
-    {form:'Standard',    kr:'스탠더드', color:'#4895C9', title:'산책',       mark:'Relaxed, in two', note:'모든 것이 끝나 어쩌면 갱도 은퇴한 부챠라티와 아바키오가 부챠라티의 고향에 가 평화로운 한때를 보낸다는 느낌으로 그려봤습니다.'},
-    {form:'Ballad',      kr:'발라드',   color:'#2A6F97', title:'blue', mark:'Slow ballad, tender', note:''},
-    {form:'Blues',       kr:'블루스',   color:'#1B5299', title:'5',     mark:'Slow blues, after hours', note:'작품 소개글이 놓일 자리'},
-    {form:'Prelude',     kr:'전주곡',   color:'#1D3461', title:'6',      mark:'Sostenuto', note:'작품 소개글이 놓일 자리'},
-    {form:'Étude',       kr:'연습곡',   color:'#14213D', title:'7',     mark:'Allegro, agitato', note:'작품 소개글이 놓일 자리'},
-    {form:'Nocturne',    kr:'야상곡',   color:'#121B33', title:'8',       mark:'Adagio, con dolore', note:'작품 소개글이 놓일 자리'},
-    {form:'Ballade',     kr:'담시곡',   color:'#161630', title:'9',     mark:'Narrante', note:'작품 소개글이 놓일 자리'},
-    {form:'Symphony',    kr:'교향곡',   color:'#15122B', title:'10',        mark:'Adagio lamentoso', note:'작품 소개글이 놓일 자리'},
+    {form:'Cool',        kr:'쿨',       color:'#A8DADC', title:'BLUE AND BLUE',   mark:'Cool, unhurried', note:'최근 어째서인지 우울해 보이는 아바키오. 매해 자신의 생일엔 혼자 고향에 내려가 하루를 보내는 부차라티는 아바키오를 위해 처음으로 혼자가 아닌 함께 고향으로 내려간다. 그렇게 둘이서 보내는 평범한 하루.', x:'Oishi_masita'},
+    {form:'Modal',       kr:'모달',     color:'#6FB7D4', title:'내일은 날이 밝을거야', mark:'Modal, spacious', note:'', x:'deubokaa'},
+    {form:'Standard',    kr:'스탠더드', color:'#4895C9', title:'산책',       mark:'Relaxed, in two', note:'모든 것이 끝나 어쩌면 갱도 은퇴한 부챠라티와 아바키오가 부챠라티의 고향에 가 평화로운 한때를 보낸다는 느낌으로 그려봤습니다.', x:'jj_fgo48'},
+    {form:'Ballad',      kr:'발라드',   color:'#2A6F97', title:'Untitled Blue: 927', mark:'Slow ballad, tender', note:'', x:'WOOBARKX'},
+    {form:'Blues',       kr:'블루스',   color:'#1B5299', title:'5',     mark:'Slow blues, after hours', note:'작품 소개글이 놓일 자리', x:''},
+    {form:'Prelude',     kr:'전주곡',   color:'#1D3461', title:'6',      mark:'Sostenuto', note:'작품 소개글이 놓일 자리', x:''},
+    {form:'Étude',       kr:'연습곡',   color:'#14213D', title:'7',     mark:'Allegro, agitato', note:'작품 소개글이 놓일 자리', x:''},
+    {form:'Nocturne',    kr:'야상곡',   color:'#121B33', title:'8',       mark:'Adagio, con dolore', note:'작품 소개글이 놓일 자리', x:''},
+    {form:'Ballade',     kr:'담시곡',   color:'#161630', title:'9',     mark:'Narrante', note:'작품 소개글이 놓일 자리', x:''},
+    {form:'Symphony',    kr:'교향곡',   color:'#15122B', title:'10',        mark:'Adagio lamentoso', note:'작품 소개글이 놓일 자리', x:''},
     {form:'Requiem',     kr:'진혼곡',   color:'#120A22', title:'11',     mark:'Lento, doloroso', note:'작품 소개글이 놓일 자리', hidden:true},
   ];
 
@@ -868,6 +873,14 @@
     }, 460);
   }
   const wvNormalCount=discs.filter(d=>!d.hidden).length;
+  discs.forEach((d,i)=>{                                   // 작품을 다 본 뒤에야 만나는 문 — 작가에게로
+    const h=(d.x||'').replace(/^@/,'').trim(); if(!h) return;
+    const wv=document.getElementById('work-'+(i+1)); if(!wv) return;
+    const box=document.createElement('div'); box.className='artist';
+    const a=document.createElement('a'); a.href='https://x.com/'+encodeURIComponent(h); a.target='_blank'; a.rel='noopener';
+    a.textContent='@'+h; box.appendChild(a);
+    wv.querySelector('.work-body').after(box);
+  });
   document.querySelectorAll('.work-view').forEach((wv,idx)=>{
     const nav=document.createElement('div');
     nav.className='wv-nav';
