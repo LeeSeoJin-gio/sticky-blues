@@ -859,6 +859,7 @@
     const nx=document.getElementById('work-'+(next+1));
     if(nx===cur) return;
     current=next;
+    if(!discs[next].hidden) stopSound();              // 승천의 방을 떠나 다른 방으로 가면 곡은 멎는다
     nx.scrollTop=0;
     const fwd=dir>0;                                  // 다음: 새 페이지가 오른쪽에서 / 이전: 왼쪽에서
     const inFrom=fwd?'100%':'-100%';
