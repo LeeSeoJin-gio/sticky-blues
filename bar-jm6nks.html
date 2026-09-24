@@ -727,14 +727,14 @@
   window.addEventListener('resize', setBloomY);
 
   // 작품 화면 전환 (한 파일 안에서)
-  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();requestAnimationFrame(()=>{sink(wv);markSeen(i);});}
+  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;if(!(history.state&&history.state.sb==='work'))history.pushState({sb:'work'},'');wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();requestAnimationFrame(()=>{sink(wv);markSeen(i);});}
   function hideWork(wv){wv.querySelectorAll('video').forEach(v=>v.pause());wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');
     if(!requiemUnlocked && readWorks.size>=discs.filter(d=>!d.hidden).length){ finale(); return; }   // 자리를 비운 사이, 선반이 달라져 있다
     if(requiemUnlocked && !shelfRestored && current===discs.length-1) restoreShelf();   // 진혼곡의 방을 읽고 나온 뒤에야, 열 장이 돌아온다
     if(current>=0) stop();}                                      // 나오면 판은 내려가 있다 — 다음 장은 손이 고른다
   npTitle.addEventListener('click',e=>{e.preventDefault();if(current>=0)showWork(current);});
   document.getElementById('npGo').addEventListener('click',()=>{if(current>=0)showWork(current);});
-  document.querySelectorAll('.wv-back').forEach(b=>b.addEventListener('click',()=>hideWork(b.closest('.work-view'))));
+  document.querySelectorAll('.wv-back').forEach(b=>b.addEventListener('click',()=>{ if(history.state&&history.state.sb==='work') history.back(); else hideWork(b.closest('.work-view')); }));
 
   // 레퀴엠: 한 편을 바닥까지 읽을 때마다 그 방의 불이 꺼지고, 문패만 남아 빛난다.
   // 열 편을 모두 읽고 나온 선반에는 낯선 한 장만 남는다. 진혼곡이 흐르는 동안, 열 장은 꺼진 채로 돌아온다.
@@ -1002,11 +1002,13 @@
     foyer.classList.add('show'); foyer.setAttribute('aria-hidden','false');
     document.body.classList.add('foyer-open');  // 속표지 위에서 본문이 스크롤로 드러나지 않게
     foyerLocked=true;
+    history.pushState({sb:'foyer'},'');        // 폰 뒤로가기: 속표지 → 표지
     startRainOutside();                        // 표지 탭이 손짓 — 밖의 비가 차오른다
   }
 
   // 속표지 입장 → 암전, 문소리, 그 사이 비가 실내로, 밝아오며 본문
   function enterHall(){
+    history.replaceState({sb:'hall'},'');      // 폰 뒤로가기: 본문 → 표지
     doorSound();                               // 문 한 세트: 열리고 — 닫힌다
     blackout.classList.add('on');              // 그 소리에 맞춰 화면이 저문다
     const T1 = RM_T?200:2200;                  // 문이 여닫히는 사이, 어둠 속에서 장면을 바꾼다
@@ -1024,7 +1026,9 @@
   cover.addEventListener('click', enterAlbum);
   cover.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enterAlbum(); } });
   document.getElementById('foyerEnter').addEventListener('click', enterHall);
+  let fromPop=false;
   homeBtn.addEventListener('click', ()=>{
+    if(!fromPop && history.state && history.state.sb) history.replaceState(null,'');
     if(current>=0) stop();
     cover.classList.remove('open'); // 표지가 다시 가운데로 닫힘
     foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
@@ -1033,6 +1037,16 @@
     document.body.classList.add('covered');
     if(rainCtx){ rainInside=false; fadeTo(rIn,0,800); fadeTo(rOut,0,800); fadeTo(rUmb,0,800); }   // 표지로 나가면 비는 멎는다
     window.scrollTo(0,0);
+  });
+
+  // ===== 폰의 뒤로가기 =====  작품 방 → 선반 → 표지 순으로 한 걸음씩 물러난다. 표지에서 한 번 더 누르면 나간다.
+  window.addEventListener('popstate', e=>{
+    const st=e.state&&e.state.sb;
+    const open=document.querySelector('.work-view.active');
+    if(st==='work') return;                                  // 앞으로가기로 되돌아온 칸 — 그대로 둔다
+    if(open) hideWork(open);
+    if(st==='hall' || st==='foyer') return;                  // 작품 방에서 나와 선반(또는 속표지)으로
+    if(!document.body.classList.contains('covered')){ fromPop=true; homeBtn.click(); fromPop=false; }   // 선반·속표지에서 → 표지로
   });
 
   setBloomY();
