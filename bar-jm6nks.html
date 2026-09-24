@@ -637,9 +637,8 @@
   <div class="wpage">
     <header class="work-head">
       <div class="wh-form">Requiem<span>진혼곡</span></div>
-      <h1 class="wh-title">11</h1>
+      <h1 class="wh-title">Ascensione<span class="wh-sub">승천</span></h1>
       <div class="wh-mark">Lento, doloroso</div>
-      <div class="wh-by">편곡 ○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -685,7 +684,7 @@
     {form:'Duo Seraphim', kr:'두 세라핌', audio:'seraphim',   color:'#121B33', title:'8',       mark:'Chiamando, l’un l’altro', note:'작품 소개글이 놓일 자리', x:'', vol:1},
     {form:'Audi coelum', kr:'들으소서, 하늘이여', audio:'audi',   color:'#161630', title:'9',     mark:'Con eco, da lontano', note:'작품 소개글이 놓일 자리', x:'', vol:1},
     {form:'Sonata sopra Sancta Maria', kr:'산타 마리아의 소나타', audio:'sonata',   color:'#15122B', title:'10',        mark:'Ostinato, pregando', note:'작품 소개글이 놓일 자리', x:'', vol:1},
-    {form:'Requiem',     kr:'진혼곡',   color:'#120A22', title:'11',     mark:'Lento, doloroso', note:'작품 소개글이 놓일 자리', hidden:true},
+    {form:'Requiem',     kr:'진혼곡',   color:'#120A22', title:'Ascensione',     mark:'Lento, doloroso', note:'작품 소개글이 놓일 자리', hidden:true},
   ];
 
   const root=document.documentElement, scene=document.getElementById('scene'), shelf=document.getElementById('shelf');
@@ -749,7 +748,7 @@
   window.addEventListener('resize', setBloomY);
 
   // 작품 화면 전환 (한 파일 안에서)
-  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;if(!(history.state&&history.state.sb==='work'))history.pushState({sb:'work'},'');wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();requestAnimationFrame(()=>{sink(wv);markSeen(i);});}
+  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;if(!(history.state&&history.state.sb==='work'))history.pushState({sb:'work'},'');wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');if(!discs[i].hidden)stopSound();requestAnimationFrame(()=>{sink(wv);markSeen(i);});}   // 승천의 방에서는 곡이 멈추지 않는다
   function hideWork(wv){wv.querySelectorAll('video').forEach(v=>v.pause());wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');
     if(!requiemUnlocked && readWorks.size>=discs.filter(d=>!d.hidden).length){ finale(); return; }   // 자리를 비운 사이, 선반이 달라져 있다
     if(requiemUnlocked && !shelfRestored && current===discs.length-1) restoreShelf();   // 진혼곡의 방을 읽고 나온 뒤에야, 열 장이 돌아온다
