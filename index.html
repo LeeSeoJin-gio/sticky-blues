@@ -150,6 +150,26 @@
   .foyer-enter{margin-top:40px;padding:14px 42px;background:none;border:1px solid #46596a;border-radius:2px;color:#cddae6;font-family:var(--sans);font-size:12.5px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;transition:background .5s, box-shadow .5s, color .5s;}
   .foyer-enter:hover,.foyer-enter:focus-visible{background:rgba(123,190,222,.09);box-shadow:0 0 24px rgba(123,190,222,.16);color:#7bbede;outline:none;}
 
+  /* ===== 끝의 두 버튼 — Sticky(나가기) · Blues(되감기) ===== */
+  .endgame{display:flex;justify-content:center;gap:clamp(14px,5vw,34px);margin:78px 0 10px;flex-wrap:wrap;}
+  .eg{min-width:124px;padding:15px 30px 16px;background:none;border-radius:2px;cursor:pointer;
+      font-family:var(--display);font-style:italic;font-size:22px;letter-spacing:.06em;-webkit-tap-highlight-color:transparent;
+      transition:background .6s, box-shadow .6s, color .6s, border-color .6s;animation:egglow 4.2s ease-in-out infinite;}
+  .eg-sticky{--g:123,190,222;color:#a9d8ec;border:1px solid rgba(123,190,222,.55);}
+  .eg-blues {--g:158,118,226;color:#c7b0f0;border:1px solid rgba(158,118,226,.55);animation-delay:-2.1s;}
+  .eg:hover,.eg:focus-visible{background:rgba(var(--g),.12);box-shadow:0 0 34px rgba(var(--g),.38), inset 0 0 18px rgba(var(--g),.14);outline:none;}
+  @keyframes egglow{0%,100%{box-shadow:0 0 14px rgba(var(--g),.14);text-shadow:0 0 8px rgba(var(--g),.35);}
+                    50%{box-shadow:0 0 30px rgba(var(--g),.32);text-shadow:0 0 16px rgba(var(--g),.7);}}
+  @media (prefers-reduced-motion:reduce){.eg{animation:none;}}
+
+  /* 뒷표지 — 글자 없이 그림과 빗소리만. 누르면 판을 뒤집듯 앞표지로 */
+  .backcover{position:fixed;inset:0;z-index:39;background:#1b1c20;display:flex;align-items:center;justify-content:center;
+      opacity:0;visibility:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 1.8s ease, visibility 1.8s;}
+  .backcover.show{opacity:1;visibility:visible;}
+  .backcover picture,.backcover img{width:100%;height:100%;display:block;}
+  .backcover img{object-fit:contain;}
+  .backcover.flip{transition:transform .55s cubic-bezier(.55,0,.8,.4), opacity .55s ease;transform:perspective(1400px) rotateY(88deg);opacity:0;}
+
   /* 암전막 */
   .blackout{position:fixed;inset:0;z-index:40;background:#04060a;opacity:0;visibility:hidden;pointer-events:none;
     transition:opacity 1.4s ease, visibility 1.4s;}
@@ -385,6 +405,9 @@
 
 <!-- 암전막 : 장면 전환을 덮는다 -->
 <div class="blackout" id="blackout" aria-hidden="true"></div>
+<div class="backcover" id="backcover" aria-hidden="true" role="button" aria-label="앞표지로 넘기기">
+  <picture><source media="(min-aspect-ratio: 1/1)" srcset="back-wide.jpg"><img src="back.jpg" alt=""></picture>
+</div>
 
 <section class="work-view" id="work-1" aria-hidden="true" style="--wv-accent:rgb(207,235,236);--wv-glow:#A8DADC;">
   <div class="wpage">
@@ -542,6 +565,10 @@
          ============================================================ -->
       <p class="placeholder">작품이 이곳에 펼쳐집니다</p>
     </main>
+    <div class="endgame">
+      <button class="eg eg-sticky" id="egSticky" aria-label="Sticky — 지퍼를 열고 나가기">Sticky</button>
+      <button class="eg eg-blues" id="egBlues" aria-label="Blues — 처음으로 되감기">Blues</button>
+    </div>
     <footer class="work-foot"><button class="back wv-back"><span class="arr"></span>음반으로 돌아가기</button></footer>
   </div>
 </section>
@@ -577,7 +604,7 @@
     {form:'Duo Seraphim', kr:'두 세라핌', audio:'seraphim',   color:'#121B33', title:'',       mark:'Chiamando, l’un l’altro', note:'', x:'', vol:1},
     {form:'Audi coelum', kr:'들으소서, 하늘이여', audio:'audi',   color:'#161630', title:'',     mark:'Con eco, da lontano', note:'', x:'', vol:1},
     {form:'Sonata sopra Sancta Maria', kr:'산타 마리아의 소나타', audio:'sonata',   color:'#15122B', title:'',        mark:'Ostinato, pregando', note:'', x:'', vol:1},
-    {form:'Requiem',     kr:'진혼곡',   color:'#120A22', title:'Ascensione',     mark:'Lento, doloroso', note:'', hidden:true},
+    {form:'Requiem',     kr:'진혼곡',   color:'#120A22', title:'Ascensione',     mark:'Lento, doloroso', note:'작품 소개글이 놓일 자리', hidden:true},
   ];
 
   const root=document.documentElement, scene=document.getElementById('scene'), shelf=document.getElementById('shelf');
@@ -981,8 +1008,59 @@
     window.scrollTo(0,0);
   });
 
+  // ===== 끝: Sticky(지퍼를 열고 나가기) · Blues(무디 블루스, 처음으로 되감기) =====
+  const backcover=document.getElementById('backcover');
+  function sfx(file){ try{ const a=new Audio(file); a.muted=muted; a.play().catch(()=>{}); return a; }catch(e){ return null; } }
+  function closeRoomQuietly(){                                // 종막·선반 복원 없이 방만 닫는다
+    const wv=document.querySelector('.work-view.active'); if(!wv) return;
+    wv.querySelectorAll('video').forEach(v=>v.pause());
+    wv.classList.remove('active'); wv.setAttribute('aria-hidden','true'); document.body.classList.remove('locked');
+  }
+  let egBusy=false;
+
+  document.getElementById('egSticky').addEventListener('click', ()=>{
+    if(egBusy) return; egBusy=true;
+    stopSound(); sfx('sticky-open.mp3');                       // 지퍼가 열리고 —
+    blackout.classList.add('on');
+    setTimeout(()=>{                                          // 어둠 속에서 바를 나선다
+      closeRoomQuietly(); if(current>=0) stop();
+      cover.classList.remove('open'); foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
+      foyerLocked=false; document.body.classList.remove('foyer-open'); document.body.classList.add('covered');
+      window.scrollTo(0,0);
+      history.replaceState(null,'');
+      backcover.classList.remove('flip'); backcover.classList.add('show'); backcover.setAttribute('aria-hidden','false');
+      sfx('sticky-close.mp3');                                 // — 닫힌다
+      setTimeout(()=>{ blackout.classList.remove('on'); startRainOutside(); egBusy=false; }, 900);   // 뒷표지와 함께, 밖의 비
+    }, RM_T?200:1500);
+  });
+  function flipToFront(){                                     // 판을 뒤집듯 — 앞표지로
+    if(!backcover.classList.contains('show')) return;
+    backcover.classList.add('flip');
+    setTimeout(()=>{ backcover.classList.remove('show','flip'); backcover.setAttribute('aria-hidden','true'); }, 560);
+  }
+  backcover.addEventListener('click', flipToFront);
+
+  document.getElementById('egBlues').addEventListener('click', ()=>{
+    if(egBusy) return; egBusy=true;
+    stopSound(); sfx('blues-rewind.mp3');                      // 무디 블루스 — 되감는다
+    blackout.classList.add('on');
+    setTimeout(()=>{                                          // 어둠 속에서, 처음 온 날로
+      closeRoomQuietly(); if(current>=0) stop();
+      readWorks.clear(); requiemUnlocked=false; shelfRestored=false;
+      items.forEach(it=>it.classList.remove('read','gone','returning','ret','revealed','pre','rise','active'));
+      shelf.classList.remove('solo'); shelf.scrollLeft=0;
+      veil.classList.remove('on','hold','hintable'); veil.setAttribute('aria-hidden','true');
+      if(epAudio) epStop();
+      hintEl.textContent='선반에서 한 장을 골라 올려보세요';
+      history.replaceState({sb:'hall'},'');
+      window.scrollTo(0,0); setBloomY();
+    }, RM_T?200:1500);
+    setTimeout(()=>{ blackout.classList.remove('on'); egBusy=false; }, RM_T?400:3900);   // 테이프가 멎을 즈음 밝아온다
+  });
+
   // ===== 폰의 뒤로가기 =====  작품 방 → 선반 → 표지 순으로 한 걸음씩 물러난다. 표지에서 한 번 더 누르면 나간다.
   window.addEventListener('popstate', e=>{
+    if(backcover.classList.contains('show')){ flipToFront(); return; }   // 뒷표지에서 뒤로 → 앞표지
     const st=e.state&&e.state.sb;
     const open=document.querySelector('.work-view.active');
     if(st==='work') return;                                  // 앞으로가기로 되돌아온 칸 — 그대로 둔다
