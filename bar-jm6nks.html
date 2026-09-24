@@ -249,6 +249,12 @@
   .work-view .fig img{width:100%;height:auto;border-radius:3px;display:block;box-shadow:0 14px 34px rgba(0,0,0,.45);}
   .work-view .fig figcaption{font-family:var(--sans);font-size:12.5px;color:var(--dim);text-align:center;margin-top:13px;}
   .work-view .sep{text-align:center;margin:2.8em 0;color:var(--wv-accent);opacity:.45;font-size:16px;letter-spacing:.4em;}
+  .work-view .manga{margin:0 -26px;}                                   /* 만화: 화면 폭 가득, 페이지 사이 좁은 틈 */
+  .work-view .manga img{width:100%;height:auto;display:block;margin:0 auto 6px;max-width:760px;}
+  @media (min-width:732px){ .work-view .manga{margin:0;} }
+  .work-view .film{margin:2.6em 0;}
+  .work-view .film video{width:100%;height:auto;display:block;border-radius:3px;background:#000;box-shadow:0 14px 34px rgba(0,0,0,.45);}
+  .work-view .wh-sub{display:block;font-family:var(--sans);font-size:14px;color:var(--haze);opacity:.72;letter-spacing:.06em;margin-top:10px;}
   .work-view .placeholder{text-align:center;color:var(--dim);font-style:italic;padding:80px 0;font-size:15px;opacity:.55;}
   .work-view .work-foot{margin-top:72px;padding-top:32px;border-top:1px solid rgba(255,255,255,.08);text-align:center;}
   .work-view .wv-nav{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:28px;}
@@ -346,10 +352,10 @@
       <div class="liner-side">
         <div class="side-head"><span class="side-mark">A</span></div>
         <ol class="tracklist">
-          <li><span class="tl-no">01</span><span class="tl-name">Cool</span><span class="tl-by">○○○</span></li>
-          <li><span class="tl-no">02</span><span class="tl-name">Modal</span><span class="tl-by">○○○</span></li>
-          <li><span class="tl-no">03</span><span class="tl-name">Standard</span><span class="tl-by">○○○</span></li>
-          <li><span class="tl-no">04</span><span class="tl-name">Ballad</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">01</span><span class="tl-name">Cool</span><span class="tl-by">용</span></li>
+          <li><span class="tl-no">02</span><span class="tl-name">Modal</span><span class="tl-by">드보카</span></li>
+          <li><span class="tl-no">03</span><span class="tl-name">Standard</span><span class="tl-by">털실모자</span></li>
+          <li><span class="tl-no">04</span><span class="tl-name">Ballad</span><span class="tl-by">깨갱</span></li>
           <li><span class="tl-no">05</span><span class="tl-name">Blues</span><span class="tl-by">○○○</span></li>
         </ol>
       </div>
@@ -379,9 +385,9 @@
   <div class="wpage">
     <header class="work-head">
       <div class="wh-form">Cool<span>쿨</span></div>
-      <h1 class="wh-title">1</h1>
+      <h1 class="wh-title">BLUE AND BLUE<span class="wh-sub">파랑과 우울</span></h1>
       <div class="wh-mark">Cool, unhurried</div>
-      <div class="wh-by">○○○</div>
+      <div class="wh-by">용</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -392,7 +398,25 @@
          그림 파일은 이 html과 같은 폴더에 두고 파일명을 src에 적으면 됩니다.
          작품을 넣은 뒤 placeholder 줄은 지우세요.
          ============================================================ -->
-      <p class="placeholder">작품이 이곳에 펼쳐집니다</p>
+      <div class="manga">
+        <img src="p01/01.jpg" alt="BLUE AND BLUE 1쪽" loading="eager" width="1400" height="1977">
+        <img src="p01/02.jpg" alt="BLUE AND BLUE 2쪽" loading="eager" width="1400" height="1977">
+        <img src="p01/03.jpg" alt="BLUE AND BLUE 3쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/04.jpg" alt="BLUE AND BLUE 4쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/05.jpg" alt="BLUE AND BLUE 5쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/06.jpg" alt="BLUE AND BLUE 6쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/07.jpg" alt="BLUE AND BLUE 7쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/08.jpg" alt="BLUE AND BLUE 8쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/09.jpg" alt="BLUE AND BLUE 9쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/10.jpg" alt="BLUE AND BLUE 10쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/11.jpg" alt="BLUE AND BLUE 11쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/12.jpg" alt="BLUE AND BLUE 12쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/13.jpg" alt="BLUE AND BLUE 13쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/14.jpg" alt="BLUE AND BLUE 14쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/15.jpg" alt="BLUE AND BLUE 15쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/16.jpg" alt="BLUE AND BLUE 16쪽" loading="lazy" width="1400" height="1977">
+        <img src="p01/17.jpg" alt="BLUE AND BLUE 17쪽" loading="lazy" width="1400" height="1977">
+      </div>
     </main>
     <footer class="work-foot"><button class="back wv-back"><span class="arr"></span>음반으로 돌아가기</button></footer>
   </div>
@@ -404,7 +428,7 @@
       <div class="wh-form">Modal<span>모달</span></div>
       <h1 class="wh-title">2</h1>
       <div class="wh-mark">Modal, spacious</div>
-      <div class="wh-by">○○○</div>
+      <div class="wh-by">드보카</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -415,7 +439,7 @@
          그림 파일은 이 html과 같은 폴더에 두고 파일명을 src에 적으면 됩니다.
          작품을 넣은 뒤 placeholder 줄은 지우세요.
          ============================================================ -->
-      <p class="placeholder">작품이 이곳에 펼쳐집니다</p>
+      <figure class="film"><video src="p02/video.mp4" controls playsinline preload="metadata"></video></figure>
     </main>
     <footer class="work-foot"><button class="back wv-back"><span class="arr"></span>음반으로 돌아가기</button></footer>
   </div>
@@ -427,7 +451,7 @@
       <div class="wh-form">Standard<span>스탠더드</span></div>
       <h1 class="wh-title">3</h1>
       <div class="wh-mark">Relaxed, in two</div>
-      <div class="wh-by">○○○</div>
+      <div class="wh-by">털실모자</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -438,7 +462,7 @@
          그림 파일은 이 html과 같은 폴더에 두고 파일명을 src에 적으면 됩니다.
          작품을 넣은 뒤 placeholder 줄은 지우세요.
          ============================================================ -->
-      <p class="placeholder">작품이 이곳에 펼쳐집니다</p>
+      <figure class="fig"><img src="p03/art.jpg" alt="털실모자 님의 그림" width="1800" height="1271"></figure>
     </main>
     <footer class="work-foot"><button class="back wv-back"><span class="arr"></span>음반으로 돌아가기</button></footer>
   </div>
@@ -450,7 +474,7 @@
       <div class="wh-form">Ballad<span>발라드</span></div>
       <h1 class="wh-title">4</h1>
       <div class="wh-mark">Slow ballad, tender</div>
-      <div class="wh-by">○○○</div>
+      <div class="wh-by">깨갱</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -461,7 +485,7 @@
          그림 파일은 이 html과 같은 폴더에 두고 파일명을 src에 적으면 됩니다.
          작품을 넣은 뒤 placeholder 줄은 지우세요.
          ============================================================ -->
-      <p class="placeholder">작품이 이곳에 펼쳐집니다</p>
+      <figure class="fig"><img src="p04/art.jpg" alt="깨갱 님의 그림" width="1600" height="1891"></figure>
     </main>
     <footer class="work-foot"><button class="back wv-back"><span class="arr"></span>음반으로 돌아가기</button></footer>
   </div>
@@ -640,10 +664,10 @@
   // 제목이 없는 작품: title:''  → 형식명이 곧 곡의 이름이 됨 (예: 야상곡 / Nocturne)
   // 소개글이 없는 작품: note:''  → 속지처럼 'Instrumental' 한 단어만 흐리게 표시
   const discs = [
-    {form:'Cool',        kr:'쿨',       color:'#A8DADC', title:'1',   mark:'Cool, unhurried', note:'작품 소개글이 놓일 자리'},
-    {form:'Modal',       kr:'모달',     color:'#6FB7D4', title:'2', mark:'Modal, spacious', note:'작품 소개글이 놓일 자리'},
-    {form:'Standard',    kr:'스탠더드', color:'#4895C9', title:'3',       mark:'Relaxed, in two', note:'작품 소개글이 놓일 자리'},
-    {form:'Ballad',      kr:'발라드',   color:'#2A6F97', title:'4', mark:'Slow ballad, tender', note:'작품 소개글이 놓일 자리'},
+    {form:'Cool',        kr:'쿨',       color:'#A8DADC', title:'BLUE AND BLUE',   mark:'Cool, unhurried', note:'최근 어째서인지 우울해 보이는 아바키오. 매해 자신의 생일엔 혼자 고향에 내려가 하루를 보내는 부차라티는 아바키오를 위해 처음으로 혼자가 아닌 함께 고향으로 내려간다. 그렇게 둘이서 보내는 평범한 하루.'},
+    {form:'Modal',       kr:'모달',     color:'#6FB7D4', title:'', mark:'Modal, spacious', note:''},
+    {form:'Standard',    kr:'스탠더드', color:'#4895C9', title:'',       mark:'Relaxed, in two', note:''},
+    {form:'Ballad',      kr:'발라드',   color:'#2A6F97', title:'', mark:'Slow ballad, tender', note:''},
     {form:'Blues',       kr:'블루스',   color:'#1B5299', title:'5',     mark:'Slow blues, after hours', note:'작품 소개글이 놓일 자리'},
     {form:'Prelude',     kr:'전주곡',   color:'#1D3461', title:'6',      mark:'Sostenuto', note:'작품 소개글이 놓일 자리'},
     {form:'Étude',       kr:'연습곡',   color:'#14213D', title:'7',     mark:'Allegro, agitato', note:'작품 소개글이 놓일 자리'},
@@ -704,7 +728,7 @@
 
   // 작품 화면 전환 (한 파일 안에서)
   function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');stopSound();requestAnimationFrame(()=>{sink(wv);markSeen(i);});}
-  function hideWork(wv){wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');
+  function hideWork(wv){wv.querySelectorAll('video').forEach(v=>v.pause());wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');
     if(!requiemUnlocked && readWorks.size>=discs.filter(d=>!d.hidden).length){ finale(); return; }   // 자리를 비운 사이, 선반이 달라져 있다
     if(requiemUnlocked && !shelfRestored && current===discs.length-1) restoreShelf();   // 진혼곡의 방을 읽고 나온 뒤에야, 열 장이 돌아온다
     if(current>=0) stop();}                                      // 나오면 판은 내려가 있다 — 다음 장은 손이 고른다
@@ -935,6 +959,10 @@
             .catch(()=>{ if(trackAudio===a) trackAudio=null; });   // 파일 없으면 조용히
   }
   function stopSound(){ stopTrack(); duckRain(false); }
+  document.querySelectorAll('.work-view video').forEach(v=>{            // 영상이 흐르는 동안 빗소리는 물러난다
+    v.addEventListener('play',()=>duckRain(true));
+    ['pause','ended'].forEach(ev=>v.addEventListener(ev,()=>duckRain(false)));
+  });
   const soundBtn=document.getElementById('soundBtn');
   function setMute(m){muted=m;soundBtn.classList.toggle('muted',m);soundBtn.setAttribute('aria-label',m?'소리 켜기':'소리 끄기');if(trackAudio)trackAudio.muted=m;setRainMuted(m);}
   soundBtn.addEventListener('click', ()=>setMute(!muted));
