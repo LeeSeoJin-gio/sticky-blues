@@ -68,6 +68,7 @@
   .np-mid{position:relative;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:clamp(110px,17vh,180px);margin-top:8px;}
   .np-note{max-width:36ch;padding:0 8px;text-align:center;font-size:13px;line-height:1.85;color:#94a2b2;opacity:0;transition:opacity .6s ease .55s;}
   .playing .np-note{opacity:1;}
+  .np-note.instrumental{font-family:var(--display);font-style:italic;font-size:14.5px;letter-spacing:.16em;color:#6d7d8c;}   /* 소개글 없는 곡: 속지의 'Instrumental' */
   .np-go{margin-top:14px;font-size:11px;color:var(--dim);letter-spacing:.08em;opacity:0;pointer-events:none;transition:opacity .6s ease .7s;cursor:pointer;-webkit-tap-highlight-color:transparent;}
   .playing .np-go{opacity:1;pointer-events:auto;}
 
@@ -379,7 +380,7 @@
       <div class="wh-form">Cool<span>쿨</span></div>
       <h1 class="wh-title">1</h1>
       <div class="wh-mark">Cool, unhurried</div>
-      <div class="wh-by">작곡 ○○○</div>
+      <div class="wh-by">○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -402,7 +403,7 @@
       <div class="wh-form">Modal<span>모달</span></div>
       <h1 class="wh-title">2</h1>
       <div class="wh-mark">Modal, spacious</div>
-      <div class="wh-by">작곡 ○○○</div>
+      <div class="wh-by">○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -425,7 +426,7 @@
       <div class="wh-form">Standard<span>스탠더드</span></div>
       <h1 class="wh-title">3</h1>
       <div class="wh-mark">Relaxed, in two</div>
-      <div class="wh-by">작곡 ○○○</div>
+      <div class="wh-by">○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -448,7 +449,7 @@
       <div class="wh-form">Ballad<span>발라드</span></div>
       <h1 class="wh-title">4</h1>
       <div class="wh-mark">Slow ballad, tender</div>
-      <div class="wh-by">작곡 ○○○</div>
+      <div class="wh-by">○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -471,7 +472,7 @@
       <div class="wh-form">Blues<span>블루스</span></div>
       <h1 class="wh-title">5</h1>
       <div class="wh-mark">Slow blues, after hours</div>
-      <div class="wh-by">작곡 ○○○</div>
+      <div class="wh-by">○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -493,7 +494,7 @@
       <div class="wh-form">Prelude<span>전주곡</span></div>
       <h1 class="wh-title">6</h1>
       <div class="wh-mark">Sostenuto</div>
-      <div class="wh-by">작곡 ○○○</div>
+      <div class="wh-by">○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -516,7 +517,7 @@
       <div class="wh-form">Étude<span>연습곡</span></div>
       <h1 class="wh-title">7</h1>
       <div class="wh-mark">Allegro, agitato</div>
-      <div class="wh-by">작곡 ○○○</div>
+      <div class="wh-by">○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -539,7 +540,7 @@
       <div class="wh-form">Nocturne<span>야상곡</span></div>
       <h1 class="wh-title">8</h1>
       <div class="wh-mark">Adagio, con dolore</div>
-      <div class="wh-by">작곡 ○○○</div>
+      <div class="wh-by">○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -562,7 +563,7 @@
       <div class="wh-form">Ballade<span>담시곡</span></div>
       <h1 class="wh-title">9</h1>
       <div class="wh-mark">Narrante</div>
-      <div class="wh-by">작곡 ○○○</div>
+      <div class="wh-by">○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -585,7 +586,7 @@
       <div class="wh-form">Symphony<span>교향곡</span></div>
       <h1 class="wh-title">10</h1>
       <div class="wh-mark">Adagio lamentoso</div>
-      <div class="wh-by">작곡 ○○○</div>
+      <div class="wh-by">○○○</div>
     </header>
     <main class="work-body">
       <!-- ============================================================
@@ -635,6 +636,8 @@
 
 
   // ===== 데이터 ===== 제목은 참여자 해석 자리(예시), 악상기호는 형식별 배정(예시)
+  // 제목이 없는 작품: title:''  → 형식명이 곧 곡의 이름이 됨 (예: 야상곡 / Nocturne)
+  // 소개글이 없는 작품: note:''  → 속지처럼 'Instrumental' 한 단어만 흐리게 표시
   const discs = [
     {form:'Cool',        kr:'쿨',       color:'#A8DADC', title:'1',   mark:'Cool, unhurried', note:'작품 소개글이 놓일 자리'},
     {form:'Modal',       kr:'모달',     color:'#6FB7D4', title:'2', mark:'Modal, spacious', note:'작품 소개글이 놓일 자리'},
@@ -668,6 +671,12 @@
   });
   const items=[...shelf.children];
 
+  // 무제 작품의 방: 제목 자리에 형식명을, 위 머리글엔 한글 형식명만
+  discs.forEach((d,i)=>{ if(d.title) return;
+    const wv=document.getElementById('work-'+(i+1)); if(!wv) return;
+    const t=wv.querySelector('.wh-title'), f=wv.querySelector('.wh-form');
+    if(t) t.textContent=d.form; if(f) f.textContent=d.kr; });
+
   function setBloomY(){const t=platter.getBoundingClientRect();root.style.setProperty('--bloom-y',(t.top+t.height/2)+'px');}
 
   function select(i, sound=true){
@@ -676,8 +685,9 @@
     root.style.setProperty('--blue', d.color);
     root.style.setProperty('--blue-lit', lighten(d.color,.42));
     ttLabel.textContent=d.form;
-    npForm.innerHTML=`${d.form}<span>${d.kr}</span>`;
-    npTitle.textContent=d.title; npMark.textContent=d.mark; npNote.textContent=d.note||'';
+    npForm.innerHTML = d.title ? `${d.form}<span>${d.kr}</span>` : d.kr;   // 무제: 위엔 한글 형식명, 제목 자리엔 형식명
+    npTitle.textContent=d.title||d.form; npMark.textContent=d.mark;
+    npNote.textContent=d.note||'Instrumental'; npNote.classList.toggle('instrumental', !d.note);
     items.forEach((it,idx)=>it.classList.toggle('active', idx===i));
     const sit=items[i];
     if(sit){ const tgt=sit.offsetLeft-(shelf.clientWidth-sit.offsetWidth)/2; shelf.scrollTo({left:Math.max(0,tgt), behavior:'smooth'}); }
