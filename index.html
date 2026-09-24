@@ -828,8 +828,10 @@
       rOut=mkChain('rain-out.mp3', false);
       rUmb=mkChain('rain-umbrella.mp3', false);   // 우산 위 후두둑 — 배경비 위에 겹친다
       // rain-in 파일이 있으면 그것을, 없으면 rain-out 을 필터링해 실내음으로
-      rIn =mkChain('rain-in.mp3', false);
-      rIn.el.addEventListener('error', ()=>{ rInIsSynth=true; rIn=mkChain('rain-out.mp3', true); }, {once:true});
+      if(RAIN_IN_VOL>0){                          // 0이면 안에서는 비가 들리지 않는다
+        rIn =mkChain('rain-in.mp3', false);
+        rIn.el.addEventListener('error', ()=>{ rInIsSynth=true; rIn=mkChain('rain-out.mp3', true); }, {once:true});
+      }
       rainReady=true; return true;
     }catch(e){ return false; }
   }
@@ -853,7 +855,7 @@
     if(!rainCtx) return;
     if(rainCtx.state==='suspended') rainCtx.resume();
     rainInside=true;
-    rIn.el.play().catch(()=>{});
+    if(rIn) rIn.el.play().catch(()=>{});
     fadeTo(rOut, 0, RM_A?200:1400); fadeTo(rUmb, 0, RM_A?200:1400);   // 문이 닫히면 밖의 두 층 모두 멎는다
     fadeTo(rIn, rainInFull(), RM_A?200:1600);   // 벽에 먹힌 먼 비
   }
@@ -865,7 +867,7 @@
   function setRainMuted(m){ if(rainMaster) rainMaster.gain.linearRampToValueAtTime(m?0:1, (rainCtx?rainCtx.currentTime:0)+.2); }
   // 음악이 흐르면 실내 비가 배경으로 물러난다
   // 안에 들어왔을 때 빗소리 크기 — 숫자만 바꾸면 됨 (예전 값 0.7)
-  const RAIN_IN_VOL = 0.42;     // 음악 없을 때
+  const RAIN_IN_VOL = 0;        // 음악 없을 때 (0 = 안에서는 빗소리 없음, 예전 값 0.42)
   const RAIN_IN_DUCK = 0.35;    // 음악이 흐를 땐 그 35%로
   function rainInFull(){ return rInIsSynth ? RAIN_IN_VOL*1.2 : RAIN_IN_VOL; }
   function duckRain(on){
