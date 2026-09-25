@@ -183,6 +183,13 @@
   .ret-b{opacity:0;pointer-events:none;transition:opacity 1.6s ease;}                 /* 아니면… — 조금 머문 뒤에야 */
   .foyer.return.late .ret-b{opacity:1;pointer-events:auto;}
   .ret-b .eg{margin-top:4px;}
+  /* 두 번째 재입장부터 — 이미 찾으러 갔던 물건은 불이 꺼지고, 아직 안 간 길이 빛난다 */
+  .ret-a{transition:opacity 1.2s ease;}
+  .foyer.again .ret-a{opacity:.3;}
+  .foyer.again .ret-a:hover,.foyer.again .ret-a:focus-within{opacity:.55;}          /* 꺼져 있어도 누를 수는 있다 */
+  .foyer.again .ret-b .ret-q{color:#cdb8f2;animation:retglow 4.2s ease-in-out -2.1s infinite;}   /* Moody Blues 버튼과 같은 숨으로 */
+  @keyframes retglow{0%,100%{text-shadow:0 0 8px rgba(158,118,226,.35);}50%{text-shadow:0 0 18px rgba(158,118,226,.75), 0 0 32px rgba(158,118,226,.3);}}
+  @media (prefers-reduced-motion:reduce){ .foyer.again .ret-b .ret-q{animation:none;text-shadow:0 0 12px rgba(158,118,226,.55);} }
   @media (prefers-reduced-motion:reduce){ .ret-b{transition-duration:.01s;} }
 
   /* 새로고침 뒤 — 다녀오셨어요 */
@@ -790,10 +797,11 @@
   let leftBar=false;    // Sticky Fingers 로 나갔는가
   let inside=false;     // 선반 앞(바 안)에 있었는가
   let openRoom=-1;      // 보고 있던 방
+  let tookBack=false;   // 두고 간 물건(11번)을 한 번 찾으러 갔었는가
   let booted=false;     // 복원이 끝나기 전엔 저장하지 않는다
   function save(){
     if(!booted) return;
-    try{ localStorage.setItem(SKEY, JSON.stringify({v:1,left:leftBar,inside,read:[...readWorks],req:requiemUnlocked,restored:shelfRestored,cur:current,room:openRoom})); }catch(e){}
+    try{ localStorage.setItem(SKEY, JSON.stringify({v:1,left:leftBar,inside,read:[...readWorks],req:requiemUnlocked,restored:shelfRestored,cur:current,room:openRoom,took:tookBack})); }catch(e){}
   }
   function loadSaved(){ try{ const o=JSON.parse(localStorage.getItem(SKEY)||'null'); return (o&&o.v===1)?o:null; }catch(e){ return null; } }
   function forget(){ try{ localStorage.removeItem(SKEY); }catch(e){} }
@@ -1221,9 +1229,11 @@
     cover.classList.add('open');
     const ret=leftBar;                          // Sticky Fingers 로 나갔던 손님이면 — 트랙리스트 대신 두 마디
     foyer.classList.toggle('return', ret); foyer.classList.remove('late');
+    const again=ret && tookBack;                // 또 오셨군요 — 11번은 불 꺼지고, 잊은 것 쪽이 빛난다
+    foyer.classList.toggle('again', again);
     retBluesBtn.tabIndex=-1; retBSide.setAttribute('aria-hidden','true');
     clearTimeout(lateTimer);
-    if(ret) lateTimer=setTimeout(()=>{ foyer.classList.add('late'); retBluesBtn.tabIndex=0; retBSide.setAttribute('aria-hidden','false'); }, RM_T?300:1500);   // 아니면… 은 조금 뒤에 (숫자가 작을수록 빨리)
+    if(ret) lateTimer=setTimeout(()=>{ foyer.classList.add('late'); retBluesBtn.tabIndex=0; retBSide.setAttribute('aria-hidden','false'); }, (RM_T||again)?300:1500);   // 두 번째부턴 머뭇거림 없이   // 아니면… 은 조금 뒤에 (숫자가 작을수록 빨리)
     foyer.classList.add('show'); foyer.setAttribute('aria-hidden','false');
     foyer.scrollTop=0;
     document.body.classList.add('foyer-open');  // 속표지 위에서 본문이 스크롤로 드러나지 않게
@@ -1323,7 +1333,7 @@
   // A — 두고 가신 물건: 진혼곡 한 장만 남은 선반으로. 판은 아직 돌고 있다
   document.getElementById('retReq').addEventListener('click', ()=>{
     if(egBusy) return; egBusy=true;
-    leftBar=false;
+    leftBar=false; tookBack=true;
     applyShelfState();
     select(discs.length-1);                                   // 손짓 안에서 곡을 걸어두고 —
     if(trackAudio) trackAudio.muted=true;                     // 문이 열릴 때까지는 들리지 않게
@@ -1331,7 +1341,7 @@
   });
   // B — Moody Blues: 아바키오의 손으로 되감는다. 처음 온 날의 선반 앞으로
   function resetAll(){
-    readWorks.clear(); requiemUnlocked=false; shelfRestored=false; leftBar=false; openRoom=-1;
+    readWorks.clear(); requiemUnlocked=false; shelfRestored=false; leftBar=false; openRoom=-1; tookBack=false;
     items.forEach(it=>it.classList.remove('read','gone','returning','ret','revealed','pre','rise','active'));
     shelf.classList.remove('solo'); shelf.scrollLeft=0;
     veil.classList.remove('on','hold','hintable'); veil.setAttribute('aria-hidden','true');
@@ -1389,7 +1399,7 @@
     const S=loadSaved();
     if(S){
       (S.read||[]).forEach(i=>{ if(i>=0 && i<discs.length-1) readWorks.add(i); });
-      requiemUnlocked=!!S.req; shelfRestored=!!S.restored; leftBar=!!S.left;
+      requiemUnlocked=!!S.req; shelfRestored=!!S.restored; leftBar=!!S.left; tookBack=!!S.took;
       applyShelfState();
     }
     if(S && S.inside && !S.left){                             // 보던 자리 그대로 — 표지와 속표지를 건너뛴다
