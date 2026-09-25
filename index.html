@@ -845,16 +845,16 @@
   // 음악 크기: vol:1 이 기본. 귀로 듣고 0.8(작게)·1.2(크게)처럼 조절. 0.5 ~ 2 사이 권장
   // 트위터: x:'아이디' (@ 없이)  → 작품 맨 끝에 계정으로 가는 버튼이 생김. 비워두면 버튼 없음
   const discs = [
-    {form:'Maiysha', kr:'마이샤', audio:'maiysha', color:'#A8DADC', title:'',       mark:'Gently swaying', note:'', x:'', vol:1},
-    {form:'Spanish Key', kr:'스페인의 조성', audio:'spanish',     color:'#6FB7D4', title:'', mark:'Driving, with fire', note:'', x:'', vol:1},
-    {form:'Sanctuary', kr:'성소', audio:'sanctuary',   color:'#4895C9', title:'', mark:'Slow, tender', note:'', x:'', vol:1},
-    {form:'Bitches Brew', kr:'비치스 브루', audio:'brew',       color:'#2A6F97', title:'',   mark:'Dark, swirling', note:'', x:'', vol:1},
-    {form:'Pharaoh’s Dance', kr:'파라오의 춤', audio:'pharaoh',   color:'#1B5299', title:'',     mark:'Hazy, slowly rising', note:'', x:'', vol:1},
-    {form:'Nigra sum', kr:'나는 검으나', audio:'nigra',   color:'#1D3461', title:'',      mark:'Dolce, con amore', note:'', x:'', vol:1},
-    {form:'Pulchra es', kr:'너는 아름다워', audio:'pulchra',   color:'#14213D', title:'',     mark:'Soave, a due', note:'', x:'', vol:1},
-    {form:'Duo Seraphim', kr:'두 세라핌', audio:'seraphim',   color:'#121B33', title:'',       mark:'Chiamando, l’un l’altro', note:'', x:'', vol:1},
-    {form:'Audi coelum', kr:'들으소서, 하늘이여', audio:'audi',   color:'#161630', title:'',     mark:'Con eco, da lontano', note:'', x:'', vol:1},
-    {form:'Sonata sopra Sancta Maria', kr:'산타 마리아의 소나타', audio:'sonata',   color:'#15122B', title:'',        mark:'Ostinato, pregando', note:'', x:'', vol:1},
+    {form:'Maiysha', kr:'', audio:'maiysha', color:'#A8DADC', title:'',       mark:'Gently swaying', note:'', x:'', vol:1},
+    {form:'Spanish Key', kr:'', audio:'spanish',     color:'#6FB7D4', title:'', mark:'Driving, with fire', note:'', x:'', vol:1},
+    {form:'Sanctuary', kr:'', audio:'sanctuary',   color:'#4895C9', title:'', mark:'Slow, tender', note:'', x:'', vol:1},
+    {form:'Bitches Brew', kr:'', audio:'brew',       color:'#2A6F97', title:'',   mark:'Dark, swirling', note:'', x:'', vol:1},
+    {form:'Pharaoh’s Dance', kr:'', audio:'pharaoh',   color:'#1B5299', title:'',     mark:'Hazy, slowly rising', note:'', x:'', vol:1},
+    {form:'Nigra sum', kr:'', audio:'nigra',   color:'#1D3461', title:'',      mark:'Dolce, con amore', note:'', x:'', vol:1},
+    {form:'Pulchra es', kr:'', audio:'pulchra',   color:'#14213D', title:'',     mark:'Soave, a due', note:'', x:'', vol:1},
+    {form:'Duo Seraphim', kr:'', audio:'seraphim',   color:'#121B33', title:'',       mark:'Chiamando, l’un l’altro', note:'', x:'', vol:1},
+    {form:'Audi coelum', kr:'', audio:'audi',   color:'#161630', title:'',     mark:'Con eco, da lontano', note:'', x:'', vol:1},
+    {form:'Sonata sopra Sancta Maria', kr:'', audio:'sonata',   color:'#15122B', title:'',        mark:'Ostinato, pregando', note:'', x:'', vol:1},
     {form:'Requiem',     kr:'진혼곡',   color:'#120A22', title:'Ascensione',     mark:'Lento, doloroso', note:'', hidden:true},
   ];
 
@@ -906,7 +906,7 @@
     const wv=document.getElementById('work-'+(i+1)); if(!wv) return;
     const t=wv.querySelector('.wh-title'), f=wv.querySelector('.wh-form');
     if(f) f.innerHTML = labelHTML(i);
-    if(!d.title && t) t.textContent=d.kr; });
+    if(!d.title && t) t.textContent=PREVIEW?'':d.kr; });
 
   function setBloomY(){const t=platter.getBoundingClientRect();root.style.setProperty('--bloom-y',(t.top+t.height/2)+'px');}
 
@@ -924,7 +924,7 @@
     root.style.setProperty('--blue-lit', lighten(d.color,.42));
     ttLabel.textContent='';                                   // 판 가운데는 색만 — 곡 이름은 손글씨 라벨이 맡는다
     npForm.innerHTML = labelHTML(i);                          // 곡 이름은 손글씨 라벨 하나로 (무제면 제목 자리에 한글 곡명)
-    npTitle.textContent=d.title||d.kr; npMark.textContent=d.mark;
+    npTitle.textContent=(PREVIEW && !d.title)?'':(d.title||d.kr); npMark.textContent=d.mark;
     if(PREVIEW){ npNote.textContent=''; npNote.classList.remove('instrumental'); }
     else { npNote.textContent=d.note||'Instrumental'; npNote.classList.toggle('instrumental', !d.note); }
     centerInst();
