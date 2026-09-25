@@ -185,12 +185,23 @@
   .foyer.return.late .ret-b{opacity:1;pointer-events:auto;}
   .ret-b .eg{margin-top:4px;}
   /* 첫 재입장 — 바텐더는 두고 간 물건만 내민다. B면은 머리글만 남은 빈칸 */
-  .foyer.return:not(.again) .ret-b{opacity:1;}
+  .foyer.return:not(.again) .ret-b{opacity:.14;}                                    /* B면은 불이 꺼져 있다 */
+  /* 첫 재입장 — A면만 푸르게 불이 들어온다 */
+  .ret-a{position:relative;}
+  .ret-a > *{position:relative;z-index:1;}
+  .ret-a::after{content:"";position:absolute;pointer-events:none;opacity:0;left:-6%;right:-6%;top:10%;bottom:-18px;z-index:0;
+      background:radial-gradient(ellipse 55% 55% at 50% 60%, rgba(123,190,222,.13), transparent 72%);transition:opacity 1.6s ease;}
+  .foyer.return:not(.again) .ret-a::after{opacity:1;animation:lampon 1.9s ease-out both;}
+  @keyframes lampon{0%{opacity:0;}10%{opacity:.7;}14%{opacity:.15;}22%{opacity:.85;}27%{opacity:.4;}100%{opacity:1;}}   /* 딸깍 — 불이 들어온다 */
+  .foyer.return:not(.again) .ret-a .ret-q{color:#d6eef8;text-shadow:0 0 14px rgba(123,190,222,.4);}
+  .foyer.return:not(.again) .ret-a .tl-name{color:#e2f3fa;text-shadow:0 0 12px rgba(123,190,222,.35);}
+  .foyer.return:not(.again) .ret-a .side-mark{color:#9fd3ea;}
+  @media (prefers-reduced-motion:reduce){ .foyer.return:not(.again) .ret-a::after{animation:none;} }
   .foyer.return:not(.again) .ret-b .ret-q,.foyer.return:not(.again) .ret-b .eg{display:none;}
   /* 두 번째 재입장부터 — 이미 찾으러 갔던 물건은 불이 꺼지고, 아직 안 간 길이 빛난다 */
   .ret-a{transition:opacity 1.2s ease;}
-  .foyer.again .ret-a{opacity:.3;}
-  .foyer.again .ret-a:hover,.foyer.again .ret-a:focus-within{opacity:.55;}          /* 꺼져 있어도 누를 수는 있다 */
+  .foyer.again .ret-a{opacity:.1;}
+  .foyer.again .ret-a:hover,.foyer.again .ret-a:focus-within{opacity:.28;}          /* 꺼져 있어도 누를 수는 있다 */
   .foyer.again .ret-b .ret-q{color:#cdb8f2;animation:retglow 4.2s ease-in-out -2.1s infinite;}   /* Moody Blues 버튼과 같은 숨으로 */
   @keyframes retglow{0%,100%{text-shadow:0 0 8px rgba(158,118,226,.35);}50%{text-shadow:0 0 18px rgba(158,118,226,.75), 0 0 32px rgba(158,118,226,.3);}}
   @media (prefers-reduced-motion:reduce){ .foyer.again .ret-b .ret-q{animation:none;text-shadow:0 0 12px rgba(158,118,226,.55);} }
@@ -211,6 +222,97 @@
   .work-view .afterword .para{font-size:16px;}                                                    /* 승천의 방엔 돌아가는 길이 없다 — 지퍼뿐 */
   #work-11 .endgame{margin-bottom:64px;}
   .blackout.slow{transition:opacity 3s ease, visibility 3s;}                        /* 지퍼 밖으로 — 천천히 저문다 */
+
+  /* ===== 분실물 — 단골이 두고 간 낡은 노트 (첫 재입장 A) ===== */
+  #noteRoom{position:fixed;inset:0;z-index:37;opacity:0;visibility:hidden;transition:opacity .01s, visibility .01s;
+    --table:#0d1219;--page:#dccfab;--page-dk:#c3b28a;--ink:#3a3126;--body:'Noto Serif KR','EB Garamond',Georgia,serif;}
+  #noteRoom.open{opacity:1;visibility:visible;}
+#noteRoom .nr-table{position:fixed;inset:0;background:var(--table);overflow:hidden;}
+#noteRoom .nr-table::before{content:"";position:absolute;inset:-20%;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .09' numOctaves='3' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 .09 0 0 0 0 .12 0 0 0 0 .16 0 0 0 1.4 -.35'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23w)'/%3E%3C/svg%3E");
+  background-size:600px 600px;transform:rotate(-3deg);}
+#noteRoom .nr-table::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 46%, transparent 30%, rgba(3,5,8,.72) 100%);}
+#noteRoom .nr-pool{position:absolute;left:50%;top:45%;width:130vmin;height:110vmin;transform:translate(-50%,-50%);background:radial-gradient(ellipse at center, rgba(123,190,222,.11), transparent 60%);}
+#noteRoom .nr-towel{position:absolute;right:-14%;bottom:5%;width:56vmin;height:34vmin;max-width:320px;max-height:195px;transform:rotate(-16deg);   
+  filter:drop-shadow(0 10px 14px rgba(0,0,0,.5));}
+#noteRoom .nr-towel svg{width:100%;height:100%;display:block;overflow:visible;}
+#noteRoom .nr-book{position:absolute;left:50%;top:45%;width:min(80vw,400px);aspect-ratio:1.42;transform:translate(-50%,-50%) rotate(-4deg);
+  cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .8s cubic-bezier(.3,.7,.2,1), filter .8s ease;
+  filter:drop-shadow(10px 16px 18px rgba(0,0,0,.55));}
+#noteRoom .nr-book:hover,#noteRoom .nr-book:focus-visible{outline:none;filter:drop-shadow(10px 16px 18px rgba(0,0,0,.55)) drop-shadow(0 0 18px rgba(123,190,222,.18));}
+#noteRoom .nr-cover-edge{position:absolute;inset:-3% -2.5% -4%;border-radius:7px 9px 8px 6px;                                
+  background:#2a2520 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='l'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='3' seed='2'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .48 0 0 0 0 .4 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23l)'/%3E%3C/svg%3E");
+  box-shadow:inset 0 0 0 1px rgba(210,190,160,.1), inset 0 0 14px rgba(150,125,95,.28), inset 0 0 2px rgba(0,0,0,.6);}
+#noteRoom .nr-pg{position:absolute;top:0;bottom:0;width:50%;background:var(--page);overflow:hidden;--fs:clamp(9.5px,2.6vw,13px);}
+#noteRoom .nr-pg::before{content:"";position:absolute;inset:0;pointer-events:none;                                          
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .28 0 0 0 0 .16 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23p)'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse at 85% 95%, rgba(140,110,60,.22), transparent 45%), radial-gradient(ellipse at 10% 5%, rgba(140,110,60,.16), transparent 40%);}
+#noteRoom .nr-rules{position:absolute;left:0;right:0;top:13%;bottom:8%;font-size:var(--fs);pointer-events:none;                
+  background:repeating-linear-gradient(180deg, transparent 0 calc(1.9em - 1px), rgba(80,110,140,.26) calc(1.9em - 1px) 1.9em);background-position:0 .2em;}
+#noteRoom .nr-pg.nr-l .nr-margin{position:absolute;top:0;bottom:0;left:9%;width:1px;background:rgba(160,70,70,.22);}
+#noteRoom .nr-pg.nr-r .nr-margin{position:absolute;top:0;bottom:0;left:8%;width:1px;background:rgba(160,70,70,.22);}
+#noteRoom .nr-pg.nr-l{left:0;border-radius:6px 0 0 8px;transform-origin:right center;transform:perspective(900px) rotateY(4deg);
+  background:linear-gradient(90deg, var(--page-dk) 0%, var(--page) 7%, var(--page) 78%, #c9bb9a 96%, #a8987a 100%);
+  box-shadow:-1px 1px 0 #cfc3a6, -2px 2px 0 #bfb190, -3px 3px 0 #cfc3a6, -4px 4px 0 #b3a483;}
+#noteRoom .nr-pg.nr-r{right:0;border-radius:0 8px 6px 0;transform-origin:left center;transform:perspective(900px) rotateY(-4deg);
+  background:linear-gradient(270deg, var(--page-dk) 0%, var(--page) 7%, var(--page) 78%, #c9bb9a 96%, #a8987a 100%);
+  box-shadow:1px 1px 0 #cfc3a6, 2px 2px 0 #bfb190, 3px 3px 0 #cfc3a6, 4px 4px 0 #b3a483;}
+#noteRoom .nr-gutter{position:absolute;left:50%;top:0;bottom:0;width:18px;transform:translateX(-50%);
+  background:linear-gradient(90deg, transparent, rgba(60,45,25,.28) 45%, rgba(60,45,25,.34) 50%, rgba(60,45,25,.28) 55%, transparent);}
+#noteRoom .nr-script{position:absolute;inset:13% 9% 14% 13%;font-family:var(--hand-b);font-size:var(--fs);line-height:1.9;color:rgba(52,36,78,.78);  
+  transform:rotate(-1.5deg);white-space:nowrap;}
+#noteRoom .nr-script b{display:block;font-weight:400;color:rgba(52,36,78,.92);}
+#noteRoom .nr-script span{display:block;}
+#noteRoom .nr-script .nr-gap{height:1.9em;}
+#noteRoom .nr-smear{filter:url(#nrBleed);color:rgba(62,44,92,.62);}
+#noteRoom .nr-tear{position:absolute;aspect-ratio:1;border-radius:50%;pointer-events:none;filter:url(#nrWarp);                 
+  background:radial-gradient(circle at 50% 50%, rgba(170,140,85,.05) 0 50%, rgba(140,108,55,.19) 62%, rgba(140,108,55,.07) 68%, transparent 72%);}
+#noteRoom .nr-tear.nr-faint{opacity:.55;}
+#noteRoom .nr-pg.nr-r .nr-script{inset:13% 8% 14% 12%;transform:rotate(-.6deg);}
+#noteRoom .nr-folio{position:absolute;bottom:6%;font-family:var(--serif);font-size:10px;color:rgba(58,49,38,.45);}
+#noteRoom .nr-pg.nr-l .nr-folio{left:14%;}
+#noteRoom .nr-pg.nr-r .nr-folio{right:14%;}
+#noteRoom .nr-ribbon{position:absolute;left:calc(50% + 5px);top:-4%;width:2.5px;height:122%;background:#5a4880;                   
+  transform:rotate(4deg);transform-origin:top;border-radius:2px;opacity:.9;}
+#noteRoom .nr-book.nr-shut .nr-pg.nr-l{transform:perspective(900px) rotateY(88deg);transition:transform .5s cubic-bezier(.5,0,.7,.4);}
+#noteRoom .nr-hint{position:absolute;left:0;right:0;bottom:calc(8% + env(safe-area-inset-bottom,0px));text-align:center;font-family:var(--sans);font-size:11.5px;
+  letter-spacing:.28em;text-transform:uppercase;color:rgba(207,228,234,.6);animation:nrpulse 2.6s ease-in-out infinite;pointer-events:none;transition:opacity .4s;}
+@keyframes nrpulse{0%,100%{opacity:.3;}50%{opacity:.8;}}
+#noteRoom .nr-ask{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:32px;
+  background:rgba(4,6,10,.9);opacity:0;visibility:hidden;transition:opacity .8s ease, visibility .8s;}
+#noteRoom .nr-ask.nr-show{opacity:1;visibility:visible;}
+#noteRoom .nr-q{max-width:340px;text-align:center;}
+#noteRoom .nr-q p{font-family:var(--serif);font-size:17px;line-height:1.85;color:#d6e6ee;margin:0 0 34px;word-break:keep-all;letter-spacing:.02em;}
+#noteRoom .nr-opts{display:flex;justify-content:center;gap:40px;align-items:baseline;}
+#noteRoom .nr-opt{background:none;border:none;padding:8px 4px;cursor:pointer;font-family:var(--serif);font-size:16px;color:#9fb6c4;letter-spacing:.12em;
+  border-bottom:1px solid transparent;transition:color .4s, border-color .4s;-webkit-tap-highlight-color:transparent;}
+#noteRoom .nr-opt:hover,#noteRoom .nr-opt:focus-visible{color:#e4f1f7;border-bottom-color:rgba(207,228,234,.4);outline:none;}
+#noteRoom .nr-q .nr-step{display:none;}
+#noteRoom .nr-q .nr-step.nr-on{display:block;animation:nrrise .8s ease both;}
+@keyframes nrrise{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+#noteRoom .nr-readwrap{position:fixed;inset:0;z-index:5;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  padding:calc(28px + env(safe-area-inset-top,0px)) 16px calc(40px + env(safe-area-inset-bottom,0px));
+  background:rgba(4,6,10,.6);opacity:0;visibility:hidden;transition:opacity .9s ease, visibility .9s;}
+#noteRoom .nr-readwrap.nr-show{opacity:1;visibility:visible;}
+#noteRoom .nr-leaf{max-width:540px;margin:0 auto;padding:clamp(40px,9vw,70px) clamp(26px,8vw,60px) 52px clamp(38px,10vw,72px);background:var(--page);border-radius:6px 8px 7px 5px;
+  background-image:linear-gradient(90deg, transparent calc(clamp(38px,10vw,72px) - 12px), rgba(160,70,70,.2) calc(clamp(38px,10vw,72px) - 12px), rgba(160,70,70,.2) calc(clamp(38px,10vw,72px) - 11px), transparent calc(clamp(38px,10vw,72px) - 11px)),
+    linear-gradient(90deg, rgba(60,45,25,.14), transparent 7%), radial-gradient(ellipse at 70% 10%, rgba(255,252,240,.3), transparent 60%);
+  box-shadow:inset 0 0 30px rgba(120,90,45,.22), 0 20px 50px rgba(0,0,0,.6);transform:translateY(12px);transition:transform 1s cubic-bezier(.3,.7,.2,1);}
+#noteRoom .nr-readwrap.nr-show .nr-leaf{transform:none;}
+#noteRoom .nr-leaf h1{margin:0 0 6px;font-family:var(--serif);font-style:italic;font-weight:400;font-size:clamp(28px,7vw,38px);color:var(--ink);letter-spacing:.05em;}
+#noteRoom .nr-leaf .nr-by{font-family:var(--serif);font-size:13px;color:#7a6a52;letter-spacing:.12em;margin-bottom:34px;}
+#noteRoom .nr-leaf p{font-family:var(--body);font-size:16.5px;line-height:1.95;color:#34264a;margin:0 0 1.4em;word-break:keep-all;text-wrap:pretty;}
+#noteRoom .nr-leaf p.nr-ph{color:#7a6a8e;}
+#noteRoom .nr-leaf .nr-it{font-family:var(--hand-b);font-size:22px;color:rgba(52,36,78,.85);margin:1.6em 0 .6em;transform:rotate(-1.2deg);transform-origin:left;}
+#noteRoom .nr-leaf .nr-it:first-of-type{margin-top:0;}
+#noteRoom .nr-leaf .nr-sig{font-family:var(--hand-b);font-size:26px;color:rgba(52,36,78,.85);text-align:right;margin-top:1.4em;}
+#noteRoom .nr-close{background:none;border:none;border-bottom:1px solid rgba(110,90,60,.35);padding:6px 4px;cursor:pointer;font-family:var(--body);font-size:15px;color:#6d5d45;letter-spacing:.18em;}
+#noteRoom .nr-close:hover,#noteRoom .nr-close:focus-visible{color:#3a3126;border-bottom-color:#6d5d45;outline:none;}
+#noteRoom .nr-end{display:flex;flex-direction:column;align-items:center;gap:26px;margin-top:44px;}
+#noteRoom .nr-artist{display:inline-block;padding:13px 32px;border:1px solid rgba(110,90,60,.4);border-radius:2px;color:#6d5d45;font-family:var(--sans);font-size:13px;letter-spacing:.12em;text-decoration:none;}
+@media (prefers-reduced-motion:reduce){#noteRoom .nr-book,#noteRoom .nr-ask,#noteRoom .nr-readwrap,#noteRoom .nr-leaf,#noteRoom .rewind{transition-duration:.01s;}#noteRoom .nr-hint{animation:none;}#noteRoom .nr-q .nr-step.nr-on{animation:none;}}
+  #noteRoom .nr-artist[hidden]{display:none;}
+  .blackout.quick{transition:opacity .45s ease, visibility .45s;}
 
   /* 뒷표지 — 글자 없이 그림과 빗소리만. 누르면 판을 뒤집듯 앞표지로 */
   .backcover{position:fixed;inset:0;z-index:39;touch-action:none;overscroll-behavior:contain;background:#1b1c20;display:flex;align-items:center;justify-content:center;
@@ -460,14 +562,14 @@
     <div class="liner-sides liner-return">
       <div class="liner-side ret-a">
         <div class="side-head"><span class="side-mark">A</span></div>
-        <p class="ret-q">두고 가신 물건이 있으신가요?</p>
+        <p class="ret-q">음? 다시 오셨군요.<br>잃어버린 물건이라도 있으신가요?</p>
         <ol class="tracklist">
-          <li><button class="ret-go" id="retReq" aria-label="11 Requiem — 두고 간 판으로"><span class="tl-no">11</span><span class="tl-name">Requiem</span></button></li>
+          <li><button class="ret-go" id="retReq" aria-label="??? — 분실물"><span class="tl-no">??</span><span class="tl-name">???</span></button></li>
         </ol>
       </div>
       <div class="liner-side ret-b" aria-hidden="true">
         <div class="side-head"><span class="side-mark">B</span></div>
-        <p class="ret-q">아니면… 잊은 게 있으신가요?</p>
+        <p class="ret-q">혹시 잃어버린 게 아니라,<br>무언가 잊으신 거라면…</p>
         <button class="eg eg-blues" id="retBlues" aria-label="Moody Blues — 처음으로 되감기" tabindex="-1"><span>Moody Blues</span></button>
       </div>
     </div>
@@ -484,10 +586,89 @@
   <filter id="inkA" x="-5%" y="-20%" width="110%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.02 0.5" numOctaves="2" seed="4" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.6 1.85" result="a"/><feComposite in="SourceGraphic" in2="a" operator="in" result="p"/><feTurbulence type="fractalNoise" baseFrequency="0.9" seed="3" result="e"/><feDisplacementMap in="p" in2="e" scale="0.6"/></filter>
   <filter id="inkB" x="-5%" y="-20%" width="110%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="2" seed="7" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="2" result="t"/><feTurbulence type="fractalNoise" baseFrequency="0.035 0.12" numOctaves="2" seed="11" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.2 1.45" result="a"/><feComposite in="t" in2="a" operator="in"/></filter>
 </svg>
+<section id="noteRoom" aria-hidden="true">
+
+  <div class="nr-table" aria-hidden="true"><div class="nr-pool"></div><div class="nr-towel"><svg viewBox="0 0 300 180" preserveAspectRatio="none">
+      <defs><filter id="nrCloth" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency=".012 .022" numOctaves="2" seed="7" result="n"/>
+        <feDiffuseLighting in="n" surfaceScale="4.5" lighting-color="#fff" result="l"><feDistantLight azimuth="235" elevation="48"/></feDiffuseLighting>
+        <feComposite in="l" in2="SourceGraphic" operator="arithmetic" k1="1.25" k2="0" k3="0" k4="0" result="m"/>
+        <feComposite in="m" in2="SourceAlpha" operator="in"/>
+      </filter></defs>
+      <g filter="url(#nrCloth)">
+        <path d="M22 62 C70 44 160 48 300 32 L304 172 C210 180 96 178 34 170 C20 142 28 104 22 62Z" fill="#6f7881"/>
+      </g>
+      <g filter="url(#nrCloth)">
+        <path d="M6 22 C62 8 172 12 282 2 C292 42 284 92 294 128 C196 142 84 136 12 144 C0 104 12 62 6 22Z" fill="#8f98a0"/>
+        <path d="M24 18 C21 60 27 102 22 141 L35 140 C39 101 34 60 38 17Z" fill="#3a5470"/>
+        <path d="M244 6 C256 44 250 92 258 131 L294 128 C284 92 292 42 282 2Z" fill="#7a838b"/>
+      </g>
+    </svg></div></div>
+
+  <div class="nr-book" id="nrBook" role="button" tabindex="0" aria-label="펼쳐진 낡은 노트">
+    <div class="nr-cover-edge"></div>
+    <div class="nr-pg nr-l"><div class="nr-rules"></div><div class="nr-margin"></div>
+      <div class="nr-tear" style="left:37%;top:67%;width:10%;"></div>
+      <div class="nr-tear" style="left:48%;top:70%;width:7%;transform:rotate(20deg);aspect-ratio:1/1.3;"></div>
+      <div class="nr-tear nr-faint" style="left:42%;top:76%;width:5.5%;"></div>
+      <div class="nr-script"><b>Napoli, marzo</b><span class="nr-gap"></span><span>Non so perché ho cominciato.</span><span class="nr-gap"></span><span class="nr-gap"></span><span>per ricordare —</span><span class="nr-smear" style="padding-left:1.4em">la sua voce.</span></div><span class="nr-folio">24</span></div>
+    <div class="nr-pg nr-r"><div class="nr-rules"></div><div class="nr-margin"></div>
+      <div class="nr-tear" style="left:22%;top:31%;width:9.5%;"></div>
+      <div class="nr-tear nr-faint" style="left:33%;top:35%;width:6%;transform:rotate(-15deg);aspect-ratio:1/1.35;"></div>
+      <div class="nr-script"><span>Il Greco di Tufo</span><span>era troppo freddo,</span><span class="nr-smear">e lui rideva.</span><span class="nr-gap"></span><span class="nr-gap"></span><span class="nr-gap"></span><span style="padding-left:2.2em">Domani, forse.</span></div><span class="nr-folio">25</span></div>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <filter id="nrBleed" x="-10%" y="-40%" width="120%" height="180%">
+        <feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="4" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" result="d"/>
+        <feGaussianBlur in="d" stdDeviation="1.3" result="b"/>
+        <feMerge><feMergeNode in="b"/><feMergeNode in="d"/></feMerge>
+      </filter>
+      <filter id="nrWarp" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency=".2" numOctaves="1" seed="11" result="n"/>
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="2.5"/>
+      </filter>
+    </svg>
+    <div class="nr-gutter"></div>
+    <div class="nr-ribbon"></div>
+  </div>
+  <div class="nr-hint" id="nrHint">tap to read</div>
+
+  <div class="nr-ask" id="nrAsk" aria-hidden="true">
+    <div class="nr-q">
+      <div class="nr-step nr-on" id="nrS1">
+        <p>전에 자주 오시던 손님이<br>두고 가신 노트예요.<br>그레코 디 투포를 즐겨 드시던 분이었죠.</p>
+        <div class="nr-opts"><button class="nr-opt" id="nrYes">펼쳐 본다</button><button class="nr-opt" id="nrNo">덮어 둔다</button></div>
+      </div>
+      <div class="nr-step" id="nrS2"></div>
+    </div>
+  </div>
+
+  <div class="nr-readwrap" id="nrRead" aria-hidden="true">
+    <article class="nr-leaf">
+      <h1>???</h1>
+      <div class="nr-by">???</div>
+      <!-- ============================================================
+         주최 글(아바키오의 회고록)을 여기에 넣으세요.
+           한글 문단      :  <p>문단 내용</p>
+           이탈리아어 머리글 :  <div class="nr-it">Napoli, marzo</div>   (아바키오의 만년필 글씨)
+           맨 끝 서명     :  <div class="nr-sig">— L.</div>
+         임시 문단(nr-ph)은 글을 넣은 뒤 지우세요.
+         ============================================================ -->
+      <div class="nr-it">Napoli, marzo</div>
+      <p class="nr-ph">여기에 주최의 글이 놓입니다. 아바키오의 회고록.</p>
+      <div class="nr-sig">— L.</div>
+      <div class="nr-end">
+        <a class="nr-artist" id="nrArtist" href="#" target="_blank" rel="noopener" hidden></a>
+        <button class="nr-close" id="nrClose">노트 덮기</button>
+      </div>
+    </article>
+  </div>
+
+  </section>
 <div class="blackout" id="blackout" aria-hidden="true"></div>
 <div class="welcome" id="welcome" role="button" aria-hidden="true" aria-label="자리로 돌아가기"><div class="wb">다녀오셨어요.<br>자리는 그대로 두었습니다.</div></div>
 <div class="backcover" id="backcover" aria-hidden="true" role="button" aria-label="앞표지로 넘기기">
-  <picture><source media="(min-aspect-ratio: 1/1)" srcset="back-wide.jpg"><img src="back.jpg" alt=""></picture>
+  <picture><source id="backSrc" media="(min-aspect-ratio: 1/1)" srcset="back-wide.jpg"><img id="backImg" src="back.jpg" alt=""></picture>
 </div>
 
 <section class="work-view" id="work-1" aria-hidden="true" style="--wv-accent:rgb(207,235,236);--wv-glow:#A8DADC;">
@@ -871,7 +1052,7 @@
     {form:'Spanish Key', kr:'스페인의 조성', audio:'spanish',     color:'#6FB7D4', title:'내일은 날이 밝을거야', mark:'Driving, with fire', note:'', x:'deubokaa', vol:1},
     {form:'Sanctuary', kr:'성소', audio:'sanctuary',   color:'#4895C9', title:'Untitled Blue: 927', mark:'Slow, tender', note:'', x:'WOOBARKX', vol:1},
     {form:'Bitches Brew', kr:'비치스 브루', audio:'brew',       color:'#2A6F97', title:'BLUE AND BLUE',   mark:'Dark, swirling', note:'최근 어째서인지 우울해 보이는 아바키오. 매해 자신의 생일엔 혼자 고향에 내려가 하루를 보내는 부차라티는 아바키오를 위해 처음으로 혼자가 아닌 함께 고향으로 내려간다. 그렇게 둘이서 보내는 평범한 하루.', x:'Oishi_masita', vol:1},
-    {form:'Pharaoh’s Dance', kr:'파라오의 춤', audio:'pharaoh',   color:'#1B5299', title:'Some Blueny Day',     mark:'Hazy, slowly rising', note:'어떤 날은 이유 없이 깊은 곳으로 가라앉게 만든다.', xx:'cucci_XUX', vol:1},
+    {form:'Pharaoh’s Dance', kr:'파라오의 춤', audio:'pharaoh',   color:'#1B5299', title:'Some Blueny Day',     mark:'Hazy, slowly rising', note:'어떤 날은 이유 없이 깊은 곳으로 가라앉게 만든다.', x:'cucci_XUX', vol:1},
     {form:'Nigra sum', kr:'나는 검으나', audio:'nigra',   color:'#1D3461', title:'6',      mark:'Dolce, con amore', note:'작품 소개글이 놓일 자리', x:'', vol:1},
     {form:'Pulchra es', kr:'너는 아름다워', audio:'pulchra',   color:'#14213D', title:'7',     mark:'Soave, a due', note:'작품 소개글이 놓일 자리', x:'', vol:1},
     {form:'Duo Seraphim', kr:'두 세라핌', audio:'seraphim',   color:'#121B33', title:'8',       mark:'Chiamando, l’un l’altro', note:'작품 소개글이 놓일 자리', x:'', vol:1},
@@ -902,7 +1083,8 @@
     try{
       const o=JSON.parse(localStorage.getItem(SKEY)||'null');
       if(!o||o.v!==1) return null;
-      if(o.t && Date.now()-o.t>FORGET_AFTER){ forget(); return null; }   // 너무 오래 비웠다 — 처음 손님으로
+      // 보던 자리는 1시간이면 잊지만, Sticky Fingers 로 나간 손님은 되감기 전까지 계속 기억한다
+      if(!o.left && o.t && Date.now()-o.t>FORGET_AFTER){ forget(); return null; }   // 너무 오래 비웠다 — 처음 손님으로
       return o;
     }catch(e){ return null; }
   }
@@ -1306,8 +1488,11 @@
   // 속표지가 떠 있는 동안 배경 스크롤을 원천 차단 (데스크톱 휠·키, 모바일 터치)
   let foyerLocked=false;
   function isInsideFoyer(t){ return t && foyer.contains(t); }
+  function noteOpenNow(){ const n=document.getElementById('noteRoom'); return n && n.classList.contains('open'); }
+  function nrReadEl(){ return document.getElementById('nrRead'); }
   function backShown(){ return backcover.classList.contains('show'); }
   function blockScroll(e){
+    if(noteOpenNow() && (e.type==='wheel' || e.type==='touchmove')){ if(!(nrReadEl() && nrReadEl().contains(e.target) && nrReadEl().classList.contains('nr-show'))) e.preventDefault(); return; }
     if(backShown() && (e.type==='wheel' || e.type==='touchmove')){ e.preventDefault(); return; }   // 뒷표지는 한 장의 그림 — 움직이지 않는다
     if(!foyerLocked) return;
     // 속표지 내부에서 실제로 스크롤 여지가 있으면 통과, 아니면 차단
@@ -1439,15 +1624,65 @@
 
   // ===== 재입장 속표지 =====
   const retBluesBtn=document.getElementById('retBlues'), retBSide=document.querySelector('.ret-b');
-  // A — 두고 가신 물건: 진혼곡 한 장만 남은 선반으로. 판은 아직 돌고 있다
-  document.getElementById('retReq').addEventListener('click', ()=>{
+  // A — 잃어버린 물건: 영업이 끝난 탁자 위, 단골이 두고 간 낡은 노트
+  const HOST_X = '';                                          // 주최 트위터 아이디 (@ 없이) — 비워두면 버튼 없음
+  const noteRoom=document.getElementById('noteRoom'), nrBook=document.getElementById('nrBook'), nrHint=document.getElementById('nrHint'),
+        nrAsk=document.getElementById('nrAsk'), nrRead=document.getElementById('nrRead');
+  (function(){ const h=HOST_X.replace(/^@/,'').trim(); if(!h) return; const a=document.getElementById('nrArtist');
+    a.href='https://x.com/'+encodeURIComponent(h); a.textContent='@'+h; a.hidden=false; })();
+  let noteOpen=false;
+  function resetNote(){
+    nrAsk.classList.remove('nr-show'); nrRead.classList.remove('nr-show');
+    nrAsk.setAttribute('aria-hidden','true'); nrRead.setAttribute('aria-hidden','true');
+    nrBook.classList.remove('nr-shut'); nrHint.style.visibility='';
+  }
+  function openNote(){
     if(egBusy) return; egBusy=true;
-    leftBar=false; tookBack=true;
-    applyShelfState();
-    select(discs.length-1);                                   // 손짓 안에서 곡을 걸어두고 —
-    if(trackAudio) trackAudio.muted=true;                     // 문이 열릴 때까지는 들리지 않게
-    enterHall(()=>{ if(trackAudio) trackAudio.muted=muted; egBusy=false; });   // 문을 열고 들어서니, 아직 흐르고 있다
-  });
+    doorSound(); blackout.classList.add('on');
+    setTimeout(()=>{
+      leaveFoyer(); rainGoInside();
+      resetNote();
+      noteRoom.classList.add('open'); noteRoom.setAttribute('aria-hidden','false'); noteOpen=true;
+      document.body.classList.add('locked');
+      history.replaceState({sb:'note'},'');
+      setTimeout(()=>{ blackout.classList.remove('on'); egBusy=false; }, RM_T?100:1400);
+    }, RM_T?200:2200);
+  }
+  document.getElementById('retReq').addEventListener('click', openNote);
+  nrBook.addEventListener('click', ()=>{ nrAsk.classList.add('nr-show'); nrAsk.setAttribute('aria-hidden','false'); nrHint.style.visibility='hidden'; });
+  nrBook.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); nrBook.click(); } });
+  document.getElementById('nrYes').addEventListener('click', e=>{ e.stopPropagation();
+    nrAsk.classList.remove('nr-show'); nrRead.classList.add('nr-show'); nrRead.setAttribute('aria-hidden','false'); nrRead.scrollTop=0; });
+  document.getElementById('nrNo').addEventListener('click', e=>{ e.stopPropagation(); shutNote(); });
+  document.getElementById('nrClose').addEventListener('click', shutNote);
+  // 노트를 덮고 — 1초의 암전 — 다시 바텐더 앞, 이번엔 B면에 불이 켜져 있다
+  function shutNote(){
+    if(egBusy || !noteOpen) return; egBusy=true;
+    nrAsk.classList.remove('nr-show'); nrRead.classList.remove('nr-show'); nrHint.style.visibility='hidden';
+    sfx('book-close.mp3');                                    // 파일 없으면 조용히
+    nrBook.classList.add('nr-shut');
+    const T_SHUT=RM_T?50:420, T_DARK=RM_T?50:450, T_HOLD=RM_T?100:1000;
+    setTimeout(()=>{ blackout.classList.add('quick','on'); }, T_SHUT);
+    setTimeout(()=>{
+      noteRoom.classList.remove('open'); noteRoom.setAttribute('aria-hidden','true'); noteOpen=false;
+      document.body.classList.remove('locked');
+      tookBack=true; save();
+      showReturnFoyer();
+      blackout.classList.remove('on');
+      setTimeout(()=>{ blackout.classList.remove('quick'); egBusy=false; }, 500);
+    }, T_SHUT+T_DARK+T_HOLD);
+  }
+  function showReturnFoyer(){                                 // 표지를 거치지 않고, 곧장 속표지(재입장)로
+    const again=tookBack;
+    foyer.classList.add('return'); foyer.classList.toggle('again', again); foyer.classList.remove('late');
+    retBluesBtn.tabIndex=-1; retBSide.setAttribute('aria-hidden','true');
+    clearTimeout(lateTimer);
+    if(again) lateTimer=setTimeout(()=>{ foyer.classList.add('late'); retBluesBtn.tabIndex=0; retBSide.setAttribute('aria-hidden','false'); }, RM_T?300:900);
+    foyer.classList.add('show'); foyer.setAttribute('aria-hidden','false'); foyer.scrollTop=0;
+    document.body.classList.add('foyer-open'); foyerLocked=true;
+    history.replaceState({sb:'foyer'},'');
+    startRainOutside();
+  }
   // B — Moody Blues: 아바키오의 손으로 되감는다. 처음 온 날의 선반 앞으로
   function resetAll(){
     readWorks.clear(); requiemUnlocked=false; shelfRestored=false; leftBar=false; openRoom=-1; tookBack=false;
@@ -1476,7 +1711,8 @@
 
   // ===== 폰의 뒤로가기 =====  작품 방 → 선반 → 표지 순으로 한 걸음씩 물러난다. 표지에서 한 번 더 누르면 나간다.
   window.addEventListener('popstate', e=>{
-    if(backcover.classList.contains('show')){ flipToFront(); return; }   // 뒷표지에서 뒤로 → 앞표지
+    if(backcover.classList.contains('show')){ flipToFront(); return; }
+    if(noteOpen){ history.pushState({sb:'note'},''); shutNote(); return; }   // 노트 방에서 뒤로가기 — 노트를 덮는다   // 뒷표지에서 뒤로 → 앞표지
     const st=e.state&&e.state.sb;
     const open=document.querySelector('.work-view.active');
     if(st==='work') return;                                  // 앞으로가기로 되돌아온 칸 — 그대로 둔다
@@ -1515,6 +1751,10 @@
       (S.read||[]).forEach(i=>{ if(i>=0 && i<discs.length-1) readWorks.add(i); });
       requiemUnlocked=!!S.req; shelfRestored=!!S.restored; leftBar=!!S.left; tookBack=!!S.took;
       applyShelfState();
+    }
+    if(S && S.left){                                          // 끝까지 보고 나간 손님은 — 두고 나온 그대로, 뒷표지부터
+      backcover.classList.remove('flip'); backcover.classList.add('show'); backcover.setAttribute('aria-hidden','false');
+      document.body.classList.add('back-open');
     }
     if(S && S.inside && !S.left){                             // 보던 자리 그대로 — 표지와 속표지를 건너뛴다
       cover.style.transition='none'; cover.classList.add('open'); void cover.offsetWidth;
