@@ -1694,8 +1694,9 @@
     nrAsk.classList.remove('nr-show'); nrRead.classList.remove('nr-show'); nrHint.style.visibility='hidden';
     const bc=primeSfx('book-close.mp3');
     nrBook.classList.add('nr-shut');
-    setTimeout(()=>playSfxLater('book-close.mp3', bc), RM_T?0:380);   // 책장이 맞닿는 순간 — 탁
-    const T_SHUT=RM_T?50:420, T_DARK=RM_T?50:450, T_HOLD=RM_T?100:1000;
+    const BOOK_THUD = RM_T?0:540;                             // 책장이 완전히 맞닿은 뒤 — 탁 (밀리초. 더 늦추려면 숫자를 키우기)
+    setTimeout(()=>playSfxLater('book-close.mp3', bc), BOOK_THUD);
+    const T_SHUT=RM_T?50:BOOK_THUD+60, T_DARK=RM_T?50:450, T_HOLD=RM_T?100:1000;   // 소리가 난 뒤에 어두워진다
     setTimeout(()=>{ blackout.classList.add('quick','on'); }, T_SHUT);
     setTimeout(()=>{
       noteRoom.classList.remove('open'); noteRoom.setAttribute('aria-hidden','true'); noteOpen=false;
