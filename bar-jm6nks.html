@@ -1401,8 +1401,10 @@
     rainInside=false;
     rOut.el.play().catch(()=>{}); if(rUmb) rUmb.el.play().catch(()=>{});
     if(rIn) fadeTo(rIn, 0, ms);
-    fadeTo(rOut, .55, ms); fadeTo(rUmb, .95, ms*1.25);
+    fadeTo(rOut, .55, ms);                                    // 아직 우산을 펴기 전 — 맨 빗소리만
+    if(rUmb) fadeTo(rUmb, 0, 200);
   }
+  function umbrellaRain(ms){ if(rUmb) fadeTo(rUmb, .95, ms); }   // 우산을 펴고 나서야, 우산 위 후두둑
   function setRainMuted(m){ if(rainMaster) rainMaster.gain.linearRampToValueAtTime(m?0:1, (rainCtx?rainCtx.currentTime:0)+.2); }
   // 음악이 흐르면 실내 비가 배경으로 물러난다
   // 안에 들어왔을 때 빗소리 크기 — 숫자만 바꾸면 됨 (예전 값 0.7)
@@ -1579,6 +1581,12 @@
   // ===== 끝: Sticky Fingers(지퍼를 열고 나가기) — 부차라티의 손으로 나간다 =====
   const backcover=document.getElementById('backcover');
   function sfx(file){ try{ const a=new Audio(file); a.muted=muted; a.play().catch(()=>{}); return a; }catch(e){ return null; } }
+  // 나중에 울릴 효과음은 손짓(탭) 안에서 미리 깨워둔다 — 폰 브라우저가 몇 초 뒤의 재생을 막지 않게
+  function primeSfx(file){
+    try{ const a=new Audio(file); a.preload='auto'; a.muted=true;
+      a.play().then(()=>{ a.pause(); a.currentTime=0; }).catch(()=>{}); return a; }catch(e){ return null; }
+  }
+  function playPrimed(a){ if(!a) return; try{ a.currentTime=0; a.muted=muted; a.play().catch(()=>{}); }catch(e){} }
   function closeRoomQuietly(){                                // 종막·선반 복원 없이 방만 닫는다
     const wv=document.querySelector('.work-view.active'); if(!wv) return;
     wv.querySelectorAll('video').forEach(v=>v.pause());
@@ -1593,12 +1601,14 @@
     const T_HOLD = RM_T?0:800;                                // 지퍼가 열리는 동안 — 음악은 아직 그대로
     const T_OUT  = RM_T?400:4000;                             // 틈을 지나 나가는 길이 (전체)
     sfx('sticky-open.mp3');                                   // 지퍼가 열리고 — 음악은 아직 흐른다
+    const zipClose=primeSfx('sticky-close.mp3'), umbOpen=primeSfx('umbrella-open.mp3');
     rainSeep(RM_T?300:T_OUT);                                 // 열린 틈으로 밖의 비가 스며든다
     muffleTrack(T_OUT-T_HOLD, T_HOLD);                        // 그다음에야 음악은 등 뒤로, 먹먹하게 멀어진다
     blackout.classList.add('slow');
     setTimeout(()=>blackout.classList.add('on'), T_HOLD);     // 화면은 소리를 따라 천천히 저문다
     setTimeout(()=>{
-      cutTrack(); sfx('sticky-close.mp3');                    // — 닫힌다. 남은 음악은 저 안에 봉해진다
+      cutTrack(); playPrimed(zipClose);                       // — 닫힌다. 남은 음악은 저 안에 봉해진다
+      setTimeout(()=>{ playPrimed(umbOpen); setTimeout(()=>umbrellaRain(RM_T?300:1600), 350); }, RM_T?100:750);   // 한 박자 쉬고 — 우산을 편다
       closeRoomQuietly(); if(current>=0) stop();
       leftBar=true; inside=false; shelfRestored=false;        // 바는 두고 나온 그대로 — 진혼곡 한 장만 남는다
       applyShelfState(); save();
