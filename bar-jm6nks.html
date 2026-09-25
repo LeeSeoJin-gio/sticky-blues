@@ -393,21 +393,21 @@
       <div class="liner-side">
         <div class="side-head"><span class="side-mark">A</span></div>
         <ol class="tracklist">
-          <li><span class="tl-no">01</span><span class="tl-name">Bitches Brew</span><span class="tl-by">용</span></li>
-          <li><span class="tl-no">02</span><span class="tl-name">Spanish Key</span><span class="tl-by">드보카</span></li>
-          <li><span class="tl-no">03</span><span class="tl-name">Maiysha</span><span class="tl-by">털실모자</span></li>
-          <li><span class="tl-no">04</span><span class="tl-name">Sanctuary</span><span class="tl-by">깨갱</span></li>
-          <li><span class="tl-no">05</span><span class="tl-name">Pharaoh’s Dance</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">01</span><span class="tl-name">Bitches Brew</span></li>
+          <li><span class="tl-no">02</span><span class="tl-name">Spanish Key</span></li>
+          <li><span class="tl-no">03</span><span class="tl-name">Maiysha</span></li>
+          <li><span class="tl-no">04</span><span class="tl-name">Sanctuary</span></li>
+          <li><span class="tl-no">05</span><span class="tl-name">Pharaoh’s Dance</span></li>
         </ol>
       </div>
       <div class="liner-side">
         <div class="side-head"><span class="side-mark">B</span></div>
         <ol class="tracklist" start="6">
-          <li><span class="tl-no">06</span><span class="tl-name">Nigra sum</span><span class="tl-by">○○○</span></li>
-          <li><span class="tl-no">07</span><span class="tl-name">Pulchra es</span><span class="tl-by">○○○</span></li>
-          <li><span class="tl-no">08</span><span class="tl-name">Duo Seraphim</span><span class="tl-by">○○○</span></li>
-          <li><span class="tl-no">09</span><span class="tl-name">Audi coelum</span><span class="tl-by">○○○</span></li>
-          <li><span class="tl-no">10</span><span class="tl-name">Sonata sopra Sancta Maria</span><span class="tl-by">○○○</span></li>
+          <li><span class="tl-no">06</span><span class="tl-name">Nigra sum</span></li>
+          <li><span class="tl-no">07</span><span class="tl-name">Pulchra es</span></li>
+          <li><span class="tl-no">08</span><span class="tl-name">Duo Seraphim</span></li>
+          <li><span class="tl-no">09</span><span class="tl-name">Audi coelum</span></li>
+          <li><span class="tl-no">10</span><span class="tl-name">Sonata sopra Sancta Maria</span></li>
         </ol>
       </div>
     </div>
@@ -757,7 +757,7 @@
   discs.forEach((d,i)=>{
     const wv=document.getElementById('work-'+(i+1)); if(!wv) return;
     const t=wv.querySelector('.wh-title'), f=wv.querySelector('.wh-form');
-    if(f) f.innerHTML = labelHTML(i) + (d.title ? `<span class="kr">${d.kr}</span>` : '');
+    if(f) f.innerHTML = labelHTML(i);
     if(!d.title && t) t.textContent=d.kr; });
 
   function setBloomY(){const t=platter.getBoundingClientRect();root.style.setProperty('--bloom-y',(t.top+t.height/2)+'px');}
@@ -774,8 +774,8 @@
     const d=discs[i]; current=i;
     root.style.setProperty('--blue', d.color);
     root.style.setProperty('--blue-lit', lighten(d.color,.42));
-    ttLabel.textContent=d.form;
-    npForm.innerHTML = labelHTML(i) + (d.title ? `<span class="kr">${d.kr}</span>` : '');   // 무제: 라벨 아래 제목 자리에 한글 곡명
+    ttLabel.textContent='';                                   // 판 가운데는 색만 — 곡 이름은 손글씨 라벨이 맡는다
+    npForm.innerHTML = labelHTML(i);                          // 곡 이름은 손글씨 라벨 하나로 (무제면 제목 자리에 한글 곡명)
     npTitle.textContent=d.title||d.kr; npMark.textContent=d.mark;
     if(PREVIEW){ npNote.textContent=''; npNote.classList.remove('instrumental'); }
     else { npNote.textContent=d.note||'Instrumental'; npNote.classList.toggle('instrumental', !d.note); }
