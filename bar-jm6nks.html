@@ -229,8 +229,8 @@
   #noteRoom.open{opacity:1;visibility:visible;}
 #noteRoom .nr-table{position:fixed;inset:0;background:var(--table);overflow:hidden;}
 #noteRoom .nr-table::before{content:"";position:absolute;inset:-20%;opacity:.5;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .09' numOctaves='3' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 .09 0 0 0 0 .12 0 0 0 0 .16 0 0 0 1.4 -.35'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23w)'/%3E%3C/svg%3E");
-  background-size:600px 600px;transform:rotate(-3deg);}
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='w' x='0' y='0' width='100%25' height='100%25' filterUnits='userSpaceOnUse'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .09' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .09 0 0 0 0 .12 0 0 0 0 .16 0 0 0 1.4 -.35'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23w)'/%3E%3C/svg%3E");
+  background-size:600px 600px;background-repeat:repeat;transform:rotate(-3deg);}
 #noteRoom .nr-table::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 46%, transparent 30%, rgba(3,5,8,.72) 100%);}
 #noteRoom .nr-pool{position:absolute;left:50%;top:45%;width:130vmin;height:110vmin;transform:translate(-50%,-50%);background:radial-gradient(ellipse at center, rgba(123,190,222,.11), transparent 60%);}
 #noteRoom .nr-towel{position:absolute;right:-14%;bottom:5%;width:56vmin;height:34vmin;max-width:320px;max-height:195px;transform:rotate(-16deg);   
@@ -652,11 +652,7 @@
            한글 문단      :  <p>문단 내용</p>
            이탈리아어 머리글 :  <div class="nr-it">Napoli, marzo</div>   (아바키오의 만년필 글씨)
            맨 끝 서명     :  <div class="nr-sig">— L.</div>
-         임시 문단(nr-ph)은 글을 넣은 뒤 지우세요.
          ============================================================ -->
-      <div class="nr-it">Napoli, marzo</div>
-      <p class="nr-ph">여기에 주최의 글이 놓입니다. 아바키오의 회고록.</p>
-      <div class="nr-sig">— L.</div>
       <div class="nr-end">
         <a class="nr-artist" id="nrArtist" href="#" target="_blank" rel="noopener" hidden></a>
         <button class="nr-close" id="nrClose">노트 덮기</button>
@@ -1679,6 +1675,7 @@
       leaveFoyer(); rainGoInside();
       resetNote();
       noteRoom.classList.add('open'); noteRoom.setAttribute('aria-hidden','false'); noteOpen=true;
+      loadSfx('book-close.mp3');                               // 덮는 소리를 미리 불러둔다
       document.body.classList.add('locked');
       history.replaceState({sb:'note'},'');
       setTimeout(()=>{ blackout.classList.remove('on'); egBusy=false; }, RM_T?100:1400);
@@ -1695,8 +1692,9 @@
   function shutNote(){
     if(egBusy || !noteOpen) return; egBusy=true;
     nrAsk.classList.remove('nr-show'); nrRead.classList.remove('nr-show'); nrHint.style.visibility='hidden';
-    sfx('book-close.mp3');                                    // 파일 없으면 조용히
+    const bc=primeSfx('book-close.mp3');
     nrBook.classList.add('nr-shut');
+    setTimeout(()=>playSfxLater('book-close.mp3', bc), RM_T?0:380);   // 책장이 맞닿는 순간 — 탁
     const T_SHUT=RM_T?50:420, T_DARK=RM_T?50:450, T_HOLD=RM_T?100:1000;
     setTimeout(()=>{ blackout.classList.add('quick','on'); }, T_SHUT);
     setTimeout(()=>{
