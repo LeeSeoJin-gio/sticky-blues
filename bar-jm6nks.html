@@ -1700,6 +1700,7 @@
   nrBook.addEventListener('click', ()=>{ nrAsk.classList.add('nr-show'); nrAsk.setAttribute('aria-hidden','false'); nrHint.style.visibility='hidden'; });
   nrBook.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); nrBook.click(); } });
   document.getElementById('nrYes').addEventListener('click', e=>{ e.stopPropagation();
+    sfx('page-flip.mp3');                                     // 사락 — 노트를 펼친다 (파일 없으면 조용히)
     nrAsk.classList.remove('nr-show'); nrRead.classList.add('nr-show'); nrRead.setAttribute('aria-hidden','false'); nrRead.scrollTop=0; });
   document.getElementById('nrNo').addEventListener('click', e=>{ e.stopPropagation(); shutNote(); });
   document.getElementById('nrClose').addEventListener('click', shutNote);
