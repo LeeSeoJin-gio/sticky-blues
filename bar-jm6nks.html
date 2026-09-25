@@ -1587,6 +1587,26 @@
       a.play().then(()=>{ a.pause(); a.currentTime=0; }).catch(()=>{}); return a; }catch(e){ return null; }
   }
   function playPrimed(a){ if(!a) return; try{ a.currentTime=0; a.muted=muted; a.play().catch(()=>{}); }catch(e){} }
+  // 더 확실한 길 — 빗소리가 흐르는 오디오 장치(이미 탭으로 깨어 있음)로 효과음을 직접 튼다. 폰이 막지 않는다
+  const sfxBuf={};
+  function loadSfx(file){
+    if(!rainCtx) return null;
+    if(!sfxBuf[file]) sfxBuf[file]=fetch(file).then(r=>{ if(!r.ok) throw 0; return r.arrayBuffer(); })
+      .then(ab=>new Promise((res,rej)=>rainCtx.decodeAudioData(ab,res,rej))).catch(()=>null);
+    return sfxBuf[file];
+  }
+  function playSfxLater(file, primed){                        // 준비된 소리가 있으면 그것으로, 없으면 미리 깨워둔 소리로
+    const pr=loadSfx(file);
+    if(!pr){ playPrimed(primed); return; }
+    pr.then(buf=>{
+      if(!buf || !rainCtx){ playPrimed(primed); return; }
+      try{ if(rainCtx.state==='suspended') rainCtx.resume();
+        const src=rainCtx.createBufferSource(); src.buffer=buf;
+        const g=rainCtx.createGain(); g.gain.value=muted?0:1;
+        src.connect(g); g.connect(rainCtx.destination); src.start();
+      }catch(e){ playPrimed(primed); }
+    });
+  }
   function closeRoomQuietly(){                                // 종막·선반 복원 없이 방만 닫는다
     const wv=document.querySelector('.work-view.active'); if(!wv) return;
     wv.querySelectorAll('video').forEach(v=>v.pause());
@@ -1603,12 +1623,13 @@
     sfx('sticky-open.mp3');                                   // 지퍼가 열리고 — 음악은 아직 흐른다
     const zipClose=primeSfx('sticky-close.mp3'), umbOpen=primeSfx('umbrella-open.mp3');
     rainSeep(RM_T?300:T_OUT);                                 // 열린 틈으로 밖의 비가 스며든다
+    loadSfx('sticky-close.mp3'); loadSfx('umbrella-open.mp3');   // 나가는 동안 미리 불러둔다
     muffleTrack(T_OUT-T_HOLD, T_HOLD);                        // 그다음에야 음악은 등 뒤로, 먹먹하게 멀어진다
     blackout.classList.add('slow');
     setTimeout(()=>blackout.classList.add('on'), T_HOLD);     // 화면은 소리를 따라 천천히 저문다
     setTimeout(()=>{
-      cutTrack(); playPrimed(zipClose);                       // — 닫힌다. 남은 음악은 저 안에 봉해진다
-      setTimeout(()=>{ playPrimed(umbOpen); setTimeout(()=>umbrellaRain(RM_T?300:1600), 350); }, RM_T?100:750);   // 한 박자 쉬고 — 우산을 편다
+      cutTrack(); playSfxLater('sticky-close.mp3', zipClose);                       // — 닫힌다. 남은 음악은 저 안에 봉해진다
+      setTimeout(()=>{ playSfxLater('umbrella-open.mp3', umbOpen); setTimeout(()=>umbrellaRain(RM_T?300:1600), 350); }, RM_T?100:750);   // 한 박자 쉬고 — 우산을 편다
       closeRoomQuietly(); if(current>=0) stop();
       leftBar=true; inside=false; shelfRestored=false;        // 바는 두고 나온 그대로 — 진혼곡 한 장만 남는다
       applyShelfState(); save();
