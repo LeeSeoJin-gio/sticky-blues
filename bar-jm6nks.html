@@ -170,6 +170,31 @@
                     50%{box-shadow:0 0 30px rgba(var(--g),.32);text-shadow:0 0 16px rgba(var(--g),.7);}}
   @media (prefers-reduced-motion:reduce){.eg{animation:none;}}
 
+  /* ===== 재입장 속표지 — 트랙리스트 대신 바텐더의 두 마디 ===== */
+  .liner-return{display:none;}
+  .foyer.return .liner-sides.orig,.foyer.return .foyer-enter{display:none;}
+  .foyer.return .liner-return{display:flex;}
+  .ret-q{font-family:var(--serif);font-size:15.5px;line-height:1.75;color:#cbd8e2;margin:6px 2px 16px;word-break:keep-all;letter-spacing:.02em;}
+  .liner-return .tracklist li{padding:0;}
+  .ret-go{display:flex;align-items:baseline;gap:12px;width:100%;padding:11px 2px;background:none;border:none;cursor:pointer;text-align:left;color:inherit;-webkit-tap-highlight-color:transparent;transition:background .5s;}
+  .ret-go .tl-name{transition:color .5s, text-shadow .5s;}
+  .ret-go:hover,.ret-go:focus-visible{background:rgba(158,118,226,.06);outline:none;}
+  .ret-go:hover .tl-name,.ret-go:focus-visible .tl-name{color:#fff;text-shadow:0 0 18px rgba(207,228,234,.45);}
+  .ret-b{opacity:0;pointer-events:none;transition:opacity 2.4s ease;}                 /* 아니면… — 조금 머문 뒤에야 */
+  .foyer.return.late .ret-b{opacity:1;pointer-events:auto;}
+  .ret-b .eg{margin-top:4px;}
+  @media (prefers-reduced-motion:reduce){ .ret-b{transition-duration:.01s;} }
+
+  /* 새로고침 뒤 — 다녀오셨어요 */
+  .welcome{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;padding:24px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+      opacity:0;visibility:hidden;transition:opacity .9s ease, visibility .9s;}
+  .welcome.show{opacity:1;visibility:visible;}
+  .welcome .wb{max-width:320px;padding:20px 30px 19px;background:rgba(9,11,17,.66);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+      border:1px solid rgba(207,228,234,.14);border-radius:3px;box-shadow:0 18px 40px rgba(0,0,0,.45);
+      font-family:var(--serif);font-size:16px;line-height:1.8;color:#d2dde5;text-align:center;letter-spacing:.03em;word-break:keep-all;}
+  .scene.held .tt-disc .disc-face{animation-play-state:paused;}                      /* 외출한 사이 판은 멈춰 있다 */
+  .blackout.slow{transition:opacity 2.8s ease, visibility 2.8s;}                        /* 지퍼 밖으로 — 천천히 저문다 */
+
   /* 뒷표지 — 글자 없이 그림과 빗소리만. 누르면 판을 뒤집듯 앞표지로 */
   .backcover{position:fixed;inset:0;z-index:39;background:#1b1c20;display:flex;align-items:center;justify-content:center;
       opacity:0;visibility:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity 1.8s ease, visibility 1.8s;}
@@ -391,7 +416,7 @@
     <h2 class="liner-title">Sticky Blues</h2>
     <p class="liner-sub">Bruno Bucciarati &times; Leone Abbacchio</p>
 
-    <div class="liner-sides">
+    <div class="liner-sides orig">
       <div class="liner-side">
         <div class="side-head"><span class="side-mark">A</span></div>
         <ol class="tracklist">
@@ -414,6 +439,22 @@
       </div>
     </div>
 
+    <!-- 재입장: Sticky Fingers 로 나갔던 손님에게만 -->
+    <div class="liner-sides liner-return">
+      <div class="liner-side ret-a">
+        <div class="side-head"><span class="side-mark">A</span></div>
+        <p class="ret-q">두고 가신 물건이 있으신가요?</p>
+        <ol class="tracklist">
+          <li><button class="ret-go" id="retReq" aria-label="11 Requiem — 두고 간 판으로"><span class="tl-no">11</span><span class="tl-name">Requiem</span></button></li>
+        </ol>
+      </div>
+      <div class="liner-side ret-b" aria-hidden="true">
+        <div class="side-head"><span class="side-mark">B</span></div>
+        <p class="ret-q">아니면… 잊은 게 있으신가요?</p>
+        <button class="eg eg-blues" id="retBlues" aria-label="Moody Blues — 처음으로 되감기" tabindex="-1"><span>Moody Blues</span></button>
+      </div>
+    </div>
+
     <div class="liner-rule"></div>
     <p class="liner-fine">본 페이지는 팬 2차 창작이며, 원작 및 실존 인물과 무관합니다.</p>
 
@@ -427,6 +468,7 @@
   <filter id="inkB" x="-5%" y="-20%" width="110%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="2" seed="7" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="2" result="t"/><feTurbulence type="fractalNoise" baseFrequency="0.035 0.12" numOctaves="2" seed="11" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.2 1.45" result="a"/><feComposite in="t" in2="a" operator="in"/></filter>
 </svg>
 <div class="blackout" id="blackout" aria-hidden="true"></div>
+<div class="welcome" id="welcome" role="button" aria-hidden="true" aria-label="자리로 돌아가기"><div class="wb">다녀오셨어요.<br>자리는 그대로 두었습니다.</div></div>
 <div class="backcover" id="backcover" aria-hidden="true" role="button" aria-label="앞표지로 넘기기">
   <picture><source media="(min-aspect-ratio: 1/1)" srcset="back-wide.jpg"><img src="back.jpg" alt=""></picture>
 </div>
@@ -695,8 +737,7 @@
       <p class="placeholder">작품이 이곳에 펼쳐집니다</p>
     </main>
     <div class="endgame">
-      <button class="eg eg-sticky" id="egSticky" aria-label="Sticky — 지퍼를 열고 나가기"><span>STICKY</span></button>
-      <button class="eg eg-blues" id="egBlues" aria-label="Blues — 처음으로 되감기"><span>Blues</span></button>
+      <button class="eg eg-sticky" id="egSticky" aria-label="Sticky Fingers — 지퍼를 열고 나가기"><span>STICKY FINGERS</span></button>
     </div>
     <footer class="work-foot"><button class="back wv-back"><span class="arr"></span>음반으로 돌아가기</button></footer>
   </div>
@@ -742,6 +783,18 @@
   const ttDisc=document.getElementById('ttDisc');
   let current=-1;
   const readWorks=new Set(); let requiemUnlocked=false; let shelfRestored=false;
+  // ===== 기억 — 새로고침해도, 되감기(Moody Blues) 전까지는 바가 손님을 기억한다 =====
+  const SKEY='stickyblues:state';           // 같은 github.io 아래 다른 저장소와 섞이지 않게 전시 이름을 붙인다
+  let leftBar=false;    // Sticky Fingers 로 나갔는가
+  let inside=false;     // 선반 앞(바 안)에 있었는가
+  let openRoom=-1;      // 보고 있던 방
+  let booted=false;     // 복원이 끝나기 전엔 저장하지 않는다
+  function save(){
+    if(!booted) return;
+    try{ localStorage.setItem(SKEY, JSON.stringify({v:1,left:leftBar,inside,read:[...readWorks],req:requiemUnlocked,restored:shelfRestored,cur:current,room:openRoom})); }catch(e){}
+  }
+  function loadSaved(){ try{ const o=JSON.parse(localStorage.getItem(SKEY)||'null'); return (o&&o.v===1)?o:null; }catch(e){ return null; } }
+  function forget(){ try{ localStorage.removeItem(SKEY); }catch(e){} }
 
   function lighten(hex,f){const n=parseInt(hex.slice(1),16);let r=n>>16,g=(n>>8)&255,b=n&255;r=Math.round(r+(255-r)*f);g=Math.round(g+(255-g)*f);b=Math.round(b+(255-b)*f);return `rgb(${r},${g},${b})`;}
 
@@ -789,6 +842,7 @@
     scene.classList.toggle('side-a', i<5); scene.classList.toggle('side-b', i>=5 && i<discs.length-1); scene.classList.toggle('side-req', i===discs.length-1);
     tonearm.style.animation='none'; void tonearm.offsetWidth; tonearm.style.animation='';
     if(sound) playSound(i); else stopSound();
+    save();
   }
   // Instrumental 한 단어는 곡 정보(악상기호)와 '작품 펼치기' 사이 빈 칸의 한가운데에
   function absTop(el){ let y=0; for(let e=el; e; e=e.offsetParent) y+=e.offsetTop; return y; }   // 애니메이션(transform)에 흔들리지 않는 위치
@@ -799,14 +853,15 @@
     npNote.style.transform=`translateY(${((mB+gT)/2)-(nT+nH/2)}px)`;
   }
   window.addEventListener('resize', centerInst);
-  function stop(){current=-1;scene.classList.remove('playing','side-a','side-b','side-req');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopSound();}
+  function stop(){current=-1;scene.classList.remove('playing','side-a','side-b','side-req');items.forEach(it=>it.classList.remove('active'));ttDisc.tabIndex=-1;stopSound();save();}
 
   ttDisc.addEventListener('click', stop);
   window.addEventListener('resize', setBloomY);
 
   // 작품 화면 전환 (한 파일 안에서)
-  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;if(!(history.state&&history.state.sb==='work'))history.pushState({sb:'work'},'');wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');if(!discs[i].hidden)stopSound();requestAnimationFrame(()=>{sink(wv);markSeen(i);});}   // 승천의 방에서는 곡이 멈추지 않는다
+  function showWork(i){const wv=document.getElementById('work-'+(i+1));if(!wv)return;if(!(history.state&&history.state.sb==='work'))history.pushState({sb:'work'},'');wv.classList.add('active');wv.setAttribute('aria-hidden','false');wv.scrollTop=0;document.body.classList.add('locked');if(!discs[i].hidden)stopSound();openRoom=i;save();requestAnimationFrame(()=>{sink(wv);markSeen(i);});}   // 승천의 방에서는 곡이 멈추지 않는다
   function hideWork(wv){wv.querySelectorAll('video').forEach(v=>v.pause());wv.classList.remove('active');wv.setAttribute('aria-hidden','true');document.body.classList.remove('locked');
+    openRoom=-1; save();
     if(!requiemUnlocked && readWorks.size>=discs.filter(d=>!d.hidden).length){ finale(); return; }   // 자리를 비운 사이, 선반이 달라져 있다
     if(requiemUnlocked && !shelfRestored && current===discs.length-1) restoreShelf();   // 진혼곡의 방을 읽고 나온 뒤에야, 열 장이 돌아온다
     if(current>=0) stop();}                                      // 나오면 판은 내려가 있다 — 다음 장은 손이 고른다
@@ -830,6 +885,7 @@
     if(i>=discs.length-1 || readWorks.has(i)) return;            // 진혼곡 자신은 세지 않는다
     readWorks.add(i);
     items[i].classList.add('read');                              // 불이 꺼지고, 문패가 켜진다
+    save();
   }
   // ===== 비명(碑銘)의 배경음 — 같은 폴더의 epitaph.mp3, 없으면 침묵 =====
   let epAudio=null, epCtx=null, epGain=null;
@@ -867,7 +923,7 @@
     epFade(0,1400,()=>{ try{ if(epAudio)epAudio.pause(); if(epCtx)epCtx.close(); }catch(e){} epAudio=null; epCtx=null; epGain=null; });
   }
   function finale(){
-    requiemUnlocked=true;
+    requiemUnlocked=true; save();
     const req=items[items.length-1];
     const T_DARK=RM?200:3350;                                    // 3250ms — 3월 25일의 길이로 저문다
     veil.classList.add('on');                                    // 화면이 천천히 어두워진다 — 저묾은 무음으로
@@ -894,7 +950,7 @@
     req.classList.add('rise'); req.classList.remove('pre');      // 어둠이 걷히고, 그가 떠오른다
   });
   function restoreShelf(){
-    shelfRestored=true;
+    shelfRestored=true; save();
     setTimeout(()=>{
       shelf.classList.remove('solo');
       items.forEach((it,idx)=>{ if(!discs[idx].hidden){ it.classList.remove('gone'); it.classList.add('returning'); } });
@@ -907,6 +963,20 @@
     }, 600);                                                     // 방을 나서는 걸음 뒤에, 세계가 돌아온다
   }
 
+  // 저장된 기억대로 선반을 되살린다 (애니메이션 없이)
+  function applyShelfState(){
+    items.forEach(it=>it.classList.remove('read','gone','returning','ret','revealed','pre','rise','active'));
+    readWorks.forEach(i=>{ if(items[i]) items[i].classList.add('read'); });
+    const req=items[items.length-1];
+    if(requiemUnlocked){
+      req.classList.add('revealed','rise');
+      if(!shelfRestored){
+        items.forEach((it,idx)=>{ if(!discs[idx].hidden) it.classList.add('gone'); });
+        shelf.classList.add('solo'); hintEl.textContent='';
+      }else{ shelf.classList.remove('solo'); hintEl.textContent='선반에서 한 장을 골라 올려보세요'; }
+    }else{ shelf.classList.remove('solo'); hintEl.textContent='선반에서 한 장을 골라 올려보세요'; }
+  }
+
   // 작품 간 이전/다음 이동 (끝에서 처음으로 순환)
   function navWork(dir){
     if(current<0) return;
@@ -915,7 +985,7 @@
     const next=(current+dir+max)%max;
     const nx=document.getElementById('work-'+(next+1));
     if(nx===cur) return;
-    current=next;
+    current=next; openRoom=next; save();
     if(!discs[next].hidden) stopSound();              // 승천의 방을 떠나 다른 방으로 가면 곡은 멎는다
     nx.scrollTop=0;
     const fwd=dir>0;                                  // 다음: 새 페이지가 오른쪽에서 / 이전: 왼쪽에서
@@ -1028,6 +1098,15 @@
     rOut.el.play().catch(()=>{});
     fadeTo(rIn, 0, 1200); fadeTo(rOut, .55, 1400); fadeTo(rUmb, .95, 1400);
   }
+  // 지퍼가 열린 틈으로 — 밖의 비가 스며든다
+  function rainSeep(ms){
+    if(!initRain()) return;
+    if(rainCtx.state==='suspended') rainCtx.resume();
+    rainInside=false;
+    rOut.el.play().catch(()=>{}); if(rUmb) rUmb.el.play().catch(()=>{});
+    if(rIn) fadeTo(rIn, 0, ms);
+    fadeTo(rOut, .55, ms); fadeTo(rUmb, .95, ms*1.25);
+  }
   function setRainMuted(m){ if(rainMaster) rainMaster.gain.linearRampToValueAtTime(m?0:1, (rainCtx?rainCtx.currentTime:0)+.2); }
   // 음악이 흐르면 실내 비가 배경으로 물러난다
   // 안에 들어왔을 때 빗소리 크기 — 숫자만 바꾸면 됨 (예전 값 0.7)
@@ -1051,9 +1130,39 @@
       if(musicCtx.state==='suspended') musicCtx.resume();
       const src=musicCtx.createMediaElementSource(a), g=musicCtx.createGain();
       g.gain.value=v; src.connect(g); g.connect(musicCtx.destination);
+      a._src=src; a._g=g;
     }catch(e){ try{ a.volume=Math.min(1,v); }catch(_){} }
   }
   function stopTrack(){ if(trackAudio){ try{trackAudio.pause();}catch(e){} trackAudio=null; } }
+  // 지퍼 틈으로 나서는 동안 — 음악은 등 뒤로 멀어지며 먹먹해진다 (벽 너머로 새는 소리)
+  const MUFFLE_LEFT = 0.18;   // 지퍼가 닫히는 순간 남아 있는 음악의 크기 (0.15~0.2 권장)
+  function muffleTrack(ms){
+    const a=trackAudio; if(!a) return;
+    const sec=ms/1000;
+    try{
+      const AC=window.AudioContext||window.webkitAudioContext; if(!AC) throw 0;
+      musicCtx=musicCtx||new AC();
+      if(musicCtx.state==='suspended') musicCtx.resume();
+      let src=a._src, g=a._g;
+      if(!src){ src=musicCtx.createMediaElementSource(a); g=musicCtx.createGain(); g.gain.value=1; g.connect(musicCtx.destination); a._src=src; a._g=g; }
+      else src.disconnect();
+      const lp=musicCtx.createBiquadFilter(); lp.type='lowpass'; lp.Q.value=.7;
+      src.connect(lp); lp.connect(g);
+      const t=musicCtx.currentTime, base=g.gain.value;
+      lp.frequency.setValueAtTime(16000,t); lp.frequency.exponentialRampToValueAtTime(380,t+sec);
+      g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(base,t); g.gain.linearRampToValueAtTime(base*MUFFLE_LEFT,t+sec);
+    }catch(e){                                                   // Web Audio 가 없으면 크기만이라도
+      const from=a.volume, t0=performance.now();
+      (function step(){ const k=Math.min(1,(performance.now()-t0)/ms); try{a.volume=from*(1-(1-MUFFLE_LEFT)*k);}catch(_){} if(k<1&&trackAudio===a) requestAnimationFrame(step); })();
+    }
+  }
+  function cutTrack(){                                           // 지퍼가 닫히며 — 툭, 봉해진다 (딸깍 소리 없이 아주 짧게)
+    const a=trackAudio; trackAudio=null; if(!a) return;
+    if(a._g && musicCtx){
+      const t=musicCtx.currentTime; a._g.gain.cancelScheduledValues(t); a._g.gain.setValueAtTime(a._g.gain.value,t); a._g.gain.linearRampToValueAtTime(0,t+.05);
+      setTimeout(()=>{ try{a.pause();}catch(e){} },90);
+    }else{ try{a.pause();}catch(e){} }
+  }
   function playSound(i){
     stopTrack();
     duckRain(true);
@@ -1103,72 +1212,98 @@
   function doorSound(){ try{ const a=new Audio('door.mp3'); a.play().catch(()=>{}); }catch(e){} }
 
   // 표지 탭 → 속표지로. 여기서 '밖의 비'가 페이드인.
+  let lateTimer=null;
   function enterAlbum(){
     cover.classList.add('open');
+    const ret=leftBar;                          // Sticky Fingers 로 나갔던 손님이면 — 트랙리스트 대신 두 마디
+    foyer.classList.toggle('return', ret); foyer.classList.remove('late');
+    retBluesBtn.tabIndex=-1; retBSide.setAttribute('aria-hidden','true');
+    clearTimeout(lateTimer);
+    if(ret) lateTimer=setTimeout(()=>{ foyer.classList.add('late'); retBluesBtn.tabIndex=0; retBSide.setAttribute('aria-hidden','false'); }, RM_T?300:2800);   // 아니면… 은 조금 뒤에
     foyer.classList.add('show'); foyer.setAttribute('aria-hidden','false');
+    foyer.scrollTop=0;
     document.body.classList.add('foyer-open');  // 속표지 위에서 본문이 스크롤로 드러나지 않게
     foyerLocked=true;
     history.pushState({sb:'foyer'},'');        // 폰 뒤로가기: 속표지 → 표지
     startRainOutside();                        // 표지 탭이 손짓 — 밖의 비가 차오른다
   }
+  function leaveFoyer(){
+    clearTimeout(lateTimer);
+    foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
+    foyerLocked=false;
+    document.body.classList.remove('covered','foyer-open');
+  }
 
   // 속표지 입장 → 암전, 문소리, 그 사이 비가 실내로, 밝아오며 본문
-  function enterHall(){
+  function enterHall(onInside){
     history.replaceState({sb:'hall'},'');      // 폰 뒤로가기: 본문 → 표지
     doorSound();                               // 문 한 세트: 열리고 — 닫힌다
     blackout.classList.add('on');              // 그 소리에 맞춰 화면이 저문다
     const T1 = RM_T?200:2200;                  // 문이 여닫히는 사이, 어둠 속에서 장면을 바꾼다
     const T2 = RM_T?100:1400;                  // 문이 닫힐 즈음 천천히 밝아온다
     setTimeout(()=>{
-      foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
-      foyerLocked=false;
-      document.body.classList.remove('covered','foyer-open');
+      leaveFoyer();
       rainGoInside();                          // 비가 벽 안으로 먹힌다
-      window.scrollTo(0,0);
+      window.scrollTo(0,0); setBloomY();
+      inside=true; save();
+      if(typeof onInside==='function') onInside();
       setTimeout(()=>blackout.classList.remove('on'), T2);
     }, T1);
   }
   // 표지는 무음. 밖의 비는 표지를 탭해 속표지로 들어설 때 시작된다(브라우저 자동재생 정책 우회).
   cover.addEventListener('click', enterAlbum);
   cover.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enterAlbum(); } });
-  document.getElementById('foyerEnter').addEventListener('click', enterHall);
+  document.getElementById('foyerEnter').addEventListener('click', ()=>enterHall());
   let fromPop=false;
   homeBtn.addEventListener('click', ()=>{
     if(!fromPop && history.state && history.state.sb) history.replaceState(null,'');
     if(current>=0) stop();
     cover.classList.remove('open'); // 표지가 다시 가운데로 닫힘
     foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
+    clearTimeout(lateTimer);
     foyerLocked=false;
     document.body.classList.remove('foyer-open');
     document.body.classList.add('covered');
     if(rainCtx){ rainInside=false; fadeTo(rIn,0,800); fadeTo(rOut,0,800); fadeTo(rUmb,0,800); }   // 표지로 나가면 비는 멎는다
     window.scrollTo(0,0);
+    inside=false; save();
   });
 
-  // ===== 끝: Sticky(지퍼를 열고 나가기) · Blues(무디 블루스, 처음으로 되감기) =====
+  // ===== 끝: Sticky Fingers(지퍼를 열고 나가기) — 부차라티의 손으로 나간다 =====
   const backcover=document.getElementById('backcover');
   function sfx(file){ try{ const a=new Audio(file); a.muted=muted; a.play().catch(()=>{}); return a; }catch(e){ return null; } }
   function closeRoomQuietly(){                                // 종막·선반 복원 없이 방만 닫는다
     const wv=document.querySelector('.work-view.active'); if(!wv) return;
     wv.querySelectorAll('video').forEach(v=>v.pause());
     wv.classList.remove('active'); wv.setAttribute('aria-hidden','true'); document.body.classList.remove('locked');
+    openRoom=-1;
   }
   let egBusy=false;
 
   document.getElementById('egSticky').addEventListener('click', ()=>{
     if(egBusy) return; egBusy=true;
-    stopSound(); sfx('sticky-open.mp3');                       // 지퍼가 열리고 —
-    blackout.classList.add('on');
-    setTimeout(()=>{                                          // 어둠 속에서 바를 나선다
+    const T_OUT = RM_T?400:3000;                              // 틈을 지나 나가는 길이
+    sfx('sticky-open.mp3');                                   // 지퍼가 열리고 — 음악은 아직 흐른다
+    rainSeep(RM_T?300:T_OUT);                                 // 열린 틈으로 밖의 비가 스며든다
+    muffleTrack(T_OUT);                                       // 음악은 등 뒤로, 먹먹하게 멀어진다
+    blackout.classList.add('slow');
+    setTimeout(()=>blackout.classList.add('on'), RM_T?0:300); // 화면은 소리를 따라 천천히 저문다
+    setTimeout(()=>{
+      cutTrack(); sfx('sticky-close.mp3');                    // — 닫힌다. 남은 음악은 저 안에 봉해진다
       closeRoomQuietly(); if(current>=0) stop();
+      leftBar=true; inside=false; shelfRestored=false;        // 바는 두고 나온 그대로 — 진혼곡 한 장만 남는다
+      applyShelfState(); save();
       cover.classList.remove('open'); foyer.classList.remove('show'); foyer.setAttribute('aria-hidden','true');
       foyerLocked=false; document.body.classList.remove('foyer-open'); document.body.classList.add('covered');
       window.scrollTo(0,0);
       history.replaceState(null,'');
       backcover.classList.remove('flip'); backcover.classList.add('show'); backcover.setAttribute('aria-hidden','false');
-      sfx('sticky-close.mp3');                                 // — 닫힌다
-      setTimeout(()=>{ blackout.classList.remove('on'); startRainOutside(); egBusy=false; }, 900);   // 뒷표지와 함께, 밖의 비
-    }, RM_T?200:1500);
+      setTimeout(()=>{                                        // 뒷표지와 함께, 밖의 비만 남는다
+        blackout.classList.remove('on');
+        setTimeout(()=>blackout.classList.remove('slow'), RM_T?50:2900);
+        egBusy=false;
+      }, 900);
+    }, T_OUT);
   });
   function flipToFront(){                                     // 판을 뒤집듯 — 앞표지로
     if(!backcover.classList.contains('show')) return;
@@ -1177,20 +1312,39 @@
   }
   backcover.addEventListener('click', flipToFront);
 
-  document.getElementById('egBlues').addEventListener('click', ()=>{
+  // ===== 재입장 속표지 =====
+  const retBluesBtn=document.getElementById('retBlues'), retBSide=document.querySelector('.ret-b');
+  // A — 두고 가신 물건: 진혼곡 한 장만 남은 선반으로. 판은 아직 돌고 있다
+  document.getElementById('retReq').addEventListener('click', ()=>{
     if(egBusy) return; egBusy=true;
-    stopSound(); sfx('blues-rewind.mp3');                      // 무디 블루스 — 되감는다
+    leftBar=false;
+    applyShelfState();
+    select(discs.length-1);                                   // 손짓 안에서 곡을 걸어두고 —
+    if(trackAudio) trackAudio.muted=true;                     // 문이 열릴 때까지는 들리지 않게
+    enterHall(()=>{ if(trackAudio) trackAudio.muted=muted; egBusy=false; });   // 문을 열고 들어서니, 아직 흐르고 있다
+  });
+  // B — Moody Blues: 아바키오의 손으로 되감는다. 처음 온 날의 선반 앞으로
+  function resetAll(){
+    readWorks.clear(); requiemUnlocked=false; shelfRestored=false; leftBar=false; openRoom=-1;
+    items.forEach(it=>it.classList.remove('read','gone','returning','ret','revealed','pre','rise','active'));
+    shelf.classList.remove('solo'); shelf.scrollLeft=0;
+    veil.classList.remove('on','hold','hintable'); veil.setAttribute('aria-hidden','true');
+    if(epAudio) epStop();
+    hintEl.textContent='선반에서 한 장을 골라 올려보세요';
+    forget();
+  }
+  retBluesBtn.addEventListener('click', ()=>{
+    if(egBusy || !foyer.classList.contains('late')) return; egBusy=true;
+    sfx('blues-rewind.mp3');                                  // 무디 블루스 — 되감는다
     blackout.classList.add('on');
     setTimeout(()=>{                                          // 어둠 속에서, 처음 온 날로
       closeRoomQuietly(); if(current>=0) stop();
-      readWorks.clear(); requiemUnlocked=false; shelfRestored=false;
-      items.forEach(it=>it.classList.remove('read','gone','returning','ret','revealed','pre','rise','active'));
-      shelf.classList.remove('solo'); shelf.scrollLeft=0;
-      veil.classList.remove('on','hold','hintable'); veil.setAttribute('aria-hidden','true');
-      if(epAudio) epStop();
-      hintEl.textContent='선반에서 한 장을 골라 올려보세요';
+      resetAll();
+      leaveFoyer();
+      rainGoInside();
       history.replaceState({sb:'hall'},'');
       window.scrollTo(0,0); setBloomY();
+      inside=true; save();
     }, RM_T?200:1500);
     setTimeout(()=>{ blackout.classList.remove('on'); egBusy=false; }, RM_T?400:3900);   // 테이프가 멎을 즈음 밝아온다
   });
@@ -1205,6 +1359,45 @@
     if(st==='hall' || st==='foyer') return;                  // 작품 방에서 나와 선반(또는 속표지)으로
     if(!document.body.classList.contains('covered')){ fromPop=true; homeBtn.click(); fromPop=false; }   // 선반·속표지에서 → 표지로
   });
+
+  // ===== 새로고침 — 다녀오셨어요 =====
+  const welcome=document.getElementById('welcome');
+  function dismissWelcome(e){
+    if(e){ e.preventDefault(); e.stopPropagation(); }         // 이 한 번의 탭은 박스만 닫는다 — 밑으로 새지 않게
+    if(!welcome.classList.contains('show')) return;
+    welcome.classList.remove('show'); welcome.setAttribute('aria-hidden','true');
+    scene.classList.remove('held');
+    initRain(); rainGoInside();
+    // 이 탭이 곧 손짓 — 멈춰 있던 판이 다시 돈다 (작품 방은 원래 조용하니, 승천의 방만 곡이 흐른다)
+    const roomSilent = openRoom>=0 && !discs[openRoom].hidden;
+    if(current>=0 && !roomSilent) playSound(current);
+  }
+  welcome.addEventListener('click', dismissWelcome);
+  welcome.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') dismissWelcome(e); });
+
+  (function boot(){
+    const S=loadSaved();
+    if(S){
+      (S.read||[]).forEach(i=>{ if(i>=0 && i<discs.length-1) readWorks.add(i); });
+      requiemUnlocked=!!S.req; shelfRestored=!!S.restored; leftBar=!!S.left;
+      applyShelfState();
+    }
+    if(S && S.inside && !S.left){                             // 보던 자리 그대로 — 표지와 속표지를 건너뛴다
+      cover.style.transition='none'; cover.classList.add('open'); void cover.offsetWidth;
+      requestAnimationFrame(()=>{ cover.style.transition=''; });
+      document.body.classList.remove('covered');
+      inside=true;
+      history.replaceState({sb:'hall'},'');
+      booted=true;
+      const r=S.room, c=S.cur;
+      const roomOk = r>=0 && r<discs.length && (!discs[r].hidden || requiemUnlocked) && document.getElementById('work-'+(r+1));
+      if(roomOk){ select(r,false); showWork(r); }
+      else if(c>=0 && c<discs.length && (!discs[c].hidden || requiemUnlocked)) select(c,false);
+      if(current>=0) scene.classList.add('held');            // 판은 올라가 있지만 멈춰 있다
+      welcome.classList.add('show'); welcome.setAttribute('aria-hidden','false'); welcome.tabIndex=0;
+    }
+    booted=true;
+  })();
 
   setBloomY();
 </script>
