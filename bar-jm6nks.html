@@ -1010,10 +1010,25 @@
       <!-- 후기 한 편 =  <section class="afterword"><h2 class="sub">작품 제목<span class="aw-by">참여자</span></h2><p class="para">후기 문단</p></section>
            트랙 순서대로 이어 붙이면 됩니다. -->
       <section class="afterword">
+        <h2 class="sub">산책<span class="aw-by">털실모자</span></h2>
+        <p class="para">오랜만에 합작에 참가하게 되서 너무즐거웠습니다.사실 처음에는 죽은 이후 천국에서 만난다는 느낌으로 하다가 그래도 행복하게 보고 싶어!!하다가 이런 느낌으로 갔네요 다른분들 작품도 너무 기대하고 있어요!즈최해주셔서 너무 감사합니다</p>
+      </section>
+      <section class="afterword">
+        <h2 class="sub">내일은 날이 밝을거야<span class="aw-by">드보카</span></h2>
+        <p class="para">이번 합작 하면서 5부 한 8번쯤 정주행 한거 같은데 둘이 만날때 마다 눈물버튼 눌려서 펑펑 울었네요.</p>
+        <p class="para">부아바는 죠죠 파면서 제 오시 컾링중 하나라고 해도 과언이 아닌데요, 정말 정말 즐거웠습니다. 사실 조금더 퀄리티를 높여 오고 싶었는데 대학생인지라 시간이 없는게 정말 아쉽습니다….</p>
+        <p class="para">이런 귀중한 자리에 하게 되어서 너무 영광이고 행복합니다!! 여러분 부아바 합시다!!</p>
+      </section>
+      <section class="afterword">
+        <h2 class="sub">BLUE AND BLUE<span class="aw-by">용</span></h2>
+        <p class="para">안녕하세요, '용'이라고 합니다. 사실, 이 만화를 그리면서 생일 합작에 이런 걸 그려도 되는 걸까? 하는 의문이 있었습니다. 하지만 누군가는 이런 걸 그려야 하지 않을까? 싶은 생각도 들어 결국 강행하게 되었네요. 17페이지  밖에 안 되지만 만화를 그려본 적 없는 저에겐 도전이었습니다.</p>
+        <p class="para">제목의 파랑은 부차라티, 우울은 아바키오를 뜻합니다. 만화 안에 여러 가지를 담아보려 했지만 더 설명하진 않겠습니다. 독자님들의 눈에는 저 드넓은 바다가 어떻게 보일지 궁금해지네요. 부디 재미있게 읽으셨기를 바랍니다. 늘 행복하세요!</p>
+      </section>
+      <section class="afterword">
         <h2 class="sub">Some Blueny Day<span class="aw-by">죠백</span></h2>
-        <p class="para">Blue라는 주제를 듣자마자 떠오른 제목, 그리고 소재로 즐겁게 써내려간 글을 읽어주셔서 감사합니다. 귀한 합작 덕분에 오랜 시간 마음에 품어두기만 했던 소재로 한가닥을 완성했네요. 주최님께 소소한 감사 인사를 전합니다. 후후.</p>
+        <p class="para">Blue라는 주제를 듣자마자 떠오른 제목, 그리고 소재로 즐겁게 써내려간 글을 읽어주셔서 감사합니다. 귀한 합작 덕분에 오랜시간 마음에 품어두었두기만 했던 소재로 한가닥을 완성했네요. 주최님께 소소한 감사 인사를 전합니다. 후후.</p>
         <p class="para">[브루노 부차라티의 우울]이라는 부제를 달아놓고 시작한 글이 아바키오의 활약(?)으로 잘 풀린 것 같아 무척이나 기쁘네요. 고맙다. 아바키오. 부차라티와 아바키오는 서로에게 영향을 주는 존재라 생각하며 글을 썼는데요. 아바키오의 서툰 위로에서 부차라티가 아바키오에게 먼저 건넸던 위로를 그려보아도 좋을 것 같습니다.</p>
-        <p class="para">평소와 달라 보이지만, 서로에게는 다를 바 없는 두 사람의 파란 하루를 함께 지켜봐주셔서, 그리고 함께 해주셔서 감사합니다. :)</p>
+        <p class="para">평소와 달라보이지만, 서로에게는 다를바 없는 두 사람의 파란 하루를 함께 지켜봐주셔서, 그리고 함께 해주셔서 감사합니다. :)</p>
       </section>
     </main>
     <div class="endgame">
@@ -1105,7 +1120,7 @@
     const wv=document.getElementById('work-'+(i+1)); if(!wv) return;
     const t=wv.querySelector('.wh-title'), f=wv.querySelector('.wh-form');
     if(f) f.innerHTML = labelHTML(i);
-    if(!d.title && t) t.textContent=d.kr; });
+    if(!d.title && t) t.textContent=PREVIEW?'':d.kr; });
 
   function setBloomY(){const t=platter.getBoundingClientRect();root.style.setProperty('--bloom-y',(t.top+t.height/2)+'px');}
 
@@ -1123,7 +1138,7 @@
     root.style.setProperty('--blue-lit', lighten(d.color,.42));
     ttLabel.textContent='';                                   // 판 가운데는 색만 — 곡 이름은 손글씨 라벨이 맡는다
     npForm.innerHTML = labelHTML(i);                          // 곡 이름은 손글씨 라벨 하나로 (무제면 제목 자리에 한글 곡명)
-    npTitle.textContent=d.title||d.kr; npMark.textContent=d.mark;
+    npTitle.textContent=(PREVIEW && !d.title)?'':(d.title||d.kr); npMark.textContent=d.mark;
     if(PREVIEW){ npNote.textContent=''; npNote.classList.remove('instrumental'); }
     else { npNote.textContent=d.note||'Instrumental'; npNote.classList.toggle('instrumental', !d.note); }
     centerInst();
