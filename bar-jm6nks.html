@@ -736,7 +736,7 @@
 
   <div class="nr-readwrap" id="nrRead" aria-hidden="true">
     <div class="nf-stage" id="nfStage"><div class="nf-stack"></div><div class="nf-under"></div></div>
-    <div class="nf-nav"><button class="nf-prev" id="nfPrev" aria-label="이전 장">‹</button><span id="nfPos">1 / 1</span><button class="nf-next" id="nfNext" aria-label="다음 장">›</button></div>
+    <div class="nf-nav"><button class="nf-prev" id="nfPrev" aria-label="이전 장">‹</button><span id="nfPos" hidden></span><button class="nf-next" id="nfNext" aria-label="다음 장">›</button></div>
     <!-- 아래 원고를 화면 크기에 맞춰 한 장씩 잘라 넘겨 읽게 한다 (원고는 여기서만 고치면 됨) -->
     <article class="nr-leaf nf-src" id="nfSrc" aria-hidden="true">
       <h1>???</h1>
@@ -1921,8 +1921,7 @@
       N=els.length; cur=Math.min(cur,N-1);
       els.forEach((pg,k)=>{ pg.style.zIndex=N-k;
         const sh=document.createElement('div'); sh.className='nf-shade'; const gl=document.createElement('div'); gl.className='nf-gloss';
-        const f=document.createElement('span'); f.className='nf-folio'; f.textContent=k+1;
-        pg.appendChild(sh); pg.appendChild(gl); pg.appendChild(f);
+        pg.appendChild(sh); pg.appendChild(gl);
         setA(pg, k<cur?180:0); });
       built=true; ui();
     }
