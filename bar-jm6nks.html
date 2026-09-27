@@ -374,6 +374,29 @@
   #noteRoom .nf-nav button{background:none;border:none;color:rgba(207,228,234,.7);font-family:var(--serif);font-size:20px;padding:6px 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
   #noteRoom .nf-nav button:disabled{opacity:.2;cursor:default;}
   #noteRoom .nf-nav button:focus-visible{outline:1px solid rgba(207,228,234,.5);outline-offset:2px;}
+
+  /* ===== 작가의 쪽지 — 접힌 메모지, 누르면 그 자리에서 펼쳐진다 ===== */
+  .work-view .memo{margin:2.4em auto 0;max-width:560px;--ink:#1f35c9;}
+  .work-view .memo-tab{display:block;margin:0 auto;max-width:250px;padding:16px 18px 18px;background:#f5f6fa;border:none;border-radius:2px;cursor:pointer;
+    color:var(--ink);font-family:var(--body);font-size:12.5px;line-height:1.6;text-align:left;word-break:keep-all;transform:rotate(-2.5deg);
+    box-shadow:0 8px 18px rgba(0,0,0,.4), inset 0 -1px 0 rgba(0,0,0,.06);position:relative;-webkit-tap-highlight-color:transparent;
+    transition:transform .5s cubic-bezier(.3,.7,.2,1), max-width .6s cubic-bezier(.3,.7,.2,1), box-shadow .5s;}
+  .work-view .memo-tab::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:linear-gradient(90deg, rgba(31,53,201,.0), rgba(0,0,0,.08) 20%, rgba(0,0,0,.08) 80%, rgba(31,53,201,0));}   /* 반으로 접혔던 자국 */
+  .work-view .memo-tab::after{content:"";position:absolute;right:0;top:0;border-style:solid;border-width:0 14px 14px 0;border-color:transparent #d9dce8 transparent transparent;}
+  .work-view .memo-tab:hover,.work-view .memo-tab:focus-visible{transform:rotate(-1deg) translateY(-2px);outline:none;box-shadow:0 12px 24px rgba(0,0,0,.45);}
+  .work-view .memo.open .memo-tab{max-width:100%;width:100%;transform:none;border-radius:2px 2px 0 0;box-shadow:none;}
+  .work-view .memo-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .8s cubic-bezier(.3,.7,.2,1);}
+  .work-view .memo.open .memo-body{grid-template-rows:1fr;}
+  .work-view .memo-in{overflow:hidden;background:#f5f6fa;border-radius:0 0 2px 2px;padding:0 clamp(20px,6vw,34px);box-shadow:0 14px 30px rgba(0,0,0,.4);}
+  .work-view .memo.open .memo-in{padding-bottom:26px;}
+  .work-view .memo-in p{color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.9;margin:0 0 1.2em;word-break:keep-all;overflow-wrap:break-word;}
+  .work-view .memo-in p:first-child{margin-top:4px;}
+  .work-view .memo-in p.memo-lead{font-size:12.5px;opacity:.75;}
+  .work-view .memo-tab span{display:block;text-align:center;font-family:var(--serif);font-style:italic;font-size:17px;letter-spacing:.04em;padding:4px 18px;}
+  .work-view .memo-pic{margin:.4em auto 1.6em;width:min(72%,300px);transform:rotate(2deg);position:relative;}
+  .work-view .memo-pic img{width:100%;display:block;box-shadow:0 3px 8px rgba(0,0,0,.18);}
+  .work-view .memo-pic::before{content:"";position:absolute;left:50%;top:-9px;width:64px;height:18px;transform:translateX(-50%) rotate(-3deg);background:rgba(210,215,230,.75);box-shadow:0 1px 2px rgba(0,0,0,.08);}   /* 테이프 */
+  @media (prefers-reduced-motion:reduce){ .work-view .memo-tab,.work-view .memo-body{transition:none;} }
   .blackout.quick{transition:opacity .45s ease, visibility .45s;}
 
   /* 뒷표지 — 글자 없이 그림과 빗소리만. 누르면 판을 뒤집듯 앞표지로 */
@@ -1105,20 +1128,30 @@
   <div class="wpage">
     <header class="work-head">
       <div class="wh-form">Sonata sopra Sancta Maria<span>산타 마리아의 소나타</span></div>
-      <h1 class="wh-title">10</h1>
+      <h1 class="wh-title">BLUE EYES</h1>
       <div class="wh-mark">Ostinato, pregando</div>
-      <div class="wh-by">○○○</div>
+      <div class="wh-by">헤게</div>
     </header>
     <main class="work-body">
-      <!-- ============================================================
-         여기에 작품을 넣으세요. 글과 그림을 원하는 순서로 자유롭게.
-           글 문단 :  <p class="para">문단 내용</p>
-           소제목  :  <h2 class="sub">소제목</h2>
-           그림    :  <figure class="fig"><img src="그림파일.jpg" alt="설명"><figcaption>캡션</figcaption></figure>
-         그림 파일은 이 html과 같은 폴더에 두고 파일명을 src에 적으면 됩니다.
-         작품을 넣은 뒤 placeholder 줄은 지우세요.
-         ============================================================ -->
-      <p class="placeholder">작품이 이곳에 펼쳐집니다</p>
+      <div class="film"><video src="blue-eye.mp4" poster="blue-eye-poster.jpg" controls playsinline preload="metadata"></video></div>
+      <!-- 작가의 쪽지 — 누르면 그 자리에서 펼쳐진다 -->
+      <div class="memo">
+        <button class="memo-tab" aria-expanded="false" aria-label="from hegemoney — 쪽지 펼치기"><span>from hegemoney</span></button>
+        <div class="memo-body"><div class="memo-in">
+          <p class="memo-lead">(여기서부터는 작품 TMI 그뭔씹 주저리입니다. 꼭 안 보셔도 됩니다.)</p>
+          <p>Blue Eyes는 어떤 특정 스토리가 있다기 보단 Blue와 관련된 부아바 조각들의 집합이라고 생각하고 만들었습니다. 그렇다보니 호동형님의 ‘니는 이게 말이 된다꼬 생각하나’ 짤이 계속 아른거리는데.. 쩝 어쩌겠습니까..(예술병 올라오던 시즌에 기획했음 ㅈㅅ).</p>
+          <figure class="memo-pic"><img src="blue-eye-zzal.jpg" alt="니는 그게 말이 된다꼬 생각카나! 짤" loading="lazy"></figure>
+          <p>아무튼 Blue Eyes는 부차라티의 푸른 눈(리터럴리 파란색 눈동자)과 아바키오의 푸른 눈(정확히는 푸르게 물든 눈가)이 마주하는 이야기입니다.</p>
+          <p>맨 처음에 나오는 셰익스피어의 As You Like It 구절 인용에서 파란 글자로 표시된 부분에 주목해주신 분 계셨을까요. 해당 내용은 대충 ‘사랑에 빠진 남자는 이와 같은 증상을 가진다던데, 당신은 그렇지 않다’고 말하는 대사입니다. 여기서 나온 사랑에 빠진 증상은 blue eye(눈가가 푸르게 물든 것)와 lean cheek(꺼진 뺨)인데요, 이 두가지 특징은 마지막 챕터에서 그대로 다시 나오도록 구성했습니다.</p>
+          <p>BLUE EYE는모든 챕터가 B로 시작합니다. 그런데 보셨다시피 전부 대문자인 챕터도 있고, 앞머리만 대문자인 챕터도 있죠. 아바키오가 부차라티를 보는 챕터는 모두 대문자, 부차라티가 아바키오를 보는 챕터는 앞글자만 대문자인 것입니다🤭</p>
+          <p>그리고 영상 작업이다보니 사운드에도 부차라티와 아바키오 두 사람의 특징을 넣을 수 있어서 재밌었습니다.</p>
+          <p>인트로 이후 첫 번째 챕터의 브금은 아바키오가 부차라티에게서 느끼는 느낌(빛나고, 반짝이지만 뭔가 멀게 느껴지는, 알 수 없는)을, 두 번째 챕터의 브금은 부차라티가 아바키오에게서 느끼는 느낌(음울하고, 뭔가 숨기는 듯한)을 주는 사운드를 선택했습니다. (그렇게 안 느껴졌다면… 유감.)</p>
+          <p>그리고 BLOOMING 챕터의 브금은 느끼신 분들은 느꼈겠지만 원본 사운드를 역재생하였습니다. (무디~블루스~)</p>
+          <p>이외에도 연출의도라던가 봐줬으면 하는 포인트를 모두 말하자니 그뭔씹 팔만대장경이라서, 이미 길게 말했지만 여기까지 하겠습니다.</p>
+          <p>작품 감상해주신 분들께 다들 감사드립니다!</p>
+          <p>그리고 사랑하는 부아바! 행복해라!</p>
+        </div></div>
+      </div>
     </main>
     <footer class="work-foot"><button class="back wv-back"><span class="arr"></span>음반으로 돌아가기</button></footer>
   </div>
@@ -1160,6 +1193,11 @@
         <p class="para">Blue라는 주제를 듣자마자 떠오른 제목, 그리고 소재로 즐겁게 써내려간 글을 읽어주셔서 감사합니다. 귀한 합작 덕분에 오랜시간 마음에 품어두었두기만 했던 소재로 한가닥을 완성했네요. 주최님께 소소한 감사 인사를 전합니다. 후후.</p>
         <p class="para">[브루노 부차라티의 우울]이라는 부제를 달아놓고 시작한 글이 아바키오의 활약(?)으로 잘 풀린 것 같아 무척이나 기쁘네요. 고맙다. 아바키오. 부차라티와 아바키오는 서로에게 영향을 주는 존재라 생각하며 글을 썼는데요. 아바키오의 서툰 위로에서 부차라티가 아바키오에게 먼저 건넸던 위로를 그려보아도 좋을 것 같습니다.</p>
         <p class="para">평소와 달라보이지만, 서로에게는 다를바 없는 두 사람의 파란 하루를 함께 지켜봐주셔서, 그리고 함께 해주셔서 감사합니다. :)</p>
+      </section>
+      <section class="afterword">
+        <h2 class="sub">BLUE EYES<span class="aw-by">헤게</span></h2>
+        <p class="para">기획까지 합치면 8월초부터 9월 말까지 2달에 걸쳐서 작업했네요. 사실 기획에 거진 한 달을 썼습니다💦 이렇게나 불태운 씨피는 정말 부압이 처음이다...</p>
+        <p class="para">좋은 기회와 사람들 덕분에 이렇게 모여 같은 씨피, 같은 주제로 작업하게 되어 정말 감사하고 기쁩니다. 끝까지 함께 해준 합작멤 분들 그리고 사이트 깎아주신 서진님께 모두 감사드리고 사랑합니다!! 봡친들 그리고 죠친들에게 해피한 날만 가득하길💙💙💙💙</p>
       </section>
       <!-- 주최 후기 — 제목·이름 없이 글만. 아래 section 안에 문단을 넣으면 선과 함께 나타나요 (비워두면 안 보임)
              문단        :  <p class="para">후기 문단</p>
@@ -1210,7 +1248,7 @@
     {form:'Pulchra es', kr:'너는 아름다워', audio:'pulchra',   color:'#14213D', title:'7',     mark:'Soave, a due', note:'작품 소개글이 놓일 자리', x:'', vol:1},
     {form:'Duo Seraphim', kr:'두 세라핌', audio:'seraphim',   color:'#121B33', title:'8',       mark:'Chiamando, l’un l’altro', note:'작품 소개글이 놓일 자리', x:'', vol:1},
     {form:'Audi coelum', kr:'들으소서, 하늘이여', audio:'audi',   color:'#161630', title:'9',     mark:'Con eco, da lontano', note:'작품 소개글이 놓일 자리', x:'', vol:1},
-    {form:'Sonata sopra Sancta Maria', kr:'산타 마리아의 소나타', audio:'sonata',   color:'#15122B', title:'10',        mark:'Ostinato, pregando', note:'작품 소개글이 놓일 자리', x:'', vol:1},
+    {form:'Sonata sopra Sancta Maria', kr:'산타 마리아의 소나타', audio:'sonata',   color:'#15122B', title:'BLUE EYES',        mark:'Ostinato, pregando', note:'Blue Eyes는 어떤 특정 스토리가 있다기 보단 Blue와 관련된 부아바 조각들의 집합이라고 생각하고 만들었습니다. Blue Eyes는 부차라티의 푸른 눈(리터럴리 파란색 눈동자)과 아바키오의 푸른 눈(정확히는 푸르게 물든 눈가)이 마주하는 이야기입니다.', x:'Hegemoney_ba', vol:1},
     {form:'Requiem',     kr:'진혼곡',   color:'#120A22', title:'Ascensione',     mark:'Lento, doloroso', note:'작품 소개글이 놓일 자리', hidden:true},
   ];
 
@@ -1866,6 +1904,10 @@
     nrAsk.classList.remove('nr-show'); nrRead.classList.add('nr-show'); nrRead.setAttribute('aria-hidden','false');
     nf.open(); });
   document.getElementById('nrNo').addEventListener('click', e=>{ e.stopPropagation(); shutNote(); });
+  document.querySelectorAll('.work-view .memo-tab').forEach(t=>t.addEventListener('click',()=>{   // 작가의 쪽지 펼치기/접기
+    const m=t.closest('.memo'), o=m.classList.toggle('open'); t.setAttribute('aria-expanded', o?'true':'false');
+    if(o) setTimeout(()=>m.scrollIntoView({behavior:'smooth',block:'start'}), 120);
+  }));
   // ===== 노트를 한 장씩 넘긴다 =====
   const nf=(function(){
     const stage=document.getElementById('nfStage'), src=document.getElementById('nfSrc'), under=stage.querySelector('.nf-under');
