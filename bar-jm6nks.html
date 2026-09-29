@@ -397,6 +397,21 @@
   .work-view .memo-pic img{width:100%;display:block;box-shadow:0 3px 8px rgba(0,0,0,.18);}
   .work-view .memo-pic::before{content:"";position:absolute;left:50%;top:-9px;width:64px;height:18px;transform:translateX(-50%) rotate(-3deg);background:rgba(210,215,230,.75);box-shadow:0 1px 2px rgba(0,0,0,.08);}   /* 테이프 */
   @media (prefers-reduced-motion:reduce){ .work-view .memo-tab,.work-view .memo-body{transition:none;} }
+
+  /* ===== 영상 — 재생 전 볼륨 안내 카드 (누르면 사라지며 재생) ===== */
+  .work-view .film.vol-film{position:relative;overflow:hidden;border-radius:3px;background:#000;}
+  .work-view .film.vol-film video{aspect-ratio:16/9;}
+  .work-view .vol{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+    background:#000;cursor:pointer;border:none;width:100%;color:#dfe8ee;-webkit-tap-highlight-color:transparent;transition:opacity .9s ease, visibility .9s;}
+  .work-view .vol.gone{opacity:0;visibility:hidden;pointer-events:none;}
+  .work-view .vol .ico{width:26px;height:26px;opacity:.75;}
+  .work-view .vol .msg{font-family:var(--serif);font-size:clamp(13px,3.6vw,15.5px);letter-spacing:.06em;line-height:1.7;text-align:center;padding:0 22px;word-break:keep-all;}
+  .work-view .vol .play{width:44px;height:44px;border-radius:50%;border:1px solid rgba(223,232,238,.45);display:flex;align-items:center;justify-content:center;animation:volbreathe 2.6s ease-in-out infinite;}
+  .work-view .vol .play::before{content:"";margin-left:4px;border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent #dfe8ee;}
+  .work-view .vol:hover .play,.work-view .vol:focus-visible .play{border-color:#dfe8ee;}
+  .work-view .vol:focus-visible{outline:1px solid rgba(223,232,238,.4);outline-offset:-6px;}
+  @keyframes volbreathe{0%,100%{opacity:.55;}50%{opacity:1;}}
+  @media (prefers-reduced-motion:reduce){.work-view .vol .play{animation:none;}}
   .blackout.quick{transition:opacity .45s ease, visibility .45s;}
 
   /* 뒷표지 — 글자 없이 그림과 빗소리만. 누르면 판을 뒤집듯 앞표지로 */
@@ -1133,7 +1148,12 @@
       <div class="wh-by">헤게</div>
     </header>
     <main class="work-body">
-      <div class="film"><video src="blue-eye.mp4" controls playsinline preload="metadata"></video></div>
+      <div class="film vol-film"><video src="blue-eye.mp4" controls playsinline preload="metadata"></video>
+        <button class="vol" aria-label="볼륨을 50% 이상으로 설정하는 것을 권장합니다. 누르면 재생">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M15.5 8.5c1.7 1.7 1.7 5.3 0 7M18 6c3 3 3 9 0 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="msg">볼륨을 50% 이상으로 설정하는 것을 권장합니다</span>
+          <span class="play" aria-hidden="true"></span>
+        </button></div>
       <!-- 작가의 쪽지 — 누르면 그 자리에서 펼쳐진다 -->
       <div class="memo">
         <button class="memo-tab" aria-expanded="false" aria-label="from hegemoney — 쪽지 펼치기"><span>from hegemoney</span></button>
@@ -1904,6 +1924,9 @@
     nrAsk.classList.remove('nr-show'); nrRead.classList.add('nr-show'); nrRead.setAttribute('aria-hidden','false');
     nf.open(); });
   document.getElementById('nrNo').addEventListener('click', e=>{ e.stopPropagation(); shutNote(); });
+  document.querySelectorAll('.work-view .vol').forEach(b=>{ const v=b.parentNode.querySelector('video');   // 볼륨 안내 — 한 번 누르면 사라지고 바로 재생
+    b.addEventListener('click',()=>{ b.classList.add('gone'); v.play().catch(()=>{}); });
+    v.addEventListener('play',()=>b.classList.add('gone')); });
   document.querySelectorAll('.work-view .memo-tab').forEach(t=>t.addEventListener('click',()=>{   // 작가의 쪽지 펼치기/접기
     const m=t.closest('.memo'), o=m.classList.toggle('open'); t.setAttribute('aria-expanded', o?'true':'false');
     if(o) setTimeout(()=>m.scrollIntoView({behavior:'smooth',block:'start'}), 120);
